@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module" : "commonjs",
+        "noImplicitAny": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "noEmitOnError": true,
+        "sourceMap": true
+        "outDir":"./build"
+    },
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
+}
