@@ -34,11 +34,6 @@ router.get('/AST', /*async*/ (req, res) => {
         return;
     }
 
-    console.log();
-    console.log();
-    console.log();
-    console.log();
-
     const qcObj = value as QCObject;
 
     // TODO add return logic here
