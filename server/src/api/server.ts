@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 
-
+// app.use('route/to/api', importedRoute)
 
 
 export default app;

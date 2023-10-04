@@ -12,9 +12,6 @@ exports.app.use((0, morgan_1.default)('dev'));
 exports.app.use(express_1.default.urlencoded({ extended: false }));
 exports.app.use((0, cors_1.default)());
 exports.app.use(express_1.default.json());
-exports.app.get('/hol', (req, res) => {
-    res.send("SEXOOOOO");
-});
 exports.app.get('/', (req, res) => {
     res.send('<h1>API WORKING!</h1>');
 });
