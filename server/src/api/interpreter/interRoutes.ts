@@ -27,18 +27,6 @@ router.post('/interpret', /*async*/ (req, res) => {
     res.status(200).json({message: "accepted"})
 });
 
-router.get('/AST', /*async*/ (req, res) => {
-    const { error, value } = QCObjectSchema.validate(req.body);
-    if (error){
-        res.status(400).send('Invalid JSON structure');
-        return;
-    }
-
-    const qcObj = value as QCObject;
-
-    // TODO add return logic here
-    res.status(200).json({message: "accepted"})
-})
 
 
 export { router };
