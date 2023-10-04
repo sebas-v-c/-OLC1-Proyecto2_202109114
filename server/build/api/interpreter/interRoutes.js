@@ -18,7 +18,7 @@ router.post('/interpret', (req, res) => {
         return;
     }
     const qcObj = value;
-    res.status(200).json({ message: "accpeted" });
+    res.status(200).json({ message: "accepted" });
 });
 router.get('/AST', (req, res) => {
     const { error, value } = schema_1.QCObjectSchema.validate(req.body);
@@ -27,5 +27,6 @@ router.get('/AST', (req, res) => {
         return;
     }
     const qcObj = value;
+    res.status(200).json({ message: "accepted" });
 });
 //# sourceMappingURL=interRoutes.js.map
