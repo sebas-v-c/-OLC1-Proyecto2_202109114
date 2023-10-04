@@ -26,6 +26,7 @@ router.get('/AST', (req, res) => {
         res.status(400).send('Invalid JSON structure');
         return;
     }
+    console.log();
     const qcObj = value;
     res.status(200).json({ message: "accepted" });
 });
