@@ -13,9 +13,9 @@ exports.app.use((0, morgan_1.default)('dev'));
 exports.app.use(express_1.default.urlencoded({ extended: false }));
 exports.app.use((0, cors_1.default)());
 exports.app.use(express_1.default.json());
-exports.app.get('/', (req, res) => {
+exports.app.get('/api/', (req, res) => {
     res.send('<h1>API WORKING!</h1>');
 });
-exports.app.use('/interpreter', interRoutes_1.router);
+exports.app.use('/api/interpreter', interRoutes_1.router);
 exports.default = exports.app;
 //# sourceMappingURL=server.js.map

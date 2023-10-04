@@ -23,7 +23,6 @@ app.get('/api/', (req, res) => {
 });
 
 app.use('/api/interpreter', interpRoute);
-// app.use('route/to/api', importedRoute)
 
 
 export default app;

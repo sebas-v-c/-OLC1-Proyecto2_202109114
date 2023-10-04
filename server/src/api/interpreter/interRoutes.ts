@@ -1,5 +1,6 @@
 import express from "express";
-import { QCObject, isQCObject } from "../interfaces";
+import { QCObject, QCResponseObject } from "../interfaces";
+import { QCObjectSchema } from "../schema";
 // TODO import interpeter files
 const router = express.Router();
 
@@ -10,30 +11,34 @@ router.get('/test', /*async*/ (req, res) => {
 });
 
 router.post('/interpret', /*async*/ (req, res) => {
-    if (!isQCObject(req.body)){
+    const { error, value } = QCObjectSchema.validate(req.body);
+    if (error){
         res.status(400).send('Invalid JSON structure');
         return;
     }
 
-    const qcObj = req.body as QCObject;
+    const qcObj = value as QCObject;
 
     // TODO add return logic here
     /*
      * const response: QCResponseObject = await parseFile(qcObj)
      */
 
-    res.status(200).json({message: "accpeted"})
+    res.status(200).json({message: "accepted"})
 });
 
-router.get('/interpret', /*async*/ (req, res) => {
-    if (!isQCObject(req.body)){
+router.get('/AST', /*async*/ (req, res) => {
+    const { error, value } = QCObjectSchema.validate(req.body);
+    if (error){
         res.status(400).send('Invalid JSON structure');
         return;
     }
 
-    // TODO add return logic here
+    const qcObj = value as QCObject;
 
-});
+    // TODO add return logic here
+    res.status(200).json({message: "accepted"})
+})
 
 
 export { router };
