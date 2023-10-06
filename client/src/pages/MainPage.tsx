@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import OutputWindow, { OutModes } from '../components/editor/output/OutputWindow';
+import ButtonNavBar from "../components/layout/ButtonNavBar";
 //import ButtonNavBar from "../components/layout/Bu"
 //import ButtonNavBar from "../components/layout/ButtonNavBar";
 
