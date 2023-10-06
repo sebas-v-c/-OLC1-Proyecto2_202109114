@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import CodeEditor from "../components/editor/CodeEditor";
 import useKeyPress from "../hooks/useKeyPress";
+import { QCResponseObject } from "../common/types";
 
 
 export default function MainPage(){
@@ -37,20 +38,18 @@ export default function MainPage(){
             data: formData,
         };
 
-        // verify info over here
-        axios
-            .request(options)
-            .then(function (response) {
-                console.log("res.dadta", response.data);
-                const token = response.data.token;
-                checkStatus
-            })
+        axios.request(options).then((response) =>{
+            const res: QCResponseObject = response;
+            // TODO do something with the response
+            setProcessing(false);
 
+        }).catch(error => {
+            setProcessing(false);
+            // TODO do something with the response
+            console.log(error);
+        });
     };
 
-    async function checkStatus (token) {
-
-    }
 
     function handleEditorChange(action: string, data: string) {
         switch (action) {
