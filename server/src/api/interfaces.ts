@@ -20,4 +20,5 @@ export interface QCResponseObject extends QCObject {
     errors: Errors;
     symtable: SymTable;
     ast: string;
+    status: number;
 }
