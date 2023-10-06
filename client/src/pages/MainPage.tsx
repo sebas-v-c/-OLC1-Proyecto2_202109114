@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import OutputWindow, { OutModes } from '../components/editor/output/OutputWindow';
 import ButtonNavBar from "../components/layout/ButtonNavBar";
+import { Container, Row, Col } from "react-bootstrap";
 //import ButtonNavBar from "../components/layout/Bu"
 //import ButtonNavBar from "../components/layout/ButtonNavBar";
 
@@ -111,21 +112,23 @@ export default function MainPage(){
                 draggable
                 pauseOnHover
             />
-            <div>
-                <div>
-                    <CodeEditor
-                        code={code}
-                        onChange={handleEditorChange}
-                        height="500px"
+            <Container>
+                <Row>
+                    <Col sm>
+                        <CodeEditor
+                            code={code}
+                            onChange={handleEditorChange}
+                            height="500px"
                         />
-                </div>
-                <div>
-                    <OutputWindow
-                        outMode={outMode}
-                        outputDetails={"simon"}
-                    />
-                </div>
-            </div>
+                    </Col>
+                    <Col sm>
+                        <OutputWindow
+                            outMode={outMode}
+                            outputDetails={"simon"}
+                        />
+                    </Col>
+                </Row>
+            </Container>
             <div>
                 <ButtonNavBar
                     onButtonClick={handleCompile}
