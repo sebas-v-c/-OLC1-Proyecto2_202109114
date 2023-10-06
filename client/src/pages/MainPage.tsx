@@ -7,12 +7,13 @@ import { QCResponseObject } from "../common/types";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import OutputWindow from '../components/editor/output/OutputWindow';
+import OutputWindow, { OutModes } from '../components/editor/output/OutputWindow';
 
 
 export default function MainPage(){
     const [code, setCode] = useState("");
     const [processing, setProcessing] = useState(false);
+    const [outMode, setOutMode] = useState(OutModes.Text);
 
     const enterPress = useKeyPress("Enter");
     const ctrlPress = useKeyPress("control");
@@ -108,12 +109,19 @@ export default function MainPage(){
                 pauseOnHover
             />
             <div>
-                <CodeEditor
-                    code={code}
-                    onChange={handleEditorChange}
-                    height="500px"
-                />
-                <OutputWindow/>
+                <div>
+                    <CodeEditor
+                        code={code}
+                        onChange={handleEditorChange}
+                        height="500px"
+                        />
+                </div>
+                <div>
+                    <OutputWindow
+                        outMode={outMode}
+                        outputDetails={"simon"}
+                    />
+                </div>
             </div>
         </>
     );
