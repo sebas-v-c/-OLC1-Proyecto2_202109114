@@ -6,10 +6,12 @@ import { QCResponseObject } from "../common/types";
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import '../scss/CustomContainer.scss'
 
 import OutputWindow, { OutModes } from '../components/editor/output/OutputWindow';
 import ButtonNavBar from "../components/layout/ButtonNavBar";
-import { Container, Row, Col } from "react-bootstrap";
+import "../scss/MainPage.scss";
+//import { Container, Row, Col } from "react-bootstrap";
 //import ButtonNavBar from "../components/layout/Bu"
 //import ButtonNavBar from "../components/layout/ButtonNavBar";
 
@@ -112,29 +114,27 @@ export default function MainPage(){
                 draggable
                 pauseOnHover
             />
-            <Container>
-                <Row>
-                    <Col sm>
-                        <CodeEditor
-                            code={code}
-                            onChange={handleEditorChange}
-                            height="500px"
-                        />
-                    </Col>
-                    <Col sm>
-                        <OutputWindow
-                            outMode={outMode}
-                            outputDetails={"simon"}
-                        />
-                    </Col>
-                </Row>
-            </Container>
-            <div>
-                <ButtonNavBar
-                    onButtonClick={handleCompile}
-                    content={"Run"}
-                />
+
+            <div className="container">
+                <div className="half-width">
+                     <CodeEditor
+                        code={code}
+                        onChange={handleEditorChange}
+                        height="500px"
+                     />
+                </div>
+                <div className="half-width">
+                    <OutputWindow
+                        outMode={outMode}
+                        outputDetails={"simon"}
+                    />
+                </div>
             </div>
+
+            <ButtonNavBar
+                onButtonClick={handleCompile}
+                content={"Run"}
+            />
         </>
     );
 }
