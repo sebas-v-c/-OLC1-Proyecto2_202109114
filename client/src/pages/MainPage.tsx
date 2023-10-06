@@ -6,4 +6,5 @@ export default function MainPage(){
         <>
             <CodeEditor/>
         </>
+    );
 }
