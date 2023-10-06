@@ -10,8 +10,8 @@ import '../scss/CustomContainer.scss'
 
 import OutputWindow, { OutModes } from '../components/editor/output/OutputWindow';
 import ButtonNavBar from "../components/layout/ButtonNavBar";
+import { Container, Row, Col } from "react-bootstrap";
 import "../scss/MainPage.scss";
-//import { Container, Row, Col } from "react-bootstrap";
 //import ButtonNavBar from "../components/layout/Bu"
 //import ButtonNavBar from "../components/layout/ButtonNavBar";
 
@@ -115,22 +115,24 @@ export default function MainPage(){
                 pauseOnHover
             />
 
-            <div className="container">
-                <div className="half-width">
-                     <CodeEditor
-                        code={code}
-                        onChange={handleEditorChange}
-                        height="500px"
-                     />
-                </div>
-                <div className="half-width">
-                    <OutputWindow
-                        outMode={outMode}
-                        outputDetails={"simon"}
-                    />
-                </div>
-            </div>
 
+            <Container fluid className="full-height">
+                <Row className="full-height">
+                    <Col className="half-width">
+                        <CodeEditor
+                            code={code}
+                            onChange={handleEditorChange}
+                            height="500px"
+                        />
+                    </Col>
+                    <Col className="half-width">
+                        <OutputWindow
+                            outMode={outMode}
+                            outputDetails={"simon"}
+                        />
+                    </Col>
+                </Row>
+            </Container>
             <ButtonNavBar
                 onButtonClick={handleCompile}
                 content={"Run"}
