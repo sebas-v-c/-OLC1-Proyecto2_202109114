@@ -4,12 +4,15 @@ import { Editor, useMonaco } from "@monaco-editor/react";
 type Props = {
     onChange: (code: string, val: string) => void;
     code: string;
+    height?: string,
+    width?: string
 };
 
-export default function CodeEditor({ onChange, code}: Props) {
+export default function CodeEditor({ onChange, code, height, width}: Props) {
     const [value, setValue] = useState(code || "");
     const monaco = useMonaco();
 
+    // change editor theme to dracula
     useEffect(() => {
         if (monaco) {
             import('monaco-themes/themes/Dracula.json')
@@ -20,6 +23,7 @@ export default function CodeEditor({ onChange, code}: Props) {
         }
     }, [monaco]);
 
+    // updatee editor text from parent
     function handleEditorChange(value: any){
         setValue(value);
         onChange("code", value);
@@ -27,8 +31,8 @@ export default function CodeEditor({ onChange, code}: Props) {
 
     return (
         <Editor
-            height={"85vh"}
-            width={`100%`}
+            height={height}
+            width={width}
             language={"mysql"}
             value={value}
             defaultValue="// Some code here"
