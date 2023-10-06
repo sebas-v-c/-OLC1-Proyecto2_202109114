@@ -4,6 +4,11 @@ import CodeEditor from "../components/editor/CodeEditor";
 import useKeyPress from "../hooks/useKeyPress";
 import { QCResponseObject } from "../common/types";
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import OutputWindow from '../components/editor/output/OutputWindow';
+
 
 export default function MainPage(){
     const [code, setCode] = useState("");
@@ -42,11 +47,36 @@ export default function MainPage(){
             const res: QCResponseObject = response;
             // TODO do something with the response
             setProcessing(false);
-
+            showSuccessToast()
         }).catch(error => {
             setProcessing(false);
             // TODO do something with the response
             console.log(error);
+            showErrorToast()
+        });
+    };
+
+    const showSuccessToast = (msg?: string) => {
+        toast.success(msg || 'Compiled Succesfully!', {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
+
+    const showErrorToast = (msg?: string, timer?: number) => {
+        toast.error(msg || 'Something went wrong! Please try again', {
+            position: "bottom-right",
+            autoClose: timer ? timer : 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
         });
     };
 
@@ -63,13 +93,28 @@ export default function MainPage(){
         }
     }
 
+
     return (
         <>
-            <CodeEditor
-                code={code}
-                onChange={handleEditorChange}
-                height="500px"
+            <ToastContainer
+                position='bottom-right'
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
             />
+            <div>
+                <CodeEditor
+                    code={code}
+                    onChange={handleEditorChange}
+                    height="500px"
+                />
+                <OutputWindow/>
+            </div>
         </>
     );
 }
