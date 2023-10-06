@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import CodeEditor from "../components/editor/CodeEditor";
 import useKeyPress from "../hooks/useKeyPress";
 
@@ -22,13 +23,32 @@ export default function MainPage(){
         const formData = {
             // TODO
             name: "deft",
-            code: btoa(code)
+            content: btoa(code)
         };
 
         const options = {
             method: "POST",
-            url: process.env.REACT_APP_QC_URL
-        }
+            url: process.env.REACT_APP_QC_URL,
+            params: { base64_encoded: "true", fields: "*" },
+            headers: {
+                "content-type": "application/json",
+                "Content-Type": "application/json",
+            },
+            data: formData,
+        };
+
+        // verify info over here
+        axios
+            .request(options)
+            .then(function (response) {
+                console.log("res.dadta", response.data);
+                const token = response.data.token;
+                checkStatus
+            })
+
+    };
+
+    async function checkStatus (token) {
 
     }
 
