@@ -11,8 +11,6 @@ import '../scss/CustomContainer.scss'
 import OutputWindow, { OutModes } from '../components/editor/output/OutputWindow';
 import ButtonNavBar from "../components/layout/ButtonNavBar";
 import { Container, Row, Col } from "react-bootstrap";
-import Tab from "react-bootstrap/Tab";
-import Tabs from "react-bootstrap/Tabs";
 import "../scss/MainPage.scss";
 //import ButtonNavBar from "../components/layout/Bu"
 //import ButtonNavBar from "../components/layout/ButtonNavBar";
@@ -117,7 +115,6 @@ export default function MainPage(){
                 pauseOnHover
             />
 
-
             <Container fluid className="full-height">
                 <Row className="full-height">
                     <Col className="half-width">
@@ -135,6 +132,7 @@ export default function MainPage(){
                     </Col>
                 </Row>
             </Container>
+
             <ButtonNavBar
                 onButtonClick={handleCompile}
                 content={"Run"}

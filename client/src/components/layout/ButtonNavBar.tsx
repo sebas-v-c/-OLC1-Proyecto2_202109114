@@ -6,11 +6,13 @@ import Container from "react-bootstrap/Container";
 
 export default function ButtonNavBar({ onButtonClick, content }: Props) {
     return(
-        <Navbar className="custom-navbar" data-bs-theme="dark">
-            <Container>
-                <Button variant="primary" onClick={onButtonClick}>{content}</Button>
-            </Container>
-        </Navbar>
+        <div className="sub-div">
+            <Navbar className="custom-navbar" data-bs-theme="dark">
+                <Container>
+                    <Button variant="primary" onClick={onButtonClick}>{content}</Button>
+                </Container>
+            </Navbar>
+        </div>
     );
 }
 
