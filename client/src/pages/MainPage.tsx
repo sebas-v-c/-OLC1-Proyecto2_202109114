@@ -9,18 +9,22 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../scss/CustomContainer.scss'
 
 import OutputWindow, { OutModes } from '../components/editor/output/OutputWindow';
-import ButtonNavBar from "../components/layout/ButtonNavBar";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import "../scss/MainPage.scss";
 import Tabs from "../components/editor/Tabs";
 //import ButtonNavBar from "../components/layout/Bu"
 //import ButtonNavBar from "../components/layout/ButtonNavBar";
 
+type Code = {
+    fileName: string;
+    code: string;
+}
 
 export default function MainPage(){
-    const [code, setCode] = useState("");
-    const [processing, setProcessing] = useState(false);
-    const [outMode, setOutMode] = useState(OutModes.Text);
+    const [codeFiles, setCodeFiles] = useState<Code[]>([{fileName: "Main.qc", code:"// SOME CODE HERE"}]);
+    const [code, setCode] = useState<string>("");
+    const [processing, setProcessing] = useState<boolean>(false);
+    const [outMode, setOutMode] = useState<OutModes>(OutModes.Text);
 
     const enterPress = useKeyPress("Enter");
     const ctrlPress = useKeyPress("control");
@@ -32,7 +36,7 @@ export default function MainPage(){
         }
     }, [ctrlPress, enterPress]);
 
-    function handleCompile() {
+   function handleCompile() {
         setProcessing(true);
         const formData = {
             // TODO
@@ -88,7 +92,6 @@ export default function MainPage(){
         });
     };
 
-
     function handleEditorChange(action: string, data: string) {
         switch (action) {
             case "code": {
@@ -99,6 +102,20 @@ export default function MainPage(){
                 console.warn("Case not handled", action, data);
             }
         }
+    }
+
+
+    function handleTabClick(index: number){
+        console.log("Tab Clicked:", index);
+        setCode(codeFiles[index].code);
+    }
+
+    function handleNewTab(){
+
+    }
+
+    function handleRemoveTab(index: number){
+        console.log("Remove Tab Clicked:", index);
     }
 
 
@@ -119,7 +136,12 @@ export default function MainPage(){
             <Container fluid className="full-height">
                 <Row className="full-height">
                     <Col className="half-width">
-                        <Tabs/>
+                        <Tabs
+                            onTabClick={handleTabClick}
+                            onNewTab={handleNewTab}
+                            onRemoveTab={handleRemoveTab}
+                            tabNames={codeFiles.map((file: Code) => file.fileName)}
+                        />
                         <CodeEditor
                             code={code}
                             onChange={handleEditorChange}
