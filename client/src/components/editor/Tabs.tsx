@@ -6,17 +6,10 @@ type Tab = {
     onNewTab: () => void;
     onRemoveTab: (index: number) => void;
     tabNames: string[];
+    currentTab: number;
 }
 
-export default function Tabs({ onTabClick, onNewTab, onRemoveTab, tabNames }: Tab) {
-    const [activeTab, setActiveTab] = useState(0);
-    //const empty: Tab[] = [{content: 'Main.qc'}]
-    //const [tabs, setTabs] = useState([]);
-    //
-    function handleTabClick(index: number) {
-        setActiveTab(index);
-        onTabClick(index);
-    }
+export default function Tabs({ onTabClick, onNewTab, onRemoveTab, tabNames, currentTab }: Tab) {
 
     return (
         <div>
@@ -24,11 +17,11 @@ export default function Tabs({ onTabClick, onNewTab, onRemoveTab, tabNames }: Ta
                 {tabNames.map((tab, index) => (
                     <div key={index}>
                     <button
-                        className={index === activeTab ? 'active' : 'hidden'}
-                        onClick={() => handleTabClick(index)}
+                        className={index === currentTab ? 'active' : 'hidden'}
+                        onClick={() => onTabClick(index)}
                     >
                         {tab}
-                        <span className='close' onClick={() => onRemoveTab(index)}>x</span>
+                        <span className='close' onClick={() => {onRemoveTab(index)}}>x</span>
                     </button>
                     </div>
                 ))}
@@ -36,7 +29,7 @@ export default function Tabs({ onTabClick, onNewTab, onRemoveTab, tabNames }: Ta
             </div>
             <div className='tab-content'>
                 {tabNames.map((tab, index) => (
-                    <div key={index} className={index === activeTab ? 'active' : 'hidden'}>
+                    <div key={index} className={index === currentTab ? 'active' : 'hidden'}>
                     </div>
                 ))}
             </div>

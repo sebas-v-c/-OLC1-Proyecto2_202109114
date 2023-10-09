@@ -9,7 +9,7 @@ type Props = {
 };
 
 export default function CodeEditor({ onChange, code, height, width}: Props) {
-    const [value, setValue] = useState(code || "");
+    //const [value, setValue] = useState(code || "");
     const monaco = useMonaco();
 
     // change editor theme to dracula
@@ -25,7 +25,7 @@ export default function CodeEditor({ onChange, code, height, width}: Props) {
 
     // updatee editor text from parent
     function handleEditorChange(value: any){
-        setValue(value);
+        //setValue(value);
         onChange("code", value);
     }
 
@@ -34,8 +34,7 @@ export default function CodeEditor({ onChange, code, height, width}: Props) {
             height={height}
             width={width}
             language={"mysql"}
-            value={value}
-            defaultValue="// Some code here"
+            value={code}
             onChange={handleEditorChange}
         />
     );
