@@ -1,9 +1,15 @@
+.tab-container {
+    max-width: 100%;
+    overflow-x: scroll;
+}
+
 .tab-buttons {
     display: flex;
 }
 
 .tab-buttons button {
-    padding: 10px;
+    display: flex;
+    padding: 5px;
     margin-right: 5px;
 }
 
@@ -26,4 +32,30 @@
 
 .tab-content div.active {
     display: block;
+}
+
+.parent-button {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  background-color: #6c757d;
+  color: #fff;
+  cursor: pointer;
+}
+
+.parent-button active {
+    background-color: #565e64;
+}
+
+.child-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 5px 10px;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  cursor: pointer;
 }

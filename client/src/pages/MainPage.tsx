@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import '../scss/CustomContainer.scss'
 
 import OutputWindow, { OutModes } from '../components/editor/output/OutputWindow';
+import OutTabs from "../components/editor/output/OutTabs";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import "../scss/MainPage.scss";
 import Tabs from "../components/editor/Tabs";
@@ -156,6 +157,10 @@ export default function MainPage(){
         removing = true;
     }
 
+    function handleOutTabClick(mode: OutModes) {
+        setOutMode(mode);
+    }
+
 
     return (
         <>
@@ -171,8 +176,8 @@ export default function MainPage(){
                 pauseOnHover
             />
 
-            <Container fluid className="full-height">
-                <Row className="full-height">
+            <Container fluid>
+                <Row>
                     <Col className="half-width">
                         <Tabs
                             onTabClick={handleTabClick}
@@ -191,6 +196,10 @@ export default function MainPage(){
 
                     </Col>
                     <Col className="half-width">
+                        <OutTabs
+                            onOutTabClick={handleOutTabClick}
+                            outMode={outMode}
+                        />
                         <OutputWindow
                             outMode={outMode}
                             outputDetails={"simon"}

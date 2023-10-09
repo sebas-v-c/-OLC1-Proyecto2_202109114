@@ -12,17 +12,18 @@ type Tab = {
 export default function Tabs({ onTabClick, onNewTab, onRemoveTab, tabNames, currentTab }: Tab) {
 
     return (
-        <div>
+        <div className='tab-container'>
             <div className='tab-buttons'>
                 {tabNames.map((tab, index) => (
-                    <div key={index}>
-                    <button
-                        className={index === currentTab ? 'active' : 'hidden'}
-                        onClick={() => onTabClick(index)}
-                    >
-                        {tab}
-                        <span className='close' onClick={() => {onRemoveTab(index)}}>x</span>
-                    </button>
+                    <div key={index} >
+                        <button
+                            className={index === currentTab ? 'active' : 'hidden'}
+                            onClick={() => onTabClick(index)}
+                        >
+                            {tab}
+
+                            <span className="close" onClick={() => {onRemoveTab(index)}}>x</span>
+                        </button>
                     </div>
                 ))}
                 <button className='add-tab' onClick={onNewTab}>+</button>

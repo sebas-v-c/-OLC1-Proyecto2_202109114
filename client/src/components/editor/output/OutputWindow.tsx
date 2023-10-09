@@ -19,15 +19,15 @@ export default function OutputWindow({ outputDetails, outMode }: Props) {
 
     switch(outMode){
         case OutModes.Errors: {
-            content = <OutputErrors/>
+            content = <OutputErrors content={outputDetails}/>
             break;
         }
         case OutModes.Image: {
-            content = <OutputImage/>
+            content = <OutputImage content={outputDetails}/>
             break;
         }
         case OutModes.Text: {
-            content = <OutputText/>
+            content = <OutputText content={outputDetails}/>
             break;
         }
     }
