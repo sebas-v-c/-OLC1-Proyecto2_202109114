@@ -1,0 +1,29 @@
+.tab-buttons {
+    display: flex;
+}
+
+.tab-buttons button {
+    padding: 10px;
+    margin-right: 5px;
+}
+
+.tab-buttons button.active {
+    background-color: #f0f0f0;
+}
+
+.tab-buttons button.hidden {
+    background-color: #969696;
+}
+
+.tab-buttons button .close {
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.tab-content div {
+    display: none;
+}
+
+.tab-content div.active {
+    display: block;
+}

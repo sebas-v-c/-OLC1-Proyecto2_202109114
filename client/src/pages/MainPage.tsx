@@ -10,8 +10,9 @@ import '../scss/CustomContainer.scss'
 
 import OutputWindow, { OutModes } from '../components/editor/output/OutputWindow';
 import ButtonNavBar from "../components/layout/ButtonNavBar";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import "../scss/MainPage.scss";
+import Tabs from "../components/editor/Tabs";
 //import ButtonNavBar from "../components/layout/Bu"
 //import ButtonNavBar from "../components/layout/ButtonNavBar";
 
@@ -118,11 +119,15 @@ export default function MainPage(){
             <Container fluid className="full-height">
                 <Row className="full-height">
                     <Col className="half-width">
+                        <Tabs/>
                         <CodeEditor
                             code={code}
                             onChange={handleEditorChange}
-                            height="500px"
+                            height="600px"
                         />
+
+                    <Button variant="primary" onClick={handleCompile}>{"Run"}</Button>
+
                     </Col>
                     <Col className="half-width">
                         <OutputWindow
@@ -133,10 +138,6 @@ export default function MainPage(){
                 </Row>
             </Container>
 
-            <ButtonNavBar
-                onButtonClick={handleCompile}
-                content={"Run"}
-            />
         </>
     );
 }
