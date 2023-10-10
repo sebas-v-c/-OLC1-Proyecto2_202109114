@@ -1,0 +1,15 @@
+.terminal {
+    background-color: #282a36;
+    color: #f8f8f2;
+    font-family: monospace;
+    padding: 10px;
+    //border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 100%;
+    overflow-y: auto;
+    white-space: pre-line;
+}
+
+.terminal div {
+    margin-bottom: 5px;
+}

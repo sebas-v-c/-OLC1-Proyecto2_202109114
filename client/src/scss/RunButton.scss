@@ -1,0 +1,19 @@
+
+
+.run-custom-button {
+    background-color: #a6e3a1;
+    color: #181825;
+    border: none;
+    padding: 5px;
+    align-content: center;
+    align-items: center;
+    border-radius: 15%;
+}
+
+.run-custom-button:focus, .run-custom-button:active {
+    outline: none;
+}
+
+.run-custom-button:hover {
+    background-color: #8abc85;
+}
