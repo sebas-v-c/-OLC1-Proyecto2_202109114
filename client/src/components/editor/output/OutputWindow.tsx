@@ -33,7 +33,7 @@ export default function OutputWindow({ outputDetails, outMode }: Props) {
     }
 
     return (
-        <div>
+        <div style={{height: "100%"}}>
             {content}
         </div>
     );

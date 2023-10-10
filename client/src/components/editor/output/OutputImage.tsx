@@ -8,13 +8,19 @@ type Props = {
 }
 
 export default function OutputImage({ content }: Props){
+    const [height, setHeight] = useState(0);
     const [width, setWidht] = useState(0);
     const ref = useRef(null);
 
     useEffect(() => {
-        setWidht(ref.current.clientHeight);
+        setWidht(ref.current.clientWidth);
+        setHeight(ref.current.clientHeight);
+
+        console.log(width);
+        console.log(height);
     });
 
+    // TODO change src of image
     return(
         <div className="div-container" ref={ref}>
             <TransformWrapper
@@ -30,7 +36,7 @@ export default function OutputImage({ content }: Props){
                             <button onClick={() => resetTransform()}>RESET</button>
                         </div>
                         <TransformComponent>
-                            <img src={image} alt="AST" width={width} className="responsive-image" />
+                            <img src={image} alt="AST" width={width - 20} height={height -50} />
                         </TransformComponent>
                     </React.Fragment>
                 )}

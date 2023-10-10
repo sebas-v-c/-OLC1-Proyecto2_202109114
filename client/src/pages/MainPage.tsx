@@ -27,6 +27,7 @@ export default function MainPage(){
     const [outMode, setOutMode] = useState<OutModes>(OutModes.Text);
     const [currentTab, setCurrentTab] = useState<number>(0);
     const fileInputRef = useRef(null);
+    const divRef = useRef(null);
 
     const enterPress = useKeyPress("Enter");
     const ctrlPress = useKeyPress("control");
@@ -205,20 +206,8 @@ export default function MainPage(){
 
     return (
         <div className="page">
-            <ToastContainer
-                position='bottom-right'
-                autoClose={2000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-            />
-
-            <Container fluid>
-                <Row>
+            <div className="div-row">
+                <div className="div-row">
                     <div style={{padding: '10px'}}>
                         <FileActions
                             fileInputRef={fileInputRef}
@@ -227,8 +216,8 @@ export default function MainPage(){
                             onLoad={handleLoad}
                         />
                     </div>
-
-                    <Col className="half-width">
+                </div>
+                <div  className="div-column" ref={divRef} >
                         <Tabs
                             onTabClick={handleTabClick}
                             onNewTab={handleNewTab}
@@ -239,23 +228,9 @@ export default function MainPage(){
                         <CodeEditor
                             code={codeFiles[currentTab] ? codeFiles[currentTab].code : ""}
                             onChange={handleEditorChange}
-                            height="600px"
                         />
 
-
-                    </Col>
-                    <Col className="half-width">
-                        <OutTabs
-                            onOutTabClick={handleOutTabClick}
-                            outMode={outMode}
-                        />
-                        <OutputWindow
-                            outMode={outMode}
-                            outputDetails={"simon"}
-                        />
-                    </Col>
-
-                    <div style={{padding: '10px'}}>
+                    <div style={{ padding: "10px 10px 0 0" }}>
                         <button className="run-custom-button" onClick={handleCompile}>
                             RUN
                             <img
@@ -266,8 +241,21 @@ export default function MainPage(){
                             />
                         </button>
                     </div>
-                </Row>
-            </Container>
+
+                </div>
+                <div className="div-column">
+                        <OutTabs
+                            onOutTabClick={handleOutTabClick}
+                            outMode={outMode}
+                        />
+                        <OutputWindow
+                            outMode={outMode}
+                            outputDetails={"simon"}
+                        />
+                </div>
+
+
+            </div>
 
         </div>
     );

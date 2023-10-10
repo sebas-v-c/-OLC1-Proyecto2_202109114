@@ -1,9 +1,12 @@
+* {
+  box-sizing: border-box;
+}
 
 .run-custom-button {
     background-color: #a6e3a1;
     color: #181825;
     border: none;
-    padding: 5px;
+    padding: 15px;
 }
 
 .run-custom-button:focus, .run-custom-button:active {
@@ -24,7 +27,27 @@
 
 .page {
   background-color: #1e1e2e;
-  height: 100%;
+  margin: 0px;
+  height: 100vh;
+
+
 }
 
+.div-column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 74vh;
+}
 
+.div-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
+}
