@@ -163,7 +163,7 @@ export default function MainPage(){
 
 
     return (
-        <>
+        <div className="page">
             <ToastContainer
                 position='bottom-right'
                 autoClose={2000}
@@ -208,6 +208,6 @@ export default function MainPage(){
                 </Row>
             </Container>
 
-        </>
+        </div>
     );
 }

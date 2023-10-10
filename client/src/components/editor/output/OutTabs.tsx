@@ -24,7 +24,7 @@ export default function OutTabs({ onOutTabClick, outMode }: Props){
                     className={"btn btn-secondary " + `${OutModes.Errors === outMode ? "active" : ""}`}
                     onClick={() => onOutTabClick(OutModes.Errors)}
                 >
-                    ERRORS
+                    REPORTS
                 </Button>
 
                 <Button

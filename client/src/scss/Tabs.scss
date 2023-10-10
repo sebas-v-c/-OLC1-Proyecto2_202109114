@@ -1,5 +1,5 @@
 .tab-container {
-    max-width: 100%;
+    max-width: 80%;
     overflow-x: scroll;
 }
 
@@ -14,11 +14,18 @@
 }
 
 .tab-buttons button.active {
-    background-color: #f0f0f0;
+    background-color: #565e64;
+    color: #ffffff;
+}
+
+.add-tab {
+    background-color: #6c757d;
+    color: #d8d8d8;
 }
 
 .tab-buttons button.hidden {
-    background-color: #969696;
+    background-color: #6c757d;
+    color: #d8d8d8;
 }
 
 .tab-buttons button .close {
