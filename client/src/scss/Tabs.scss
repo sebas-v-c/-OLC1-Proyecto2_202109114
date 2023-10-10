@@ -1,6 +1,32 @@
 .tab-container {
-    max-width: 80%;
+    max-width: 100%;
     overflow-x: scroll;
+}
+
+
+.tab-button {
+    white-space: nowrap;
+    display: flex;
+    padding: 5px;
+    margin-right: 5px;
+    border: none;
+    outline: none;
+    border-radius: 9px 9px 0 0;
+
+    &.active-tab-button {
+      background-color: #94e2d5;
+      color: #181825;
+    }
+
+    &.hidden-tab-button {
+      background-color: #313244;
+      color: #cdd6f4;
+    }
+}
+
+.tab-button:hover {
+    background-color: #6c7086;
+    color: #cdd6f4;
 }
 
 .tab-buttons {
@@ -10,22 +36,33 @@
 }
 
 .tab-buttons button {
+    white-space: nowrap;
     display: flex;
     padding: 5px;
-    margin-right: 5px;
+    margin-right: 1px;
     border: none;
     outline: none;
     border-radius: 9px 9px 0 0;
 }
 
 .tab-buttons button.active {
-    background-color: #565e64;
-    color: #ffffff;
+    background-color: #94e2d5;
+    color: #181825;
+}
+
+.tab-buttons button.hover {
+    background-color: #94e2d5;
+    color: #181825;
 }
 
 .add-tab {
-    background-color: #6c757d;
-    color: #d8d8d8;
+      background-color: #313244;
+      color: #cdd6f4;
+}
+
+.add-tab:hover{
+    background-color: #6c7086;
+    color: #cdd6f4;
 }
 
 .tab-buttons button.hidden {

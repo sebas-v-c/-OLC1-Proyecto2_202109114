@@ -37,10 +37,10 @@
 
 
 
-button:focus, button:active {
+.out-button:focus, out-button:active {
     outline: none;
 }
 
-button:hover {
+.out-button:hover {
     background-color: #7195ce;
 }

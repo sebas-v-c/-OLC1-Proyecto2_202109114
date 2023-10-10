@@ -15,9 +15,6 @@ export default function OutputImage({ content }: Props){
     useEffect(() => {
         setWidht(ref.current.clientWidth);
         setHeight(ref.current.clientHeight);
-
-        console.log(width);
-        console.log(height);
     });
 
     // TODO change src of image
@@ -30,10 +27,10 @@ export default function OutputImage({ content }: Props){
             >
                 {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
                     <React.Fragment>
-                        <div className="tools">
-                            <button onClick={() => zoomIn()}>+</button>
-                            <button onClick={() => zoomOut()}>-</button>
-                            <button onClick={() => resetTransform()}>RESET</button>
+                        <div className="image-button-container">
+                            <button className={"image-button left-image-button"} onClick={() => zoomIn()}>+</button>
+                            <button className={"image-button center-image-button"} onClick={() => zoomOut()}>-</button>
+                            <button className={"image-button right-image-button"} onClick={() => resetTransform()}>RESET</button>
                         </div>
                         <TransformComponent>
                             <img src={image} alt="AST" width={width - 20} height={height -50} />

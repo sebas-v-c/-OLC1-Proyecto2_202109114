@@ -10,3 +10,51 @@
     //overflow-y: auto;
     //overflow-x: auto;
 }
+
+
+
+.image-button-container {
+    display: flex;
+    padding: 0;
+}
+
+
+.image-right-button {
+    border-radius: 0 9px 9px 0;
+}
+
+.image-button {
+    background-color: #fab387;
+    color: #181825;
+    border: none;
+    padding: 5px;
+    align-content: center;
+    align-items: center;
+    border-radius: 0%;
+
+
+    &.left-image-button {
+        border-radius: 9px 0 0 9px;
+    }
+    &.center-image-button {
+        border-radius: 0 0 0 0;
+    }
+    &.right-image-button {
+        border-radius: 0 9px 9px 0;
+    }
+    &.active-image-button {
+        background-color: #cf9370;
+    }
+    &.active-image-button.center-out-button{
+        background-color: #cf9370;
+    }
+}
+
+
+.image-button:focus, .image-button:active {
+    outline: none;
+}
+
+.image-button:hover {
+    background-color: #cf9370;
+}

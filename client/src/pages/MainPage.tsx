@@ -208,7 +208,7 @@ export default function MainPage(){
         <div className="page">
             <div className="div-row">
                 <div className="div-row">
-                    <div style={{padding: '10px'}}>
+                    <div style={{padding: '10px 0px 0px 10px'}}>
                         <FileActions
                             fileInputRef={fileInputRef}
                             onFileChange={handleFileChange}

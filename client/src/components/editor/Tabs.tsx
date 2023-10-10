@@ -17,7 +17,7 @@ export default function Tabs({ onTabClick, onNewTab, onRemoveTab, tabNames, curr
                 {tabNames.map((tab, index) => (
                     <div key={index} >
                         <button
-                            className={index === currentTab ? 'active' : 'hidden'}
+                            className={index === currentTab ? 'tab-button active-tab-button' : 'tab-button hidden-tab-button'}
                             onClick={() => onTabClick(index)}
                         >
                             {tab}
@@ -27,12 +27,6 @@ export default function Tabs({ onTabClick, onNewTab, onRemoveTab, tabNames, curr
                     </div>
                 ))}
                 <button className='add-tab' onClick={onNewTab}>+</button>
-            </div>
-            <div className='tab-content'>
-                {tabNames.map((tab, index) => (
-                    <div key={index} className={index === currentTab ? 'active' : 'hidden'}>
-                    </div>
-                ))}
             </div>
         </div>
     );
