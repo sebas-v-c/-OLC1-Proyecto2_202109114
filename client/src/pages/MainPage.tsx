@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import CodeEditor from "../components/editor/CodeEditor";
 import useKeyPress from "../hooks/useKeyPress";
@@ -12,9 +12,9 @@ import OutputWindow, { OutModes } from '../components/editor/output/OutputWindow
 import OutTabs from "../components/editor/output/OutTabs";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import "../scss/MainPage.scss";
+import "../scss/RunButton.scss"
 import Tabs from "../components/editor/Tabs";
-//import ButtonNavBar from "../components/layout/Bu"
-//import ButtonNavBar from "../components/layout/ButtonNavBar";
+import FileActions from "../components/editor/FileActions";
 
 type Code = {
     fileName: string;
@@ -23,10 +23,10 @@ type Code = {
 
 export default function MainPage(){
     const [codeFiles, setCodeFiles] = useState<Code[]>([{fileName: "Main.qc", code:"// SOME CODE HERE"}]);
-    const [code, setCode] = useState<string>("");
     const [processing, setProcessing] = useState<boolean>(false);
     const [outMode, setOutMode] = useState<OutModes>(OutModes.Text);
     const [currentTab, setCurrentTab] = useState<number>(0);
+    const fileInputRef = useRef(null);
 
     const enterPress = useKeyPress("Enter");
     const ctrlPress = useKeyPress("control");
@@ -161,6 +161,47 @@ export default function MainPage(){
         setOutMode(mode);
     }
 
+    function handleSave() {
+        const blob = new Blob([codeFiles[currentTab].code], { type: "text/qc" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+
+        a.href = url;
+        a.download = codeFiles[currentTab].fileName;
+        a.click();
+
+        URL.revokeObjectURL(url);
+    }
+
+    function handleLoad() {
+        fileInputRef.current.click();
+    }
+
+    function handleFileChange(event) {
+        const selectedFile = event.target.files[0];
+
+        if (selectedFile) {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const fileContent = e.target?.result;
+
+                const newFile: Code = {
+                    fileName: selectedFile.name,
+                    code: fileContent? fileContent : ""
+                }
+
+                setCodeFiles([...codeFiles, newFile]);
+                setCurrentTab(codeFiles.length);
+            };
+
+            reader.readAsText(selectedFile);
+        }
+
+    }
+
+
 
     return (
         <div className="page">
@@ -178,6 +219,15 @@ export default function MainPage(){
 
             <Container fluid>
                 <Row>
+                    <div style={{padding: '10px'}}>
+                        <FileActions
+                            fileInputRef={fileInputRef}
+                            onFileChange={handleFileChange}
+                            onSave={handleSave}
+                            onLoad={handleLoad}
+                        />
+                    </div>
+
                     <Col className="half-width">
                         <Tabs
                             onTabClick={handleTabClick}
@@ -192,7 +242,6 @@ export default function MainPage(){
                             height="600px"
                         />
 
-                    <Button variant="primary" onClick={handleCompile}>{"Run"}</Button>
 
                     </Col>
                     <Col className="half-width">
@@ -205,6 +254,18 @@ export default function MainPage(){
                             outputDetails={"simon"}
                         />
                     </Col>
+
+                    <div style={{padding: '10px'}}>
+                        <button className="run-custom-button" onClick={handleCompile}>
+                            RUN
+                            <img
+                                src="https://icons.iconarchive.com/icons/iconoir-team/iconoir/72/play-icon.png"
+                                alt="Play"
+                                width={19}
+                                height={19}
+                            />
+                        </button>
+                    </div>
                 </Row>
             </Container>
 

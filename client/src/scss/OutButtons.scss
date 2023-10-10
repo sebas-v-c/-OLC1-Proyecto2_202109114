@@ -1,0 +1,46 @@
+.out-button-container {
+    display: flex;
+    padding: 0;
+}
+
+
+.right-button {
+    border-radius: 0 9px 9px 0;
+}
+
+.out-button {
+    background-color: #89b4fa;
+    color: #181825;
+    border: none;
+    padding: 5px;
+    align-content: center;
+    align-items: center;
+    border-radius: 0%;
+
+
+    &.left-out-button {
+        border-radius: 9px 0 0 0;
+    }
+    &.center-out-button {
+        border-radius: 0 0 0 0;
+    }
+    &.right-out-button {
+        border-radius: 0 9px 0 0;
+    }
+    &.active-out-button {
+        background-color: #7195ce;
+    }
+    &.active-out-button.center-out-button{
+        background-color: #7195ce;
+    }
+}
+
+
+
+button:focus, button:active {
+    outline: none;
+}
+
+button:hover {
+    background-color: #7195ce;
+}

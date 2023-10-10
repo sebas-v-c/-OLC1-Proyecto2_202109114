@@ -1,9 +1,13 @@
 
+
 .run-custom-button {
     background-color: #a6e3a1;
     color: #181825;
     border: none;
     padding: 5px;
+    align-content: center;
+    align-items: center;
+    border-radius: 15%;
 }
 
 .run-custom-button:focus, .run-custom-button:active {
@@ -11,20 +15,5 @@
 }
 
 .run-custom-button:hover {
-    background-color: #a6e3a1;
+    background-color: #8abc85;
 }
-
-
-.half-width {
-  max-width: 50%;
-  width: 50%;
-  box-sizing: border-box;
-}
-
-
-.page {
-  background-color: #1e1e2e;
-  height: 100%;
-}
-
-

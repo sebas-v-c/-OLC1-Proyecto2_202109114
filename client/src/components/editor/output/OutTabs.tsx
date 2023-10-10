@@ -1,6 +1,5 @@
 import { OutModes } from "./OutputWindow"
-import "../../../scss/Tabs.scss";
-import { Button, ButtonGroup } from "react-bootstrap";
+import "../../../scss/OutButtons.scss";
 
 
 type Props = {
@@ -10,30 +9,27 @@ type Props = {
 
 export default function OutTabs({ onOutTabClick, outMode }: Props){
     return (
-        <div>
-
-            <ButtonGroup aria-label="Basic Example">
-                <Button
-                    className={"btn btn-secondary " + `${OutModes.Text === outMode ? "active" : ""}`}
+        <div className="out-button-container">
+                <button
+                    className={"out-button left-out-button " + `${OutModes.Text === outMode ? "active-out-button" : ""}`}
                     onClick={() => onOutTabClick(OutModes.Text)}
                 >
                     OUT
-                </Button>
+                </button>
 
-                <Button
-                    className={"btn btn-secondary " + `${OutModes.Errors === outMode ? "active" : ""}`}
+                <button
+                    className={"out-button " + `${OutModes.Errors === outMode ? "active-out-button" : ""}`}
                     onClick={() => onOutTabClick(OutModes.Errors)}
                 >
                     REPORTS
-                </Button>
+                </button>
 
-                <Button
-                    className={"btn btn-secondary " + `${OutModes.Image === outMode ? "active" : ""}`}
+                <button
+                    className={"out-button right-out-button " + `${OutModes.Image === outMode ? "active-out-button" : ""}`}
                     onClick={() => onOutTabClick(OutModes.Image)}
                 >
                     AST
-                </Button>
-            </ButtonGroup>
+                </button>
         </div>
     );
 }
