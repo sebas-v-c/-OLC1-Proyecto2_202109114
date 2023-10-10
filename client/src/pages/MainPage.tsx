@@ -32,7 +32,7 @@ export default function MainPage(){
     const enterPress = useKeyPress("Enter");
     const ctrlPress = useKeyPress("control");
 
-    // use effecto for handling compilation when ctrl + enter is pressed
+    // use effect for handling compilation when ctrl + enter is pressed
     useEffect(() => {
         if (enterPress && ctrlPress) {
             handleCompile();
