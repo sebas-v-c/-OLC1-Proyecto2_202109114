@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/test', /*async*/ (req, res) => {
     // TODO const response = await interpreter.interpret(req.body)
-    res.status(200).json({message: 'SEXOOOO'});
+    res.status(200).json({message: "OK"});
 });
 
 router.post('/interpret', /*async*/ (req, res) => {
