@@ -1,6 +1,7 @@
 import express from "express";
 import { QCObject, QCResponseObject } from "../interfaces";
 import { QCObjectSchema } from "../schema";
+import { NumericLiteral } from "../../analyzer/abastract/ast";
 // TODO import interpeter files
 const router = express.Router();
 
@@ -23,6 +24,7 @@ router.post('/interpret', /*async*/ (req, res) => {
     /*
      * const response: QCResponseObject = await parseFile(qcObj)
      */
+
 
     res.status(200).json({message: "accepted"})
 });

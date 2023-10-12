@@ -9,7 +9,8 @@
     "start": "node build/index",
     "build": "tsc",
     "dev": "ts-node-dev src/index",
-    "jison": "jison src/analyzer/grammar.jison -o dist/analyzer/grammar.js -m es6"
+    "jison": "jison src/analyzer/grammar.jison -o build/analyzer/grammar.js",
+    "jison:debug": "jison src/analyzer/grammar.jison -o build/analyzer/grammar.js -m es6  --debug"
   },
   "repository": {
     "type": "git",

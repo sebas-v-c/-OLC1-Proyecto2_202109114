@@ -11,5 +11,14 @@ describe("Api Test QueryCrypter", function() {
 
         expect(res.status).toBe(200);
         expect(res.body.message).toBe("OK");
+    });
+
+    it("POST to API under /api/interpreter/interpret", async function() {
+        const res = await request.post('/api/interpreter/interpret').send({
+            name: "Main.qc",
+            content: "SELECT * FROM table1 WHERE `name` = \"HOLA\""
+        });
+
+        expect(res.body.message).toBe("accepted");
     })
-})
+});
