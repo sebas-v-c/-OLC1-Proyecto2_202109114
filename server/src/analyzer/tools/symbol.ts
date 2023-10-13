@@ -1,11 +1,12 @@
 import Environment from "./environments";
-import { primitive } from "./types";
+import { Functions, Primitive, ValueType } from "./types";
 
 export default interface Symbol {
     id: string;
-    type: primitive;
-    value: string;
+    type: ValueType;
+    value: any;
     row: number;
     column: number;
     environment?: string;
 }
+

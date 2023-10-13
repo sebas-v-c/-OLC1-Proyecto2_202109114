@@ -23,3 +23,11 @@ export enum RelationalOperator {
     LEQ = "<=",
     GEQ = ">="
 }
+
+export enum Functions {
+    FUNC = "func",
+    METHOD = "method",
+    NATIVE_FN = "native_fn"
+}
+
+export type ValueType = Primitive | Functions
