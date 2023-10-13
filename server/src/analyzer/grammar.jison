@@ -302,8 +302,8 @@ searched_case:
 ;
 
 searched_case_cases:
-    searched_case_cases RW_WHEN relation RW_THEN primitive {}
-|   RW_WHEN relation RW_THEN primitive                     {}
+    searched_case_cases RW_WHEN relational RW_THEN primitive {}
+|   RW_WHEN relational RW_THEN primitive                     {}
 ;
 
 while_struct:
@@ -349,7 +349,7 @@ env:
 /*-------------------------------EXPRESSIONS-------------------------------*/
 expression:
     TK_LPAR select_stmt TK_RPAR { $$ = $1; }
-|   relation                    { $$ = $1; }
+|   relational                  { $$ = $1; }
 |   logic                       { $$ = $1; }
 |   arithmetic                  { $$ = $1; }
 |   primitive                   { $$ = $1; }
@@ -359,7 +359,7 @@ expression:
 |   TK_RPAR expression TK_LPAR  { $$ = $1; }
 ;
 
-relation:
+relational:
     expression TK_EQ expression         {}
 |   expression TK_GEQ expression        {}
 |   expression TK_LEQ expression        {}
