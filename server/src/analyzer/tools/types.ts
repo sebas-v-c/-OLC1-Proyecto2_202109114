@@ -24,6 +24,12 @@ export enum RelationalOperator {
     GEQ = ">="
 }
 
+export enum LogicalOperator {
+    AND = "AND",
+    OR = "OR",
+    NOT = "NOT"
+}
+
 export enum Functions {
     FUNC = "func",
     METHOD = "method",

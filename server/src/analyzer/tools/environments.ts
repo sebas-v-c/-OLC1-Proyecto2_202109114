@@ -1,16 +1,27 @@
-/*
- * the following code is adapted from the Github repository:
- * Repostitory: https://github.com/tlaceby/guide-to-interpreters-series
- * File: /ep11-user-defined-functions/runtime/environments.ts
- * Author: tlaceby
- * Description: create an environment for the interpreter
- */
 
 import Symbol from "./symbol";
 import { Exception } from "../errors";
 
 
 export function creteGlobalEnv() {
+    const env = new Environment();
+    // Define a native builtin method
+
+    // TODO
+    // delcare lower function
+    //env.setSymbol(new Symbol("LOWER"))
+    // declare upper function
+    //env.setSymbol(new Symbol("UPPER"))
+    // declare round function
+    //env.setSymbol(new Symbol("ROUND"))
+    // declare LENGHT function
+    //env.setSymbol(new Symbol("LENGTH"))
+    // declare TRUNCATE function
+    //env.setSymbol(new Symbol("TRUNCATE"))
+    // declare typeof function
+    //env.setSymbol(new Symbol("TYPEOF"))
+
+    return env;
 }
 
 
@@ -64,7 +75,6 @@ export default class Environment {
         return env.table.get(symbol.id) as Symbol;
     }
 
-
     public resolveSymbol(symbol: Symbol): Environment | Exception {
         if (this.table.has(symbol.id)) {
             return this;
@@ -76,6 +86,4 @@ export default class Environment {
 
         return this.parent.resolveSymbol(symbol);
     }
-
-
 }
