@@ -1,4 +1,4 @@
-export enum primitive {
+export enum Primitive {
     INT = "int",
     VARCHAR = "varchar",
     DATE = "date",
@@ -7,7 +7,7 @@ export enum primitive {
     NULL = "null"
 }
 
-export enum arithmeticOperator {
+export enum ArithmeticOperator {
     PLUS = "+",
     MINUS = "-",
     MULT = "*",
@@ -15,7 +15,7 @@ export enum arithmeticOperator {
     MOD = "%"
 }
 
-export enum relationalOperator {
+export enum RelationalOperator {
     EQ = "=",
     NEQ = "!=",
     LESS = "<",

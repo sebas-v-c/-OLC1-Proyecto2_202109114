@@ -1,3 +1,10 @@
+import Environment from "../tools/environments";
+import Tree from "../tools/tree";
+import ReturnType from "../tools/returnType";
+
+
+/*
+* CODE FROM TUTORIAL
 export enum NodeType {
     Program,
     NumerciLiteral,
@@ -6,14 +13,17 @@ export enum NodeType {
     CallExpr,
     FunctionDeclaration
 }
+*/
 
 
 export interface Statement {
     row: number;
     column: number;
 
-    getValue()
-    kind: NodeType;
+    getValue(tree: Tree, table: Environment): ReturnType;
+    interpret(tree: Tree, table: Environment): any;
+    getCST(): Node;
+    getAST(): Node;
 }
 
 export class Node {
@@ -42,9 +52,11 @@ export class Node {
 
 
 
+/*
+* CODE FROM TUTORIAL
 export interface Program extends Stmt {
     kind: NodeType.Program;
-    body: Stmt[];
+    body: Statement[];
 }
 
 
@@ -68,3 +80,4 @@ export interface NumericLiteral extends Expr {
     kind: NodeType.NumerciLiteral;
     value: number
 }
+*/
