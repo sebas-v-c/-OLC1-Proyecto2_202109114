@@ -3,19 +3,6 @@ import Tree from "../tools/tree";
 import ReturnType from "../tools/returnType";
 
 
-/*
-* CODE FROM TUTORIAL
-export enum NodeType {
-    Program,
-    NumerciLiteral,
-    Identifier,
-    BinaryExpr,
-    CallExpr,
-    FunctionDeclaration
-}
-*/
-
-
 export interface Statement {
     row: number;
     column: number;
@@ -50,34 +37,3 @@ export class Node {
     }
 }
 
-
-
-/*
-* CODE FROM TUTORIAL
-export interface Program extends Stmt {
-    kind: NodeType.Program;
-    body: Statement[];
-}
-
-
-export interface Expr extends Stmt {}
-
-
-export interface BinaryExpr extends Expr {
-    kind: NodeType.BinaryExpr
-    left: Expr;
-    right: Expr;
-    operator: string;
-}
-
-
-export interface Identifier extends Expr {
-    kind: NodeType.Identifier;
-    symbol: string ;
-}
-
-export interface NumericLiteral extends Expr {
-    kind: NodeType.NumerciLiteral;
-    value: number
-}
-*/
