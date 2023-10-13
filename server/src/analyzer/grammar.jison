@@ -25,8 +25,6 @@
 "--".*                                      // comment inline
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]         // MultiLineComment
 
-
-
 /*---------------------------Reserved Words---------------------------*/
 "CREATE"                        return "RW_CREATE";
 "ALTER"                         return "RW_ALTER";
@@ -122,7 +120,7 @@
 <string>"\\\'"                  { str += "\'"; }
 <string>\s                      { str += " "; }
 <string>"\\r"                   { str += "\r"; }
-<string>["]                     { yytext = str; this.popState(); return 'TK_VARCHAR'}
+<string>["]                     { yytext = str; this.popState(); return 'TK_VARCHAR';}
 
 [0-9]+\b                                return "TK_INT";
 [0-9]+\.[0-9]+                          return "TK_DOUBLE";
@@ -150,9 +148,9 @@
 %left "RW_AND"
 %right "RW_NOT"
 %left "TK_EQEQ" "TK_NOTEQ" "TK_LESS" "TK_LEQ" "TK_GREATER" "TK_GEQ" "TK_EQ"
-%left "TK_PLUS" "TK_MINUS"
+%left "TK_PLUS" "TK_MINUS" "TK_MOD"
 %left "TK_STAR" "TK_DIV"
-%right 'UMINUS'
+%right "UMINUS"
 
 /*to regonize this token we should call it with %prec UMINUS after delcaring a production
 
@@ -168,7 +166,6 @@ ini:
     instructions EOF    { ast = { instructions: $1, synErrors: synErrors, lexErrors: lexErrors }; errors = []; return ast; }
 ;
 
-// $$ sign is the root 
 instructions:
     instructions instruction TK_SCOLON  { $1.push($2); $$ = $1; }
 |   instruction TK_SCOLON               { $$ = $1 == null ? [] : [$1]; }
@@ -226,10 +223,10 @@ select_stmt:
 |   RW_SELECT select_arguments FROM TK_ID RW_WHERE expression   {}
 // TODO I DONT KNOW IF THIS IS CORRECT
 //|   RW_SELECT TK_VAR                                            {}
+|   RW_SELECT expression AS TK_ID                               {}
 |   RW_SELECT expression                                        {}
 // TODO I DONT KNOW IF THIS IS CORRECT
 //|   RW_SELECT TK_VAR AS TK_ID                                   {}
-|   RW_SELECT expression AS TK_ID                               {}
 ;
 
 /*-------------------------------ARGUMENTS-------------------------------*/
@@ -279,8 +276,8 @@ type:
 /*-------------------------------STRUCTURES-------------------------------*/
 // TODO wait for an official test file
 if_struct:
-    RW_IF expression RW_THEN env RW_ELSE env2 RW_END RW_IF  {}
-|   RW_IF expression RW_THEN RW_BEGIN env RW_END            {}
+    RW_IF expression RW_THEN RW_BEGIN env RW_END           {}
+|   RW_IF expression RW_THEN env RW_ELSE env RW_END RW_IF  {}
 ;
 
 case_struct:
@@ -291,7 +288,7 @@ case_struct:
 simple_case:
 // TODO also change the last expression to a primitive
     RW_CASE expression simple_case_cases RW_ELSE primitive RW_END              {}
-    RW_CASE expression simple_case_cases RW_ELSE primitive RW_END RW_AS TK_ID  {}
+|   RW_CASE expression simple_case_cases RW_ELSE primitive RW_END RW_AS TK_ID  {}
 ;
 
 simple_case_cases:
@@ -378,12 +375,12 @@ logic:
 ;
 
 arithmetic:
-    expression TK_PLUS expression       {}
+    TK_MINUS expression %prec UMINUS    {}
+|   expression TK_PLUS expression       {}
 |   expression TK_MINUS expression      {}
 |   expression TK_DIV expression        {}
 |   expression TK_STAR expression       {}
 |   expression TK_MOD expression        {}
-|   TK_MINUS expression %prec UMINUS    {}
 ;
 
 primitive:
@@ -398,7 +395,6 @@ primitive:
     
 call_func_mth:
     TK_ID TK_LPAR arguments TK_RPAR {}
-|
 ;
 
 /*-------------------------------FUNCTIONS-------------------------------*/
@@ -407,5 +403,5 @@ cast:
 ;
 
 print:
-    RW_PRINT expression
+    RW_PRINT expression {}
 ;
