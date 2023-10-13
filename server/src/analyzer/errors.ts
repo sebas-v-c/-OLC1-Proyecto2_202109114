@@ -33,10 +33,22 @@ export class SynError implements Error {
     }
 }
 
-export class SemError implements Error {
-    constructor(public line: number, public column: number, public description: string){}
+
+export class Exception implements Error {
+    constructor(
+        public type: string,
+        public description: string,
+        public line: number,
+        public column: number,
+        public environment?: string
+    ) {}
 
     public print(): void {
-        console.log(`Semantic Error at: Line: ${this.line} Column: ${this.column}. ${this.description}`);
+        console.log(this.toString());
     }
+
+    public toString(): string {
+        return `--> ${this.type} - ${this.description} in ${this.environment} on [${this.line}, ${this.column}`;
+    }
+
 }
