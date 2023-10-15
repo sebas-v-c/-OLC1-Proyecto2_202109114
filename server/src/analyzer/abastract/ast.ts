@@ -4,7 +4,7 @@ import ReturnType from "../tools/returnType";
 
 
 export interface Statement {
-    row: number;
+    line: number;
     column: number;
 
     getValue(tree: Tree, table: Environment): ReturnType;

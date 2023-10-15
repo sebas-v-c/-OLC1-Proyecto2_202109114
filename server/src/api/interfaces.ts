@@ -3,9 +3,11 @@ export interface QCObject{
     content: string;
 }
 
+// TODO change the error type
 export interface Errors {
     lex: string[];
     syn: string[];
+    sem: string[]
 }
 
 export interface SymTable {
@@ -21,4 +23,5 @@ export interface QCResponseObject extends QCObject {
     symtable: SymTable;
     ast: string;
     status: number;
+    error: number;
 }

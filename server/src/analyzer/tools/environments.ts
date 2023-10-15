@@ -27,7 +27,7 @@ export function creteGlobalEnv() {
 
 
 export default class Environment {
-    private name: string;
+    public name: string;
     private parent?: Environment;
     private table: Map<string, Symbol>;
 
@@ -57,7 +57,7 @@ export default class Environment {
         let envVar = env.table.get(symbol.id);
 
         if (envVar !== undefined){
-            if (envVar === symbol.type) {
+            if (envVar.type === symbol.type) {
                 envVar.value = symbol.value;
                 return undefined;
             }

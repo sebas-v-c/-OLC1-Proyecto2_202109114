@@ -1,7 +1,8 @@
 import express from "express";
 import { QCObject, QCResponseObject } from "../interfaces";
 import { QCObjectSchema } from "../schema";
-import { NumericLiteral } from "../../analyzer/abastract/ast";
+import { analyze } from "./interpreter.controller.js";
+
 // TODO import interpeter files
 const router = express.Router();
 
@@ -10,6 +11,8 @@ router.get('/test', /*async*/ (req, res) => {
     // TODO const response = await interpreter.interpret(req.body)
     res.status(200).json({message: "OK"});
 });
+
+
 
 router.post('/interpret', /*async*/ (req, res) => {
     const { error, value } = QCObjectSchema.validate(req.body);
