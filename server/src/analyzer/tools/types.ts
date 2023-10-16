@@ -1,11 +1,19 @@
-export enum Primitive {
+export enum Numerics {
     INT = "int",
+    DOUBLE = "double"
+}
+
+export enum Strings {
     VARCHAR = "varchar",
-    DATE = "date",
+    DATE = "date"
+}
+
+export enum Booleans {
     BOOLEAN = "boolean",
-    DOUBLE = "double",
     NULL = "null"
 }
+
+export type Primitive = Numerics | Strings | Booleans;
 
 export enum ArithmeticOperator {
     PLUS = "+",

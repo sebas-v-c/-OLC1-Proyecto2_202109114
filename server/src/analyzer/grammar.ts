@@ -29,7 +29,7 @@ import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, Pro
     const { SetVar } = require("./instructions/setVar");
     const { If } = require("./instructions/if");
     const { CodeBlock } = require("./instructions/codeBlock");
-    const { Primitive } = require("./tools/types");
+    const { Numerics, Strings, Booleans } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
     const { CallVar } = require("./expressions/callVar");
 
@@ -82,22 +82,22 @@ case 47:
  this.$ = [{id: $$[$0-1], type: $$[$0]}];
 break;
 case 48:
- this.$ = Primitive.INT; 
+ this.$ = Numerics.INT; 
 break;
 case 49:
- this.$ = Primitive.VARCHAR; 
+ this.$ = Strings.VARCHAR; 
 break;
 case 50:
- this.$ = Primitive.DOUBLE; 
+ this.$ = Numerics.DOUBLE; 
 break;
 case 51:
- this.$ = Primitive.DATE; 
+ this.$ = Strings.DATE; 
 break;
 case 52:
- this.$ = Primitive.BOOLEAN; 
+ this.$ = Booleans.BOOLEAN; 
 break;
 case 53:
- this.$ = Primitive.NULL; 
+ this.$ = Booleans.NULL; 
 break;
 case 54:
  this.$ = new If($$[$0-4], $$[$0-1], undefined, _$[$0-5].first_line, _$[$0-5].first_column); 
@@ -130,25 +130,25 @@ case 84:
  this.$ = $$[$0-2]; 
 break;
 case 94:
- this.$ = new PrimitiveVar($$[$0], Primitive.INT , _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new PrimitiveVar($$[$0], Numerics.INT , _$[$0].first_line, _$[$0].first_column); 
 break;
 case 95:
- this.$ = new PrimitiveVar($$[$0], Primitive.DOUBLE , _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new PrimitiveVar($$[$0], Numerics.DOUBLE , _$[$0].first_line, _$[$0].first_column); 
 break;
 case 96:
- this.$ = new PrimitiveVar($$[$0], Primitive.DATE , _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new PrimitiveVar($$[$0], Strings.DATE , _$[$0].first_line, _$[$0].first_column); 
 break;
 case 97:
- this.$ = new PrimitiveVar($$[$0], Primitive.VARCHAR, _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new PrimitiveVar($$[$0], Strings.VARCHAR, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 98:
- this.$ = new PrimitiveVar($$[$0], Primitive.BOOLEAN , _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new PrimitiveVar($$[$0], Booleans.BOOLEAN , _$[$0].first_line, _$[$0].first_column); 
 break;
 case 99:
- this.$ = new PrimitiveVar($$[$0], Primitive.BOOLEAN, _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new PrimitiveVar($$[$0], Booleans.BOOLEAN, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 100:
- this.$ = new PrimitiveVar(null, Primitive.NULL, _$[$0].first_line, _$[$0].first_column); 
+ this.$ = new PrimitiveVar(null, Booleans.NULL, _$[$0].first_line, _$[$0].first_column); 
 break;
         }
     }

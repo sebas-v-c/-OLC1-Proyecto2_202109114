@@ -3,7 +3,7 @@ import { Exception } from "../errors";
 import Environment from "../tools/environments";
 import ReturnType from "../tools/returnType";
 import Tree from "../tools/tree";
-import { Primitive } from "../tools/types";
+import { Booleans, Primitive } from "../tools/types";
 import Symbol from "../tools/symbol";
 
 
@@ -23,7 +23,7 @@ export class SetVar implements Statement {
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {
-        return new ReturnType(Primitive.NULL, null);
+        return new ReturnType(Booleans.NULL, null);
     }
 
     interpret(tree: Tree, table: Environment) {
@@ -32,7 +32,7 @@ export class SetVar implements Statement {
 
         let result: any;
 
-        symbol = table.getSymbol(new Symbol(this.id, Primitive.NULL, null,this.line, this.column, table));
+        symbol = table.getSymbol(new Symbol(this.id, Booleans.NULL, null,this.line, this.column, table));
 
         if (symbol instanceof Exception){
             return new Exception("Semantic", `Variable ${this.id} isn't defined in the current scope`, this.line, this.column, table.name);

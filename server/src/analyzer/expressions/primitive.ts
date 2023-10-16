@@ -1,7 +1,7 @@
 import { Node, Statement } from "../abastract/ast";
 import Environment from "../tools/environments";
 import ReturnType from "../tools/returnType";
-import { Primitive } from "../tools/types";
+import { Booleans, Numerics, Primitive, Strings } from "../tools/types";
 import Tree from "../tools/tree";
 
 
@@ -24,27 +24,27 @@ export class PrimitiveVar implements Statement {
 
     getValue(tree: Tree, table: Environment): ReturnType {
         switch(this.type){
-            case Primitive.INT: {
+            case Numerics.INT: {
                 this.value = Number(this.value);
                 break;
             }
-            case Primitive.BOOLEAN: {
+            case Booleans.BOOLEAN: {
                 this.value = this.value.toLowerCase() == 'true'? true : false;
                 break;
             }
-            case Primitive.DOUBLE: {
+            case Numerics.DOUBLE: {
                 this.value = Number(this.value);
                 break;
             }
-            case Primitive.NULL: {
+            case Booleans.NULL: {
                 this.value = null;
                 break;
             }
-            case Primitive.VARCHAR: {
+            case Strings.VARCHAR: {
                 this.value = this.value.slice(1, -1);
                 break;
             }
-            case Primitive.DATE: {
+            case Strings.DATE: {
                 this.value = this.value
             }
         }
