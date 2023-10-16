@@ -40,18 +40,128 @@ export class Relational implements Statement {
                                      );
             }
             case RelationalOperator.GREATER: {
-                try{
-                    this._test_numeric_operation(table, tree)
-                } catch (err){
+                try {
+                    return this._greater_operation(table, tree);
+                } catch(err){
                     return new ReturnType(Primitive.NULL, err);
                 }
-
-                return new ReturnType(Primitive.BOOLEAN, this.leftExp.getValue(tree, table) >= this.rightExp.getValue(tree, table));
+            }
+            case RelationalOperator.GEQ: {
+                try {
+                    return this._geq_operation(table, tree);
+                } catch(err){
+                    return new ReturnType(Primitive.NULL, err);
+                }
+            }
+            case RelationalOperator.LESS: {
+                try {
+                    return this._less_operation(table, tree);
+                } catch(err){
+                    return new ReturnType(Primitive.NULL, err);
+                }
+            }
+            case RelationalOperator.LEQ: {
+                try {
+                    return this._leq_operation(table, tree);
+                } catch(err){
+                    return new ReturnType(Primitive.NULL, err);
+                }
+            }
+            case RelationalOperator.NEQ: {
+                let leftResult: ReturnType = this.leftExp.getValue(tree, table);
+                if (leftResult.value instanceof Exception) {return leftResult}
+                let rightResult: ReturnType = this.rightExp.getValue(tree, table);
+                if (rightResult.value instanceof Exception) {return rightResult}
+                return new ReturnType(Primitive.BOOLEAN,
+                                      (this.leftExp.getValue(tree, table).value !== this.rightExp.getValue(tree, table).value) &&
+                    (this.leftExp.getValue(tree, table).type !== this.rightExp.getValue(tree, table).type)
+                                     );
             }
         }
-
-        return new ReturnType(Primitive.NULL, null);
     }
+
+    _greater_operation(table: Environment, tree: Tree): ReturnType {
+        let leftResult: ReturnType = this.leftExp.getValue(tree, table);
+        if (leftResult.value instanceof Exception) {
+            throw new Exception(leftResult.value.type, leftResult.value.description, this.line, leftResult.value.column, table.name);
+        }
+        let rightResult: ReturnType = this.rightExp.getValue(tree, table);
+        if (rightResult.value instanceof Exception) {
+            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
+        }
+
+        if (leftResult.type === Primitive.DATE && rightResult.type === Primitive.DATE){
+            return new ReturnType(Primitive.BOOLEAN, leftResult.value > rightResult.value);
+        }
+        if ((leftResult.type === Primitive.INT || leftResult.type === Primitive.DOUBLE) && (rightResult.type === Primitive.INT || rightResult.type === Primitive.DOUBLE)){
+            return new ReturnType(Primitive.BOOLEAN, leftResult.value > rightResult.value);
+        }
+
+        throw new Exception("Type Error", `">" to supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
+    }
+
+    _less_operation(table: Environment, tree: Tree): ReturnType {
+        let leftResult: ReturnType = this.leftExp.getValue(tree, table);
+        if (leftResult.value instanceof Exception) {
+            throw new Exception(leftResult.value.type, leftResult.value.description, this.line, leftResult.value.column, table.name);
+        }
+        let rightResult: ReturnType = this.rightExp.getValue(tree, table);
+        if (rightResult.value instanceof Exception) {
+            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
+        }
+
+        if (leftResult.type === Primitive.DATE && rightResult.type === Primitive.DATE){
+            return new ReturnType(Primitive.BOOLEAN, leftResult.value < rightResult.value);
+        }
+        if ((leftResult.type === Primitive.INT || leftResult.type === Primitive.DOUBLE) && (rightResult.type === Primitive.INT || rightResult.type === Primitive.DOUBLE)){
+            return new ReturnType(Primitive.BOOLEAN, leftResult.value < rightResult.value);
+        }
+
+        throw new Exception("Type Error", `">" to supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
+    }
+
+
+    _geq_operation(table: Environment, tree: Tree): ReturnType {
+        let leftResult: ReturnType = this.leftExp.getValue(tree, table);
+        if (leftResult.value instanceof Exception) {
+            throw new Exception(leftResult.value.type, leftResult.value.description, this.line, leftResult.value.column, table.name);
+        }
+        let rightResult: ReturnType = this.rightExp.getValue(tree, table);
+        if (rightResult.value instanceof Exception) {
+            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
+        }
+
+        if (leftResult.type === Primitive.DATE && rightResult.type === Primitive.DATE){
+            return new ReturnType(Primitive.BOOLEAN, leftResult.value >= rightResult.value);
+        }
+        if ((leftResult.type === Primitive.INT || leftResult.type === Primitive.DOUBLE) && (rightResult.type === Primitive.INT || rightResult.type === Primitive.DOUBLE)){
+            return new ReturnType(Primitive.BOOLEAN, leftResult.value >= rightResult.value);
+        }
+
+        throw new Exception("Type Error", `">=" to supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
+    }
+
+    _leq_operation(table: Environment, tree: Tree): ReturnType {
+        let leftResult: ReturnType = this.leftExp.getValue(tree, table);
+        if (leftResult.value instanceof Exception) {
+            throw new Exception(leftResult.value.type, leftResult.value.description, this.line, leftResult.value.column, table.name);
+        }
+        let rightResult: ReturnType = this.rightExp.getValue(tree, table);
+        if (rightResult.value instanceof Exception) {
+            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
+        }
+
+        if (leftResult.type === Primitive.DATE && rightResult.type === Primitive.DATE){
+            return new ReturnType(Primitive.BOOLEAN, leftResult.value <= rightResult.value);
+        }
+        if ((leftResult.type === Primitive.INT || leftResult.type === Primitive.DOUBLE) && (rightResult.type === Primitive.INT || rightResult.type === Primitive.DOUBLE)){
+            return new ReturnType(Primitive.BOOLEAN, leftResult.value <= rightResult.value);
+        }
+
+        throw new Exception("Type Error", `"<=" to supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
+    }
+
+
 
     _test_numeric_operation(table: Environment, tree: Tree) {
         let leftResult: ReturnType = this.leftExp.getValue(tree, table);
