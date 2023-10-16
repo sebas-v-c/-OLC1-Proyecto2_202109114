@@ -6,6 +6,7 @@ import path from 'path';
 import { Node, Statement } from '../analyzer/abastract/ast';
 import Tree from '../analyzer/tools/tree';
 import Environment, { createGlobalEnv } from '../analyzer/tools/environments';
+import { Exception } from '../analyzer/errors';
 
 
 describe("Testing Interpreter", function() {
@@ -28,7 +29,13 @@ describe("Testing Interpreter", function() {
         debugger
         for (let instruction of tree.instructions) {
             let value: any = instruction.interpret(tree, globalEnv)
+            let isException: boolean = value instanceof Exception;
+            if (isException) {
+                console.log(value);
+            }
+            expect(isException).toBeFalsy();
         }
+
 
         console.log(globalEnv);
 

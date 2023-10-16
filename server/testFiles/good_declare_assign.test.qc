@@ -6,7 +6,7 @@ DECLARE @nombre2 varchar, @edad int;
 
 DECLARE @nombre VARCHAR;
 
-DECLARE @edad2 INT DEFAULT 10;
+DECLARE @edad INT DEFAULT 10;
 
 --SET @edad = 25;
 
