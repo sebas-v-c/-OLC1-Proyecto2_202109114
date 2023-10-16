@@ -19,6 +19,7 @@ export class CodeBlock implements Statement {
         this.line = line;
         this.column = column;
         this.envName = envName;
+        this.currentEnv = new Environment();
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {
