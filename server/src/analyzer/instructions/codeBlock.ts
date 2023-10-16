@@ -9,13 +9,15 @@ import { Exception } from "../errors";
 
 export class CodeBlock implements Statement {
     public instructions: Array<Statement>;
+    public envName: string;
     public line: number;
     public column: number;
 
-    constructor(instructions: Array<Statement>, line: number, column: number,){
+    constructor(instructions: Array<Statement>, line: number, column: number, envName:string = "deft"){
         this.instructions = instructions;
         this.line = line;
         this.column = column;
+        this.envName = envName;
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {
@@ -23,7 +25,7 @@ export class CodeBlock implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
-        const newEnv: Environment = new Environment(table, "if_env");
+        const newEnv: Environment = new Environment(table, this.envName);
 
         for (let instruction of this.instructions){
             const retVar = instruction.interpret(tree, newEnv);

@@ -40,10 +40,10 @@ export class If implements Statement {
 
         let retVar: any = undefined;
         if (flag.type === Primitive.BOOLEAN){
-            if (flag.value){
+            if (flag.value === true){
                 retVar = this.block.interpret(tree, table);
-            } else if(this.elseBlock !== undefined){
-                retVar = this.elseBlock.interpret(tree, table)
+            } else if(this.elseBlock instanceof CodeBlock){
+                retVar = this.elseBlock.interpret(tree, table);
             }
         }
         return retVar;

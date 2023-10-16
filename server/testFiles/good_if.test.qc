@@ -10,6 +10,13 @@ IF @var < 5 THEN
     SET @VAR = 20 + 5;
 ELSE
      declare @var2 varchar;
-     set @VAR = 12 + 1;
+     set @VAR = 1237 + 2;
      set @var2 = "simon";
 END IF;
+
+/*
+IF @var > 5 THEN
+BEGIN
+    SET @var = 20 + 5;
+END;
+*/

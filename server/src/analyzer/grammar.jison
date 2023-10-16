@@ -138,8 +138,9 @@
     const { SetVar } = require("./instructions/setVar");
     const { If } = require("./instructions/if");
     const { CodeBlock } = require("./instructions/codeBlock");
-    const { Primitive } = require("./tools/types");
+    const { Primitive, RelationalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
+    const { Relational } = require("./expressions/relational");
     const { CallVar } = require("./expressions/callVar");
 %}
 
@@ -281,8 +282,8 @@ type:
 /*-------------------------------STRUCTURES-------------------------------*/
 // TODO wait for an official test file
 if_struct:
-    RW_IF expression RW_THEN RW_BEGIN env RW_END           { $$ = new If($2, $5, undefined, @1.first_line, @1.first_column); }
-|   RW_IF expression RW_THEN env RW_ELSE env RW_END RW_IF  { $$ = new If($2, $4, $6, @1.first_line, @1.first_column); }
+    RW_IF expression RW_THEN env RW_ELSE env RW_END RW_IF  { $$ = new If($2, $4, $6, @1.first_line, @1.first_column, "if_env"); }
+|   RW_IF expression RW_THEN RW_BEGIN env RW_END           { $$ = new If($2, $5, undefined, @1.first_line, @1.first_column, "if_env"); }
 ;
 
 case_struct:
@@ -365,12 +366,12 @@ expression:
 ;
 
 relational:
-    expression TK_EQ expression         {}
-|   expression TK_GEQ expression        {}
-|   expression TK_LEQ expression        {}
-|   expression TK_GREATER expression    {}
-|   expression TK_LESS expression       {}
-|   expression TK_NOTEQ expression      {}
+    expression TK_EQ expression         { $$ = new Relational($1, RelationalOperator.EQ, $3, @1.first_line, @1.first_column); }
+|   expression TK_GEQ expression        { $$ = new Relational($1, RelationalOperator.GEQ, $3, @1.first_line, @1.first_column); }
+|   expression TK_LEQ expression        { $$ = new Relational($1, RelationalOperator.LEQ, $3, @1.first_line, @1.first_column); }
+|   expression TK_GREATER expression    { $$ = new Relational($1, RelationalOperator.GREATER, $3, @1.first_line, @1.first_column); }
+|   expression TK_LESS expression       { $$ = new Relational($1, RelationalOperator.LESS, $3, @1.first_line, @1.first_column); }
+|   expression TK_NOTEQ expression      { $$ = new Relational($1, RelationalOperator.NEQ, $3, @1.first_line, @1.first_column); }
 ;
 
 logic:
