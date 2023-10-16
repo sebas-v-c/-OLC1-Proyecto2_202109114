@@ -26,13 +26,13 @@ describe("Testing Interpreter", function() {
         globalEnv = createGlobalEnv();
         tree.globalTable = globalEnv;
 
-        debugger
         for (let instruction of tree.instructions) {
             let value: any = instruction.interpret(tree, globalEnv)
             let isException: boolean = value instanceof Exception;
             if (isException) {
                 console.log(value);
             }
+
             expect(isException).toBeFalsy();
         }
 

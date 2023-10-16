@@ -142,6 +142,7 @@
     */
     // use this import while testing
     const { Declaration } = require("./instructions/declaration");
+    const { SetVar } = require("./instructions/setVar");
     const { Primitive } = require("./tools/types.ts");
     const { PrimitiveVar } = require("./expressions/primitive");
 %}
@@ -343,7 +344,7 @@ declare_var:
 ;
 
 set_var:
-    RW_SET TK_VAR TK_EQ expression  {}
+    RW_SET TK_VAR TK_EQ expression  { $$ = new SetVar($2, $4, @1.first_line, @1.first_column); }
 ;
 
 /*-------------------------------ENVIRONMENTS-------------------------------*/
