@@ -6,10 +6,10 @@ DECLARE @nombre2 varchar, @edad int;
 
 DECLARE @nombre VARCHAR;
 
-DECLARE @edad INT DEFAULT 10;
+DECLARE @edad2 INT DEFAULT 10;
 
 --SET @edad = 25;
 
-DECLARE @si INT;
+DECLARE @SI INT;
 
 --SET @edad = '\n\"\"aaaa';

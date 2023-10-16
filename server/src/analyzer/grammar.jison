@@ -5,8 +5,6 @@
     */
     // use this import while testing
     const { LexError, SynError } = require("./errors");
-    const { Declaration } = require("./instructions/declaration");
-    const { Primitive } = require("./tools/types.ts");
 %}
 
 %{
@@ -138,6 +136,14 @@
 // IMPORTS FOR THE PARSER
 %{
 
+    // files to import should be the js files
+    /*
+    import { LexError, SynError } from "./errors.js" 
+    */
+    // use this import while testing
+    const { Declaration } = require("./instructions/declaration");
+    const { Primitive } = require("./tools/types.ts");
+    const { PrimitiveVar } = require("./expressions/primitive");
 %}
 
 
@@ -267,12 +273,12 @@ typed_var_arguments:
 
 /*-------------------------------TYPE-------------------------------*/
 type:
-    RW_INT      {}
-|   RW_VARCHAR  {}
-|   RW_DOUBLE   {}
-|   RW_DATE     {}
-|   RW_BOOLEAN  {}
-|   RW_NULL     {}
+    RW_INT      { $$ = Primitive.INT; }
+|   RW_VARCHAR  { $$ = Primitive.VARCHAR; }
+|   RW_DOUBLE   { $$ = Primitive.DOUBLE; }
+|   RW_DATE     { $$ = Primitive.DATE; }
+|   RW_BOOLEAN  { $$ = Primitive.BOOLEAN; }
+|   RW_NULL     { $$ = Primitive.NULL; }
 ;
 
 /*-------------------------------STRUCTURES-------------------------------*/
@@ -343,7 +349,7 @@ set_var:
 /*-------------------------------ENVIRONMENTS-------------------------------*/
 
 env:
-    instructions    {}
+    instructions    { $$ = $1; }
 // THIS IS EMPTY I GUES
 |                   {}
 ;
@@ -386,13 +392,13 @@ arithmetic:
 ;
 
 primitive:
-    TK_VARCHAR  {}
-|   TK_INT      {}
-|   TK_DOUBLE   {}
-|   TK_DATE     {}
-|   RW_TRUE     {}
-|   RW_FALSE    {}
-|   RW_NULL     {}
+    TK_VARCHAR  { $$ = new PrimitiveVar($1, Primitive.VARCHAR, @1.first_line, @1.first_column); }
+|   TK_INT      { $$ = new PrimitiveVar($1, Primitive.INT , @1.first_line, @1.first_column); }
+|   TK_DOUBLE   { $$ = new PrimitiveVar($1, Primitive.DOUBLE , @1.first_line, @1.first_column); }
+|   TK_DATE     { $$ = new PrimitiveVar($1, Primitive.DATE , @1.first_line, @1.first_column); }
+|   RW_TRUE     { $$ = new PrimitiveVar($1, Primitive.BOOLEAN , @1.first_line, @1.first_column); }
+|   RW_FALSE    { $$ = new PrimitiveVar($1, Primitive.BOOLEAN, @1.first_line, @1.first_column); }
+|   RW_NULL     { $$ = new PrimitiveVar(null, Primitive.NULL, @1.first_line, @1.first_column); }
 ;
     
 call_func_mth:

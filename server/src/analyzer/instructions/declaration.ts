@@ -35,8 +35,9 @@ export class Declaration implements Statement {
         let value: ReturnType;
         let symbols: Symbol[] = [];
 
+
         for (const variable of this.vars) {
-            symbols.push(new Symbol(variable.id, variable.type, null, this.line, this.column, table));
+            symbols.push(new Symbol(variable.id.toLowerCase(), variable.type, null, this.line, this.column, table));
         }
 
         let result: any;
@@ -52,16 +53,13 @@ export class Declaration implements Statement {
                 return value.value;
             }
 
-            if (value.value !== value.type){
-                return new Exception("Semantic", `Type: ${value.type} can't be assigned to variable of type: ${symbols[1].type}`, this.line, this.column, table.name);
+            if (symbols[0].type !== value.type){
+                return new Exception("Semantic", `Type: ${value.type} can't be assigned to variable of type: ${symbols[0].type}`, this.line, this.column, table.name);
             }
 
-            if (symbols[1].type !== value.type){
-                return new Exception("Semantic", `Type: ${value.type} can't be assigned to variable of type: ${symbols[1].type}`, this.line, this.column, table.name);
-            }
+            symbols[0].value = value.value;
+            result = table.setSymbol(symbols[0]);
 
-            symbols[1].value = value;
-            result = table.setSymbol(symbols[1]);
         }
 
         if (result instanceof Exception){

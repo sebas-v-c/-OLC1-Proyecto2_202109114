@@ -25,10 +25,13 @@ describe("Testing Interpreter", function() {
         globalEnv = createGlobalEnv();
         tree.globalTable = globalEnv;
 
+        debugger
         for (let instruction of tree.instructions) {
-            console.log(typeof(instruction))
             let value: any = instruction.interpret(tree, globalEnv)
         }
+
+        console.log(globalEnv);
+
 
         let rootCst: Node = new Node("Root");
         let instruction: Node = new Node("Statements");
