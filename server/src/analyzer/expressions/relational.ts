@@ -1,7 +1,7 @@
 import { Node, Statement } from "../abastract/ast";
 import Environment from "../tools/environments";
 import ReturnType from "../tools/returnType";
-import { Booleans, Numerics, Primitive, RelationalOperator, Strings } from "../tools/types";
+import { Booleans, Primitive, RelationalOperator } from "../tools/types";
 import Tree from "../tools/tree";
 import { Exception } from "../errors";
 import Symbol from "../tools/symbol";
@@ -61,11 +61,10 @@ export class Relational implements Statement {
             throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
         }
 
-        if (!((rightResult.type === Numerics.INT || rightResult.type === Numerics.DOUBLE)
-            && (leftResult.type === Numerics.INT || leftResult.type === Numerics.DOUBLE)) ||
-            !(rightResult.type === Strings.DATE && leftResult.type === Strings.DATE)){
-            throw new Exception("Type Error", `Operation not supported between ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
+        if (leftResult.type !== rightResult.type){
+
         }
+
     }
 
     getCST(): Node {
