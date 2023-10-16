@@ -45,7 +45,7 @@ export class PrimitiveVar implements Statement {
                 break;
             }
             case Primitive.DATE: {
-                this.value = this.value
+                this.value = new Date(this.value);
             }
         }
 

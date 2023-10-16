@@ -49,6 +49,8 @@ export class Relational implements Statement {
                 return new ReturnType(Primitive.BOOLEAN, this.leftExp.getValue(tree, table) >= this.rightExp.getValue(tree, table));
             }
         }
+
+        return new ReturnType(Primitive.NULL, null);
     }
 
     _test_numeric_operation(table: Environment, tree: Tree) {
@@ -61,10 +63,9 @@ export class Relational implements Statement {
             throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
         }
 
-        if (leftResult.type !== rightResult.type){
-
+        if (!((leftResult.type === Primitive.INT || leftResult.type === Primitive.DOUBLE) && (rightResult.type === Primitive.INT || rightResult.type === Primitive.DOUBLE))){
+            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
         }
-
     }
 
     getCST(): Node {

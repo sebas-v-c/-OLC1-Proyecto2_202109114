@@ -7,6 +7,7 @@ import Tree from '../analyzer/tools/tree';
 import Environment, { createGlobalEnv } from '../analyzer/tools/environments';
 import { Exception } from '../analyzer/errors';
 import Symbol from '../analyzer/tools/symbol';
+import { formatDate } from '../analyzer/utils/utils';
 import { Primitive } from '../analyzer/tools/types';
 
 
@@ -86,7 +87,7 @@ describe("Testing Interpreter", function() {
         tempSym = new Symbol("@var6", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
-            expect(tempSym.value).toBe("2023-10-16");
+            expect(formatDate(tempSym.value)).toBe("2023-10-16");
             expect(tempSym.type).toBe(Primitive.DATE);
         }
         tempSym = new Symbol("@var7", Primitive.NULL, null,0, 0, globalEnv);
