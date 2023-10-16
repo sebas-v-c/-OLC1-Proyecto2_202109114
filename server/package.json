@@ -9,10 +9,9 @@
     "start": "node build/index",
     "build": "tsc",
     "dev": "ts-node-dev src/index",
-    "jison": "jison src/analyzer/grammar.jison -o build/analyzer/grammar.js",
-    "jison:local": "jison src/analyzer/grammar.jison -o src/analyzer/grammar.js",
-    "jison:local:debug": "jison src/analyzer/grammar.jison -o src/analyzer/grammar.js -m es6  --debug",
-    "jison:debug": "jison src/analyzer/grammar.jison -o build/analyzer/grammar.js -m es6  --debug"
+    "jison": "jison -t tsconfig.json -n QCrypter -n QCrypter -o src/analyzer/grammar.ts src/analyzer/grammar.jison",
+    "ts-jison": "ts-jison -t typescript -n QCrypter -n QCrypter -o src/analyzer/grammar.ts src/analyzer/grammar.jison",
+    "ts-jison:debug": "jison -t typescript -n QCParser -n QCParser -o src/analyzer/grammar.ts src/analyzer/grammar.jison --debug"
   },
   "repository": {
     "type": "git",
@@ -36,14 +35,15 @@
     "nodemon": "^3.0.1",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
+    "ts-jison": "^0.0.6",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@ts-jison/parser-generator": "^0.4.1-alpha.2",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "express": "^4.18.2",
-    "jison": "^0.4.18",
     "joi": "^17.11.0"
   }
 }

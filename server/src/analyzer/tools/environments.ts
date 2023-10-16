@@ -39,6 +39,7 @@ export default class Environment {
     }
 
     public setSymbol(symbol: Symbol){
+        symbol.id = symbol.id.toLowerCase();
         if (this.table.has(symbol.id)){
             return new Exception("Semantic", `Variable name ${symbol.id} already defined on scope`, symbol.row, symbol.column, this.name);
         }
@@ -66,7 +67,7 @@ export default class Environment {
         }
     }
 
-    public getSymbol(symbol: Symbol){
+    public getSymbol(symbol: Symbol): Exception | Symbol{
         const env = this.resolveSymbol(symbol);
         if (env instanceof Exception){
             return env;
@@ -76,6 +77,8 @@ export default class Environment {
     }
 
     public resolveSymbol(symbol: Symbol): Environment | Exception {
+        symbol.id = symbol.id.toLowerCase();
+
         if (this.table.has(symbol.id)) {
             return this;
         }

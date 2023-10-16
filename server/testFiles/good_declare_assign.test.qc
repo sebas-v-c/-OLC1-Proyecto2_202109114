@@ -1,6 +1,15 @@
+declare @var6 date default 2023-10-16;
+declare @var5 double default 3.1415912;
+declare @var1 int default 5;
+declare @var2 varchar default "simon";
+declare @var3 boolean default true;
+declare @var4 boolean default False;
+declare @var7 null default null;
+
 declare @nombre1 varchar;
 
 set @nombre1 = "cbas+ 1234";
+set @nombre1 = @VAR2;
 
 DECLARE @nombre2 varchar, @edad int;
 
@@ -12,8 +21,8 @@ DECLARE @nombre VARCHAR;
 
 DECLARE @edad2 INT DEFAULT 10;
 
---SET @edad = 25;
+SET @edad = 25;
 
 DECLARE @SI INT;
 
---SET @edad = '\n\"\"aaaa';
+SET @nombre1 = '\n\"\"aaaa';

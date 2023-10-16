@@ -21,13 +21,14 @@
 
 %lex 
 %options case-insensitive
-%x string
 
 %%
 
 \s+                                         // spaces ignored
 "--".*                                      // comment inline
 [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]         // MultiLineComment
+[ \r\t]+
+\n
 
 /*---------------------------Reserved Words---------------------------*/
 "CREATE"                        return "RW_CREATE";
@@ -90,6 +91,16 @@
 "RETURN"                        return "RW_RETURN";
 
 /*---------------------------Tokens---------------------------*/
+(\d{4})("-")(\d{1,2})("-")(\d{1,2})     return "TK_DATE";
+"@"(\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*      return "TK_VAR";
+[0-9]+("."[0-9]+)\b                     return "TK_DOUBLE";
+[0-9]+\b                                return "TK_INT";
+(\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*         return "TK_ID";
+//                              if this doesnt work use this.begin() instead
+\"[^\"]*\"                              return "TK_VARCHAR";
+\'[^\"]*\'                              return "TK_VARCHAR";
+\'(([^\n\"\\]|\\.)*)\'                  return "TK_VARCHAR";
+\"(([^\n\"\\]|\\.)*)\"                  return "TK_VARCHAR";
 
 "("                             return "TK_LPAR";
 ")"                             return "TK_RPAR";
@@ -110,24 +121,6 @@
 "<"                             return "TK_LESS";
 "="                             return "TK_EQ";
 
-
-[ \r\t]+
-\n
-
-//                              if this doesnt work use this.begin() instead
-
-\"[^\"]*\"                              return "TK_VARCHAR";
-\'[^\"]*\'                              return "TK_VARCHAR";
-\'(([^\n\"\\]|\\.)*)\'                  return "TK_VARCHAR";
-\"(([^\n\"\\]|\\.)*)\"                  return "TK_VARCHAR";
-
-[0-9]+\b                                return "TK_INT";
-[0-9]+\.[0-9]+                          return "TK_DOUBLE";
-^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01])$ return "TK_DATE";
-(\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*         return "TK_ID";
-"@"(\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*      return "TK_VAR";
-
-
 <<EOF>>                           return 'EOF';
 .                               { lexErrors.push(new LexError(yylloc.first_line, yylloc.first_column, yytext)); return "INVALID"; }
 
@@ -143,6 +136,8 @@
     // use this import while testing
     const { Declaration } = require("./instructions/declaration");
     const { SetVar } = require("./instructions/setVar");
+    const { If } = require("./instructions/if");
+    const { CodeBlock } = require("./instructions/codeBlock");
     const { Primitive } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
     const { CallVar } = require("./expressions/callVar");
@@ -286,8 +281,8 @@ type:
 /*-------------------------------STRUCTURES-------------------------------*/
 // TODO wait for an official test file
 if_struct:
-    RW_IF expression RW_THEN RW_BEGIN env RW_END           {}
-|   RW_IF expression RW_THEN env RW_ELSE env RW_END RW_IF  {}
+    RW_IF expression RW_THEN RW_BEGIN env RW_END           { $$ = new If($2, $5, undefined, @1.first_line, @1.first_column); }
+|   RW_IF expression RW_THEN env RW_ELSE env RW_END RW_IF  { $$ = new If($2, $4, $6, @1.first_line, @1.first_column); }
 ;
 
 case_struct:
@@ -351,9 +346,9 @@ set_var:
 /*-------------------------------ENVIRONMENTS-------------------------------*/
 
 env:
-    instructions    { $$ = $1; }
+    instructions    { $$ = new CodeBlock($1, @1.first_line, @1.first_column); }
 // THIS IS EMPTY I GUES
-|                   {}
+|                   { $$ = undefined; }
 ;
 
 /*-------------------------------EXPRESSIONS-------------------------------*/
@@ -361,8 +356,8 @@ expression:
     TK_LPAR select_stmt TK_RPAR { $$ = $2; }
 |   relational                  { $$ = $1; }
 |   logic                       { $$ = $1; }
-|   arithmetic                  { $$ = $1; }
 |   primitive                   { $$ = $1; }
+|   arithmetic                  { $$ = $1; }
 |   call_func_mth               { $$ = $1; }
 |   cast                        { $$ = $1; } 
 |   TK_VAR                      { $$ = new CallVar($1, @1.first_line, @1.first_column); }
@@ -384,24 +379,25 @@ logic:
 |   RW_NOT expression               {}
 ;
 
-arithmetic:
-    TK_MINUS expression %prec UMINUS    {}
-|   expression TK_PLUS expression       {}
-|   expression TK_MINUS expression      {}
-|   expression TK_DIV expression        {}
-|   expression TK_STAR expression       {}
-|   expression TK_MOD expression        {}
-;
-
 primitive:
-    TK_VARCHAR  { $$ = new PrimitiveVar($1, Primitive.VARCHAR, @1.first_line, @1.first_column); }
-|   TK_INT      { $$ = new PrimitiveVar($1, Primitive.INT , @1.first_line, @1.first_column); }
+    TK_INT      { $$ = new PrimitiveVar($1, Primitive.INT , @1.first_line, @1.first_column); }
 |   TK_DOUBLE   { $$ = new PrimitiveVar($1, Primitive.DOUBLE , @1.first_line, @1.first_column); }
 |   TK_DATE     { $$ = new PrimitiveVar($1, Primitive.DATE , @1.first_line, @1.first_column); }
+|   TK_VARCHAR  { $$ = new PrimitiveVar($1, Primitive.VARCHAR, @1.first_line, @1.first_column); }
 |   RW_TRUE     { $$ = new PrimitiveVar($1, Primitive.BOOLEAN , @1.first_line, @1.first_column); }
 |   RW_FALSE    { $$ = new PrimitiveVar($1, Primitive.BOOLEAN, @1.first_line, @1.first_column); }
 |   RW_NULL     { $$ = new PrimitiveVar(null, Primitive.NULL, @1.first_line, @1.first_column); }
 ;
+
+arithmetic:
+    expression TK_PLUS expression       {}
+|   expression TK_MINUS expression      {}
+|   expression TK_DIV expression        {}
+|   expression TK_STAR expression       {}
+|   expression TK_MOD expression        {}
+|   TK_MINUS expression %prec UMINUS    {}
+;
+
     
 call_func_mth:
     TK_ID TK_LPAR arguments TK_RPAR {}
