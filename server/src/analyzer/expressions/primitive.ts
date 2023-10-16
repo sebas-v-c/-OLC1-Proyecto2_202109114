@@ -40,6 +40,9 @@ export class PrimitiveVar implements Statement {
                 this.value = null;
                 break;
             }
+            case Primitive.VARCHAR: {
+                this.value = this.value.slice(1, -1);
+            }
         }
 
         return new ReturnType(this.type, this.value);

@@ -43,11 +43,12 @@ export class SetVar implements Statement {
         if (value.value instanceof Exception){
             return value.value;
         }
+
         if (symbol.type !== value.type){
             return new Exception("Semantic", `Type: ${value.type} can't be assigned to variable of type: ${symbol.type}`, this.line, this.column, table.name);
         }
 
-        result = table.updateSymbol(symbol);
+        result = table.updateSymbol(new Symbol(this.id, value.type, value.value, this.line, this.column, table));
 
         if (result instanceof Exception){
             return result;

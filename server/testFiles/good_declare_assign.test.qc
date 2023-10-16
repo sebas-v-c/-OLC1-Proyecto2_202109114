@@ -1,8 +1,10 @@
 declare @nombre1 varchar;
 
+set @nombre1 = "cbas+ 1234";
+
 DECLARE @nombre2 varchar, @edad int;
 
-DECLARE @variable_name int;
+DECLARE @variable_name VARCHAR;
 
 SET @variable_name = @nombre1;
 

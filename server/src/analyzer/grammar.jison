@@ -143,8 +143,9 @@
     // use this import while testing
     const { Declaration } = require("./instructions/declaration");
     const { SetVar } = require("./instructions/setVar");
-    const { Primitive } = require("./tools/types.ts");
+    const { Primitive } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
+    const { CallVar } = require("./expressions/callVar");
 %}
 
 
@@ -364,7 +365,7 @@ expression:
 |   primitive                   { $$ = $1; }
 |   call_func_mth               { $$ = $1; }
 |   cast                        { $$ = $1; } 
-|   TK_VAR                      { $$ = $1; }
+|   TK_VAR                      { $$ = new CallVar($1, @1.first_line, @1.first_column); }
 |   TK_RPAR expression TK_LPAR  { $$ = $1; }
 ;
 
