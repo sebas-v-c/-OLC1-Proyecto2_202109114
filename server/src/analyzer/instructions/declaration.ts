@@ -1,7 +1,7 @@
 import { Statement } from "../abastract/ast";
 import Environment from "../tools/environments";
 import ReturnType from "../tools/returnType";
-import { Booleans, Primitive } from "../tools/types";
+import { Primitive } from "../tools/types";
 import Tree from "../tools/tree";
 import { Node } from "../abastract/ast";
 import Symbol from "../tools/symbol";
@@ -28,7 +28,7 @@ export class Declaration implements Statement {
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {
-        return new ReturnType(Booleans.NULL, undefined);
+        return new ReturnType(Primitive.NULL, undefined);
     }
 
     interpret(tree: Tree, table: Environment) {

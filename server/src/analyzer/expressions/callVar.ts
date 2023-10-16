@@ -1,7 +1,7 @@
 import { Node, Statement } from "../abastract/ast";
 import Environment from "../tools/environments";
 import ReturnType from "../tools/returnType";
-import { Booleans, Primitive } from "../tools/types";
+import { Primitive } from "../tools/types";
 import Tree from "../tools/tree";
 import { Exception } from "../errors";
 import Symbol from "../tools/symbol";
@@ -25,10 +25,10 @@ export class CallVar implements Statement {
 
     getValue(tree: Tree, table: Environment): ReturnType {
         let symbol: Exception | Symbol;
-        symbol = table.getSymbol(new Symbol(this.id, Booleans.NULL, null, this.line, this.column, table));
+        symbol = table.getSymbol(new Symbol(this.id, Primitive.NULL, null, this.line, this.column, table));
 
         if (symbol instanceof Exception){
-            return new ReturnType(Booleans.NULL, new Exception('Sementic', `Variable name: ${this.id} does not exist in current scope`, this.line, this.column, table.name));
+            return new ReturnType(Primitive.NULL, new Exception('Sementic', `Variable name: ${this.id} does not exist in current scope`, this.line, this.column, table.name));
         }
 
         return new ReturnType(symbol.type, symbol.value);

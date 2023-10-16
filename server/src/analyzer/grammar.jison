@@ -138,7 +138,7 @@
     const { SetVar } = require("./instructions/setVar");
     const { If } = require("./instructions/if");
     const { CodeBlock } = require("./instructions/codeBlock");
-    const { Numerics, Strings, Booleans } = require("./tools/types");
+    const { Primitive } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
     const { CallVar } = require("./expressions/callVar");
 %}
@@ -270,12 +270,12 @@ typed_var_arguments:
 
 /*-------------------------------TYPE-------------------------------*/
 type:
-    RW_INT      { $$ = Numerics.INT; }
-|   RW_VARCHAR  { $$ = Strings.VARCHAR; }
-|   RW_DOUBLE   { $$ = Numerics.DOUBLE; }
-|   RW_DATE     { $$ = Strings.DATE; }
-|   RW_BOOLEAN  { $$ = Booleans.BOOLEAN; }
-|   RW_NULL     { $$ = Booleans.NULL; }
+    RW_INT      { $$ = Primitive.INT; }
+|   RW_VARCHAR  { $$ = Primitive.VARCHAR; }
+|   RW_DOUBLE   { $$ = Primitive.DOUBLE; }
+|   RW_DATE     { $$ = Primitive.DATE; }
+|   RW_BOOLEAN  { $$ = Primitive.BOOLEAN; }
+|   RW_NULL     { $$ = Primitive.NULL; }
 ;
 
 /*-------------------------------STRUCTURES-------------------------------*/
@@ -380,13 +380,13 @@ logic:
 ;
 
 primitive:
-    TK_INT      { $$ = new PrimitiveVar($1, Numerics.INT , @1.first_line, @1.first_column); }
-|   TK_DOUBLE   { $$ = new PrimitiveVar($1, Numerics.DOUBLE , @1.first_line, @1.first_column); }
-|   TK_DATE     { $$ = new PrimitiveVar($1, Strings.DATE , @1.first_line, @1.first_column); }
-|   TK_VARCHAR  { $$ = new PrimitiveVar($1, Strings.VARCHAR, @1.first_line, @1.first_column); }
-|   RW_TRUE     { $$ = new PrimitiveVar($1, Booleans.BOOLEAN , @1.first_line, @1.first_column); }
-|   RW_FALSE    { $$ = new PrimitiveVar($1, Booleans.BOOLEAN, @1.first_line, @1.first_column); }
-|   RW_NULL     { $$ = new PrimitiveVar(null, Booleans.NULL, @1.first_line, @1.first_column); }
+    TK_INT      { $$ = new PrimitiveVar($1, Primitive.INT , @1.first_line, @1.first_column); }
+|   TK_DOUBLE   { $$ = new PrimitiveVar($1, Primitive.DOUBLE , @1.first_line, @1.first_column); }
+|   TK_DATE     { $$ = new PrimitiveVar($1, Primitive.DATE , @1.first_line, @1.first_column); }
+|   TK_VARCHAR  { $$ = new PrimitiveVar($1, Primitive.VARCHAR, @1.first_line, @1.first_column); }
+|   RW_TRUE     { $$ = new PrimitiveVar($1, Primitive.BOOLEAN , @1.first_line, @1.first_column); }
+|   RW_FALSE    { $$ = new PrimitiveVar($1, Primitive.BOOLEAN, @1.first_line, @1.first_column); }
+|   RW_NULL     { $$ = new PrimitiveVar(null, Primitive.NULL, @1.first_line, @1.first_column); }
 ;
 
 arithmetic:

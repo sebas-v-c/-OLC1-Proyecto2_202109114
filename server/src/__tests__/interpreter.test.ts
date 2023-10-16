@@ -7,7 +7,7 @@ import Tree from '../analyzer/tools/tree';
 import Environment, { createGlobalEnv } from '../analyzer/tools/environments';
 import { Exception } from '../analyzer/errors';
 import Symbol from '../analyzer/tools/symbol';
-import { Booleans, Numerics, Primitive, Strings } from '../analyzer/tools/types';
+import { Primitive } from '../analyzer/tools/types';
 
 
 describe("Testing Interpreter", function() {
@@ -53,47 +53,47 @@ describe("Testing Interpreter", function() {
             expect(isException).toBeFalsy();
         }
         /*------------------------------VARIABLE TESTING------------------------------*/
-        let tempSym: Symbol | Exception = new Symbol("@var1", Booleans.NULL, null,0, 0, globalEnv);
+        let tempSym: Symbol | Exception = new Symbol("@var1", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
             expect(tempSym.value).toBe(5);
-            expect(tempSym.type).toBe(Numerics.INT);
+            expect(tempSym.type).toBe(Primitive.INT);
         }
-        tempSym = new Symbol("@var2", Booleans.NULL, null,0, 0, globalEnv);
+        tempSym = new Symbol("@var2", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
             expect(tempSym.value).toBe("simon");
-            expect(tempSym.type).toBe(Strings.VARCHAR);
+            expect(tempSym.type).toBe(Primitive.VARCHAR);
         }
-        tempSym = new Symbol("@var3", Booleans.NULL, null,0, 0, globalEnv);
+        tempSym = new Symbol("@var3", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
             expect(tempSym.value).toBe(true);
-            expect(tempSym.type).toBe(Booleans.BOOLEAN);
+            expect(tempSym.type).toBe(Primitive.BOOLEAN);
         }
-        tempSym = new Symbol("@var4", Booleans.NULL, null,0, 0, globalEnv);
+        tempSym = new Symbol("@var4", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
             expect(tempSym.value).toBe(false);
-            expect(tempSym.type).toBe(Booleans.BOOLEAN);
+            expect(tempSym.type).toBe(Primitive.BOOLEAN);
         }
-        tempSym = new Symbol("@var5", Booleans.NULL, null,0, 0, globalEnv);
+        tempSym = new Symbol("@var5", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
             expect(tempSym.value).toBe(3.1415912);
-            expect(tempSym.type).toBe(Numerics.DOUBLE);
+            expect(tempSym.type).toBe(Primitive.DOUBLE);
         }
-        tempSym = new Symbol("@var6", Booleans.NULL, null,0, 0, globalEnv);
+        tempSym = new Symbol("@var6", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
             expect(tempSym.value).toBe("2023-10-16");
-            expect(tempSym.type).toBe(Strings.DATE);
+            expect(tempSym.type).toBe(Primitive.DATE);
         }
-        tempSym = new Symbol("@var7", Booleans.NULL, null,0, 0, globalEnv);
+        tempSym = new Symbol("@var7", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
             expect(tempSym.value).toBe(null);
-            expect(tempSym.type).toBe(Booleans.NULL);
+            expect(tempSym.type).toBe(Primitive.NULL);
         }
 
         /*------------------------------AST------------------------------*/
@@ -146,15 +146,16 @@ describe("Testing Interpreter", function() {
                 console.log(value);
                 console.log(globalEnv);
             }
+
             expect(isException).toBeFalsy();
         }
         console.log(globalEnv);
         /*------------------------------VARIABLE TESTING------------------------------*/
-        let tempSym: Symbol | Exception = new Symbol("@var1", Booleans.NULL, null,0, 0, globalEnv);
+        let tempSym: Symbol | Exception = new Symbol("@var1", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
             expect(tempSym.value).toBe(5);
-            expect(tempSym.type).toBe(Numerics.INT);
+            expect(tempSym.type).toBe(Primitive.INT);
         }
 
     });
