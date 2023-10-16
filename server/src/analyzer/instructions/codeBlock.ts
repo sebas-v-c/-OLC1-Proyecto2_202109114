@@ -12,6 +12,7 @@ export class CodeBlock implements Statement {
     public envName: string;
     public line: number;
     public column: number;
+    public currentEnv: Environment;
 
     constructor(instructions: Array<Statement>, line: number, column: number, envName:string = "deft"){
         this.instructions = instructions;
@@ -25,10 +26,10 @@ export class CodeBlock implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
-        const newEnv: Environment = new Environment(table, this.envName);
+        this.currentEnv = new Environment(table, this.envName);
 
         for (let instruction of this.instructions){
-            const retVar = instruction.interpret(tree, newEnv);
+            const retVar = instruction.interpret(tree, this.currentEnv);
 
             if (retVar instanceof Exception){
                 tree.errors.push(retVar);

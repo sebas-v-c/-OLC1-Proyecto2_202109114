@@ -157,7 +157,7 @@ describe("Testing Interpreter", function() {
         let tempSym: Symbol | Exception = new Symbol("@var", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
-            expect(tempSym.value).toBe(1239);
+            expect(tempSym.value).toBe(20);
             expect(tempSym.type).toBe(Primitive.INT);
         }
 
