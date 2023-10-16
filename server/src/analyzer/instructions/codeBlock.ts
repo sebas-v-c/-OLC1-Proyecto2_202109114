@@ -5,6 +5,7 @@ import { Primitive } from "../tools/types";
 import Tree from "../tools/tree";
 import { Node } from "../abastract/ast";
 import { Exception } from "../errors";
+import Symbol from "../tools/symbol";
 
 
 export class CodeBlock implements Statement {
@@ -13,6 +14,7 @@ export class CodeBlock implements Statement {
     public line: number;
     public column: number;
     public currentEnv: Environment;
+    public symbol: Symbol | undefined;
 
     constructor(instructions: Array<Statement>, line: number, column: number, envName:string = "deft"){
         this.instructions = instructions;
@@ -20,6 +22,7 @@ export class CodeBlock implements Statement {
         this.column = column;
         this.envName = envName;
         this.currentEnv = new Environment();
+        this.symbol = undefined;
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {
@@ -27,7 +30,12 @@ export class CodeBlock implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
+        // In case want to initiate the new environment with a default symbol
         this.currentEnv = new Environment(table, this.envName);
+        if (this.symbol !== undefined){
+            this.symbol.environment = this.currentEnv;
+            this.currentEnv.setSymbol(this.symbol);
+        }
 
         for (let instruction of this.instructions){
             const retVar = instruction.interpret(tree, this.currentEnv);
@@ -42,6 +50,10 @@ export class CodeBlock implements Statement {
         }
 
         return undefined;
+    }
+
+    addSymbol(symbol: Symbol): void {
+        this.symbol = symbol;
     }
 
     getCST(): Node {

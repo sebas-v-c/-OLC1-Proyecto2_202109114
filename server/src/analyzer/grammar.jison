@@ -82,6 +82,7 @@
 "WHILE"                         return "RW_WHILE";
 "FOR"                           return "RW_FOR";
 "IN"                            return "RW_IN";
+"LOOP"                          return "RW_LOOP";
 "BREAK"                         return "RW_BREAK";
 "CONTINUE"                      return "RW_CONTINUE";
 
@@ -137,6 +138,7 @@
     const { Declaration } = require("./instructions/declaration");
     const { SetVar } = require("./instructions/setVar");
     const { If } = require("./instructions/if");
+    const { For } = require("./instructions/for");
     const { CodeBlock } = require("./instructions/codeBlock");
     const { Primitive, RelationalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
@@ -317,7 +319,7 @@ while_struct:
 ;
 
 for_struct:
-    RW_FOR TK_ID RW_IN TK_INT TK_DOT TK_DOT TK_DOT TK_INT RW_BEGIN env RW_END   {}
+    RW_FOR TK_VAR RW_IN TK_INT TK_DOT TK_DOT TK_INT RW_BEGIN env RW_END RW_LOOP { $$ = new For($2, $9, $4, $7, @1.first_line, @1.first_column); }
 ;
 
 encapsulated:
