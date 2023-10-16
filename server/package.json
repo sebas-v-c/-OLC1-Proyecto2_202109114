@@ -10,6 +10,8 @@
     "build": "tsc",
     "dev": "ts-node-dev src/index",
     "jison": "jison src/analyzer/grammar.jison -o build/analyzer/grammar.js",
+    "jison:local": "jison src/analyzer/grammar.jison -o src/analyzer/grammar.js",
+    "jison:local:debug": "jison src/analyzer/grammar.jison -o src/analyzer/grammar.js -m es6  --debug",
     "jison:debug": "jison src/analyzer/grammar.jison -o build/analyzer/grammar.js -m es6  --debug"
   },
   "repository": {

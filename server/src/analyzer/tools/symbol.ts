@@ -8,6 +8,6 @@ export default class Symbol{
         public value: any,
         public row: number,
         public column: number,
-        public environment?: string
+        public environment: Environment
     ){}
 }

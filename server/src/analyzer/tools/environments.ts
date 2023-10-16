@@ -3,7 +3,7 @@ import Symbol from "./symbol";
 import { Exception } from "../errors";
 
 
-export function creteGlobalEnv() {
+export function createGlobalEnv() {
     const env = new Environment();
     // Define a native builtin method
 
@@ -43,7 +43,7 @@ export default class Environment {
             return new Exception("Semantic", `Variable name ${symbol.id} already defined on scope`, symbol.row, symbol.column, this.name);
         }
 
-        symbol.environment = this.name;
+        symbol.environment = this;
         this.table.set(symbol.id, symbol);
     }
 

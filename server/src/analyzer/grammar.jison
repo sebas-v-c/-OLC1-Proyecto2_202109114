@@ -1,6 +1,12 @@
 %{
     // files to import should be the js files
-    import { LexErrors, SynErrors } from "./errors.js" 
+    /*
+    import { LexError, SynError } from "./errors.js" 
+    */
+    // use this import while testing
+    const { LexError, SynError } = require("./errors");
+    const { Declaration } = require("./instructions/declaration");
+    const { Primitive } = require("./tools/types.ts");
 %}
 
 %{
@@ -107,35 +113,29 @@
 "="                             return "TK_EQ";
 
 
-[ \r\t]+                        {}
-\n                              {}
+[ \r\t]+
+\n
 
 //                              if this doesnt work use this.begin() instead
-["]                             { str = ''; this.pushState("string"); }
-<string>[^"\\]+                 { str += yytext; }
-<string>"\\n"                   { str += "\n"; }
-<string>"\\\\"                  { str += "\\"; }
-<string>"\\\""                  { str += "\""; }
-<string>"\\t"                   { str += "\t"; }
-<string>"\\\'"                  { str += "\'"; }
-<string>\s                      { str += " "; }
-<string>"\\r"                   { str += "\r"; }
-<string>["]                     { yytext = str; this.popState(); return 'TK_VARCHAR';}
+
+\"[^\"]*\"                              return "TK_VARCHAR";
+\'[^\"]*\'                              return "TK_VARCHAR";
+\'(([^\n\"\\]|\\.)*)\'                  return "TK_VARCHAR";
+\"(([^\n\"\\]|\\.)*)\"                  return "TK_VARCHAR";
 
 [0-9]+\b                                return "TK_INT";
 [0-9]+\.[0-9]+                          return "TK_DOUBLE";
 ^\d{4}-(0[1-9]|1[0-2])-([0-2]\d|3[01])$ return "TK_DATE";
 (\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*         return "TK_ID";
-@(\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*        return "TK_VAR";
+"@"(\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*      return "TK_VAR";
 
 
-<<EOF>>                           return 'EOF'
-//                              Here is better to create an error class
-.                               { lexErrors.push(new LexErrors(yylloc.first_line, yylloc.first_column, yytext)); return "INVALID"; }
+<<EOF>>                           return 'EOF';
+.                               { lexErrors.push(new LexError(yylloc.first_line, yylloc.first_column, yytext)); return "INVALID"; }
 
 /lex
 
-// IMPORTS FROM THE PARSER
+// IMPORTS FOR THE PARSER
 %{
 
 %}
@@ -163,12 +163,13 @@
 %%
 
 ini: 
-    instructions EOF    { ast = { instructions: $1, synErrors: synErrors, lexErrors: lexErrors }; errors = []; return ast; }
+    instructions EOF    { return $1; }
+|   EOF                 { return null }
 ;
 
 instructions:
     instructions instruction TK_SCOLON  { $1.push($2); $$ = $1; }
-|   instruction TK_SCOLON               { $$ = $1 == null ? [] : [$1]; }
+|   instruction TK_SCOLON               { $$ = [$1]; }
 ;
 
 instruction:
@@ -181,19 +182,20 @@ instruction:
 |   while_struct        { $$ = $1; }
 |   for_struct          { $$ = $1; }
 /*-------------------------------CONTROL-------------------------------*/
-|   RW_BREAK            {}
-|   RW_CONTINUE         {}
+|   RW_BREAK            { $$ = $1; }
+|   RW_CONTINUE         { $$ = $1; }
 /*-------------------------------FUNCTIONS&METHODS-------------------------------*/
-|   declare_function    {}
-|   declare_method      {}    
+|   declare_function    { $$ = $1; }
+|   declare_method      { $$ = $1; }    
 /*-------------------------------DECLARATION-------------------------------*/
 |   declare_var         { $$ = $1; }
 |   set_var             { $$ = $1; }
 /*-------------------------------ENV-------------------------------*/
-|   encapsulated        {}
+|   encapsulated        { $$ = $1; }
 /*-------------------------------UTILITY-------------------------------*/
 |   cast                { $$ = $1; }        
 |   print               { $$ = $1; }
+//|   error               { synErrors.push(new SynError(this._$.first_line, this._$.first_column, "Algo salio mal al chile no c")); $$ = null; }
 ;
 
 /*-------------------------------SQL LANGUAGE GRAMMARS-------------------------------*/
@@ -253,14 +255,14 @@ arguments:
 
 // TODO make this save the specified value
 typed_arguments:
-    typed_arguments TK_COMA TK_ID type  { $1.push($2); $$ = $1; }
-|   TK_ID type                          { $$ = $1 == null ? [] : [$1]; }
+    typed_arguments TK_COMA TK_ID type  { $1.push({id: $3, type: $4}); $$ = $1; }
+|   TK_ID type                          { $$ = $1 == null ? [{}] : [{id: $1, type: $2}]; }
 ;
 
 // TODO make this save the specified value
 typed_var_arguments:
-    typed_var_arguments TK_COMA TK_VAR type {}
-|   TK_VAR type                             {}
+    typed_var_arguments TK_COMA TK_VAR type { $1.push({id: $3, type: $4}); $$ = $1; }
+|   TK_VAR type                             { $$ = [{id: $1, type: $2}];}
 ;
 
 /*-------------------------------TYPE-------------------------------*/
@@ -319,7 +321,7 @@ encapsulated:
 ;
 
 /*-------------------------------FUNCTIONS&METHODS-------------------------------*/
-delcare_function:
+declare_function:
     RW_CREATE RW_FUNCTION TK_ID TK_LPAR typed_arguments TK_RPAR RETURNS primitive RW_BEGIN env RW_END   {}
 ;
 
@@ -330,8 +332,8 @@ declare_method:
 /*-------------------------------DECLARATION-------------------------------*/
 // TODO chage this when official test file is released
 declare_var:
-    RW_DECLARE typed_var_arguments                  {}
-|   RW_DECLARE TK_VAR type RW_DEFAULT expression    {}
+    RW_DECLARE typed_var_arguments                  { $$ = new Declaration($2, undefined, @1.first_line, @1.first_column); }
+|   RW_DECLARE TK_VAR type RW_DEFAULT expression    { $$ = new Declaration([{id: $2, type: $3}], $5, @1.first_line, @1.first_column); }
 ;
 
 set_var:
@@ -348,7 +350,7 @@ env:
 
 /*-------------------------------EXPRESSIONS-------------------------------*/
 expression:
-    TK_LPAR select_stmt TK_RPAR { $$ = $1; }
+    TK_LPAR select_stmt TK_RPAR { $$ = $2; }
 |   relational                  { $$ = $1; }
 |   logic                       { $$ = $1; }
 |   arithmetic                  { $$ = $1; }

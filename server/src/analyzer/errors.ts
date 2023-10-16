@@ -1,3 +1,6 @@
+import { Primitive } from "./tools/types";
+
+
 export interface Error {
     line: number;
     column: number;
