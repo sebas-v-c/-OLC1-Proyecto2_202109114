@@ -138,6 +138,7 @@
     const { Declaration } = require("./instructions/declaration");
     const { SetVar } = require("./instructions/setVar");
     const { If } = require("./instructions/if");
+    const { SimpleCase, SearchedCase } = require("./instructions/case");
     const { For } = require("./instructions/for");
     const { CodeBlock } = require("./instructions/codeBlock");
     const { Primitive, RelationalOperator, ArithmeticOperator } = require("./tools/types");
@@ -290,29 +291,29 @@ if_struct:
 ;
 
 case_struct:
-    simple_case     {}
-|   searched_case   {}
+    simple_case     { $$ = $1; }
+|   searched_case   { $$ = $1; }
 ;
 
 simple_case:
 // TODO also change the last expression to a primitive
-    RW_CASE expression simple_case_cases RW_ELSE primitive RW_END              {}
-|   RW_CASE expression simple_case_cases RW_ELSE primitive RW_END RW_AS TK_ID  {}
+    RW_CASE expression simple_case_cases RW_ELSE primitive RW_END              { $$ = new SimpleCase($2, $3, $5, undefined,@1.first_line, @1.first_column); }
+|   RW_CASE expression simple_case_cases RW_ELSE primitive RW_END RW_AS TK_VAR { $$ = new SimpleCase($2, $3, $5, $8 ,@1.first_line, @1.first_column); }
 ;
 
 simple_case_cases:
-    simple_case_cases RW_WHEN primitive RW_THEN primitive   {}
-|   RW_WHEN primitive RW_THEN primitive                     {}
+    simple_case_cases RW_WHEN primitive RW_THEN primitive   { $1.push({when: $3, then: $5}); $$ = $1; }
+|   RW_WHEN primitive RW_THEN primitive                     { $$ = [{when: $2, then: $4}];}
 ;
 
 searched_case:
-    RW_CASE searched_case_cases RW_ELSE primitive RW_END                {}
-|   RW_CASE searched_case_cases RW_ELSE primitive RW_END RW_AS TK_ID    {}
+    RW_CASE searched_case_cases RW_ELSE primitive RW_END                { $$ = new SearchedCase($2, $4, undefined, @1.first_line, @1.first_column); }
+|   RW_CASE searched_case_cases RW_ELSE primitive RW_END RW_AS TK_ID    { $$ = new SearchedCase($2, $4, $7, @1.first_line, @1.first_column); }
 ;
 
 searched_case_cases:
-    searched_case_cases RW_WHEN relational RW_THEN primitive {}
-|   RW_WHEN relational RW_THEN primitive                     {}
+    searched_case_cases RW_WHEN relational RW_THEN primitive { $1.push({when: $3, then: $5}); $$ = $1; }
+|   RW_WHEN relational RW_THEN primitive                     { $$ = [{when: $2, then: $4}]; }
 ;
 
 while_struct:

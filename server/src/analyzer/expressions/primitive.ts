@@ -25,7 +25,7 @@ export class PrimitiveVar implements Statement {
     getValue(tree: Tree, table: Environment): ReturnType {
         switch(this.type){
             case Primitive.INT: {
-                this.value = Number(this.value);
+                this.value = parseInt(this.value);
                 break;
             }
             case Primitive.BOOLEAN: {
@@ -33,7 +33,7 @@ export class PrimitiveVar implements Statement {
                 break;
             }
             case Primitive.DOUBLE: {
-                this.value = Number(this.value);
+                this.value = parseFloat(this.value);
                 break;
             }
             case Primitive.NULL: {

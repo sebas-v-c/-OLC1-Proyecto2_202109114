@@ -208,4 +208,55 @@ describe("Testing Interpreter", function() {
             expect(tempSym.type).toBe(Primitive.INT);
         }
     });
+
+    /*-------------------------------------------------TESTING-------------------------------------------------*/
+    it("Testing good cases structure Input", function() {
+        var testPath = path.join(__dirname, '..', '..', 'testFiles', 'good_case.test.qc');
+        const data = readFileSync(testPath, 'utf8');
+
+        /*------------------------------INSTRUCTIONS TESTING------------------------------*/
+        let tree: Tree | null;
+        let globalEnv: Environment | null;
+
+        let instructions: Array<Statement>
+
+        const parser = new QCrypterParser()
+        instructions = parser.parse(data);
+
+        tree = new Tree(instructions);
+
+        globalEnv = createGlobalEnv();
+        tree.globalTable = globalEnv;
+
+
+        for (let instruction of tree.instructions) {
+            let value: any = instruction.interpret(tree, globalEnv)
+            let isException: boolean = value instanceof Exception;
+            if (isException) {
+                console.log(value);
+                console.log(globalEnv);
+            }
+
+            expect(isException).toBeFalsy();
+        }
+        /*------------------------------VARIABLE TESTING------------------------------*/
+        let tempSym: Symbol | Exception = new Symbol("@mensaje", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        if (tempSym instanceof Symbol){
+            expect(tempSym.value).toBe("Muy Bueno");
+            expect(tempSym.type).toBe(Primitive.VARCHAR);
+        }
+        tempSym = new Symbol("@aprobado", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        if (tempSym instanceof Symbol){
+            expect(tempSym.value).toBe("Aprobado");
+            expect(tempSym.type).toBe(Primitive.VARCHAR);
+        }
+        tempSym = new Symbol("@mensaje2", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        if (tempSym instanceof Symbol){
+            expect(tempSym.value).toBe("APROBADO");
+            expect(tempSym.type).toBe(Primitive.VARCHAR);
+        }
+    });
 });
