@@ -28,8 +28,8 @@ export function createGlobalEnv() {
 
 export default class Environment {
     public name: string;
-    private parent?: Environment;
-    private table: Map<string, Symbol>;
+    public parent?: Environment;
+    public table: Map<string, Symbol>;
 
     constructor(parent?: Environment, name: string = "Global") {
         const global = parent ? true : false;
@@ -39,13 +39,14 @@ export default class Environment {
     }
 
     public setSymbol(symbol: Symbol){
-        symbol.id = symbol.id.toLowerCase();
-        if (this.table.has(symbol.id)){
+        let env: Environment | Exception = this.resolveSymbol(symbol);
+        if (env instanceof Exception){
+            symbol.id = symbol.id.toLowerCase();
+            symbol.environment = this;
+            this.table.set(symbol.id, symbol);
+        } else {
             return new Exception("Semantic", `Variable name ${symbol.id} already defined on scope`, symbol.row, symbol.column, this.name);
         }
-
-        symbol.environment = this;
-        this.table.set(symbol.id, symbol);
     }
 
     public updateSymbol(symbol: Symbol){

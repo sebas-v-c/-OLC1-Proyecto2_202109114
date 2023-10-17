@@ -102,13 +102,13 @@ case 53:
  this.$ = Primitive.NULL; 
 break;
 case 54:
- this.$ = new If($$[$0-6], $$[$0-4], $$[$0-2], _$[$0-7].first_line, _$[$0-7].first_column, "if_env"); 
+ $$[$0-4].envName = "if_env";$$[$0-2].envName = "else_env";this.$ = new If($$[$0-6], $$[$0-4], $$[$0-2], _$[$0-7].first_line, _$[$0-7].first_column, "if_env"); 
 break;
 case 55:
- this.$ = new If($$[$0-4], $$[$0-1], undefined, _$[$0-5].first_line, _$[$0-5].first_column, "if_env"); 
+ $$[$0-1].envName = "if_env";this.$ = new If($$[$0-4], $$[$0-1], undefined, _$[$0-5].first_line, _$[$0-5].first_column, "if_env"); 
 break;
 case 67:
- this.$ = new For($$[$0-9], $$[$0-2], $$[$0-7], $$[$0-4], _$[$0-10].first_line, _$[$0-10].first_column); 
+ $$[$0-2].envName = "for_env";this.$ = new For($$[$0-9], $$[$0-2], $$[$0-7], $$[$0-4], _$[$0-10].first_line, _$[$0-10].first_column); 
 break;
 case 71:
  this.$ = new Declaration($$[$0], undefined, _$[$0-1].first_line, _$[$0-1].first_column); 

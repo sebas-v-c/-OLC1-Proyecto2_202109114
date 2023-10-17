@@ -21,7 +21,7 @@ export class CodeBlock implements Statement {
         this.line = line;
         this.column = column;
         this.envName = envName;
-        this.currentEnv = new Environment();
+        this.currentEnv = new Environment(undefined, this.envName);
         this.symbol = undefined;
     }
 
@@ -36,7 +36,6 @@ export class CodeBlock implements Statement {
             this.symbol.environment = this.currentEnv;
             this.currentEnv.setSymbol(this.symbol);
         }
-
         for (let instruction of this.instructions){
             const retVar = instruction.interpret(tree, this.currentEnv);
 

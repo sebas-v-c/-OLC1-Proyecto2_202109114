@@ -195,12 +195,16 @@ describe("Testing Interpreter", function() {
 
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@sumatoria", Primitive.NULL, null,0, 0, globalEnv);
-
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
-            expect(tempSym.value).toBe(9);
+            expect(tempSym.value).toBe(1023);
+            expect(tempSym.type).toBe(Primitive.INT);
+        }
+        tempSym = new Symbol("@chi", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        if (tempSym instanceof Symbol){
+            expect(tempSym.value).toBe(21);
             expect(tempSym.type).toBe(Primitive.INT);
         }
     });
-
 });

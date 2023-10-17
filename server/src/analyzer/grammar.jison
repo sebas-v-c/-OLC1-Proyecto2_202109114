@@ -284,8 +284,8 @@ type:
 /*-------------------------------STRUCTURES-------------------------------*/
 // TODO wait for an official test file
 if_struct:
-    RW_IF expression RW_THEN env RW_ELSE env RW_END RW_IF  { $$ = new If($2, $4, $6, @1.first_line, @1.first_column, "if_env"); }
-|   RW_IF expression RW_THEN RW_BEGIN env RW_END           { $$ = new If($2, $5, undefined, @1.first_line, @1.first_column, "if_env"); }
+    RW_IF expression RW_THEN env RW_ELSE env RW_END RW_IF  { $4.envName = "if_env";$6.envName = "else_env";$$ = new If($2, $4, $6, @1.first_line, @1.first_column, "if_env"); }
+|   RW_IF expression RW_THEN RW_BEGIN env RW_END           { $5.envName = "if_env";$$ = new If($2, $5, undefined, @1.first_line, @1.first_column, "if_env"); }
 ;
 
 case_struct:
@@ -319,7 +319,7 @@ while_struct:
 ;
 
 for_struct:
-    RW_FOR TK_VAR RW_IN TK_INT TK_DOT TK_DOT TK_INT RW_BEGIN env RW_END RW_LOOP { $$ = new For($2, $9, $4, $7, @1.first_line, @1.first_column); }
+    RW_FOR TK_VAR RW_IN TK_INT TK_DOT TK_DOT TK_INT RW_BEGIN env RW_END RW_LOOP { $9.envName = "for_env";$$ = new For($2, $9, $4, $7, @1.first_line, @1.first_column); }
 ;
 
 encapsulated:

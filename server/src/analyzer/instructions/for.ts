@@ -19,9 +19,10 @@ export class For implements Statement {
 
     constructor(variableName: string, block: CodeBlock, start: number, end: number, line: number, column: number,){
         this.variableName = variableName;
-        this.start = start;
-        this.end = end;
+        this.start = parseInt(start.toString());
+        this.end = parseInt(end.toString());
         this.block = block;
+        this.block.envName = "for_env";
         this.line = line;
         this.column = column;
     }
@@ -37,18 +38,36 @@ export class For implements Statement {
             symbol = new Symbol(this.variableName, Primitive.INT, this.start, this.line, this.column, this.block.currentEnv)
             this.block.addSymbol(symbol);
         }
+        if (symbol.type !== Primitive.INT){
+            return new Exception("Type Error", `Variable of type '${symbol.type}' is not assigname to type 'int'`, this.line, this.column, "for_env");
+        }
 
+        symbol.value = this.start;
         let res: any = undefined;
         for (let i = this.start; i < this.end; i++){
             res = this.block.interpret(tree, table)
-            symbol.environment = this.block.currentEnv;
             if (res !== undefined){
                 if (res.value instanceof Exception){
+
                     return res;
                 }
             }
-            symbol.value = i+1;
-            this.block.currentEnv.updateSymbol(symbol);
+            if (!(symbol instanceof Exception)){
+                symbol = this.block.currentEnv.getSymbol(symbol);
+                if (!(symbol instanceof Exception)){
+                    symbol.value = i;
+                    this.block.currentEnv.updateSymbol(symbol);
+                }
+            }
+        }
+        // TODO fix later
+        if (!(symbol instanceof Exception)){
+            res = this.block.interpret(tree, table);
+            symbol = this.block.currentEnv.getSymbol(symbol)
+            if (!(symbol instanceof Exception)){
+                symbol.value = this.end;
+                this.block.currentEnv.updateSymbol(symbol);
+            }
         }
 
         return res;
