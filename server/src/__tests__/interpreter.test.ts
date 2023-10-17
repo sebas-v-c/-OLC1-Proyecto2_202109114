@@ -295,4 +295,37 @@ describe("Testing Interpreter", function() {
             expect(tempSym.type).toBe(Primitive.INT);
         }
     });
+
+    /*-------------------------------------------------TESTING-------------------------------------------------*/
+    it("Testing good print structure Input", function() {
+        var testPath = path.join(__dirname, '..', '..', 'testFiles', 'good_print.test.qc');
+        const data = readFileSync(testPath, 'utf8');
+
+        /*------------------------------INSTRUCTIONS TESTING------------------------------*/
+        let tree: Tree | null;
+        let globalEnv: Environment | null;
+
+        let instructions: Array<Statement>
+
+        const parser = new QCrypterParser()
+        instructions = parser.parse(data);
+        tree = new Tree(instructions);
+
+        globalEnv = createGlobalEnv();
+        tree.globalTable = globalEnv;
+
+        for (let instruction of tree.instructions) {
+            let value: any = instruction.interpret(tree, globalEnv)
+            let isException: boolean = value instanceof Exception;
+            if (isException) {
+                console.log(value);
+                console.log(globalEnv);
+            }
+
+            expect(isException).toBeFalsy();
+        }
+        /*------------------------------VARIABLE TESTING------------------------------*/
+        console.log(tree.console);
+    });
+
 });

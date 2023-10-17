@@ -141,6 +141,7 @@
     const { SimpleCase, SearchedCase } = require("./instructions/case");
     const { For } = require("./instructions/for");
     const { While } = require("./instructions/while");
+    const { Print } = require("./instructions/print");
     const { CodeBlock } = require("./instructions/codeBlock");
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
@@ -417,5 +418,5 @@ cast:
 ;
 
 print:
-    RW_PRINT expression {}
+    RW_PRINT expression { $$ = new Print($2, @1.first_line, @1.first_column); }
 ;

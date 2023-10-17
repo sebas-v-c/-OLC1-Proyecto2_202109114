@@ -15,6 +15,7 @@ export default class Tree {
     public instructions: Array<Statement>;
     public errors: Array<Exception>
     public console: string;
+    public stdOut: string;
     public globalTable?: Environment;
     public dot: string;
     private count: number;
@@ -25,10 +26,15 @@ export default class Tree {
         this.errors = [];
         this.dot = '';
         this.count = 0;
+        this.stdOut = "";
+    }
+
+    public updateStdout(input: string){
+        this.stdOut += `${input}\n`;
     }
 
     public updateConsole(input: string){
-        this.console += `${input}\n;`
+        this.console += `${input}\n`;
     }
 
     public getDot(root: Node, flag: boolean = true){

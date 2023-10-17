@@ -31,6 +31,7 @@ import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, Pro
     const { SimpleCase, SearchedCase } = require("./instructions/case");
     const { For } = require("./instructions/for");
     const { While } = require("./instructions/while");
+    const { Print } = require("./instructions/print");
     const { CodeBlock } = require("./instructions/codeBlock");
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
@@ -224,6 +225,9 @@ case 105:
 break;
 case 106:
  this.$ = new Arithmetic(undefined, ArithmeticOperator.UMINUS, $$[$0], _$[$0-1].first_line, _$[$0-1].first_column); 
+break;
+case 109:
+ this.$ = new Print($$[$0], _$[$0-1].first_line, _$[$0-1].first_column); 
 break;
         }
     }
