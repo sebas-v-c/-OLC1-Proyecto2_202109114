@@ -5,7 +5,6 @@ import { Functions, Primitive } from "../tools/types";
 import Tree from "../tools/tree";
 import { Exception } from "../errors";
 import Symbol from "../tools/symbol";
-import { PrimitiveVar } from "./primitive";
 import { Func } from "../instructions/function";
 
 

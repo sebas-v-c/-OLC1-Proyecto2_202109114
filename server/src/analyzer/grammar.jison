@@ -33,8 +33,9 @@
 \n
 
 /*---------------------------Reserved Words---------------------------*/
-"CREATE"                        return "RW_CREATE";
+
 "ALTER"                         return "RW_ALTER";
+"CREATE"                        return "RW_CREATE";
 "DROP"                          return "RW_DROP";
 "RENAME"                        return "RW_RENAME";
 
@@ -345,7 +346,7 @@ encapsulated:
 
 /*-------------------------------FUNCTIONS&METHODS-------------------------------*/
 declare_function:
-    RW_CREATE RW_FUNCTION TK_ID TK_LPAR typed_var_arguments TK_RPAR RETURNS type RW_BEGIN env RW_END   { $$ = new Function($3, $5, $8, $10, @1.first_line, @1.first_column); }
+    RW_CREATE RW_FUNCTION TK_ID TK_LPAR typed_var_arguments TK_RPAR RW_RETURNS type RW_BEGIN env RW_END { $$ = new Function($3, $5, $8, $10, @1.first_line, @1.first_column); }
 ;
 
 declare_method:
