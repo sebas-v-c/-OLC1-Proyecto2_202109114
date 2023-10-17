@@ -1,7 +1,7 @@
 import { Statement } from "../abastract/ast";
 import Environment from "../tools/environments";
 import ReturnType from "../tools/returnType";
-import { Primitive } from "../tools/types";
+import { Primitive, TransferOp } from "../tools/types";
 import Tree from "../tools/tree";
 import { Node } from "../abastract/ast";
 import { Exception } from "../errors";
@@ -29,15 +29,17 @@ export class CodeBlock implements Statement {
         return new ReturnType(Primitive.NULL, undefined);
     }
 
-    interpret(tree: Tree, table: Environment) {
+    interpret(tree: Tree, table: Environment): ReturnType | Exception | undefined {
         // In case want to initiate the new environment with a default symbol
         this.currentEnv = new Environment(table, this.envName);
         if (this.symbol !== undefined){
             this.symbol.environment = this.currentEnv;
             this.currentEnv.setSymbol(this.symbol);
         }
+        let retVar: ReturnType | Exception | undefined;
         for (let instruction of this.instructions){
-            const retVar = instruction.interpret(tree, this.currentEnv);
+            // TODO make sure that a break, continue, return is called here
+            retVar = instruction.interpret(tree, this.currentEnv);
 
             if (retVar instanceof Exception){
                 tree.errors.push(retVar);
@@ -46,9 +48,18 @@ export class CodeBlock implements Statement {
                 // TODO verify this behaviour
                 return retVar;
             }
+
+            if (retVar instanceof ReturnType){
+                if (retVar.type === TransferOp.BREAK || retVar.type === TransferOp.CONTINUE) {
+                    return retVar;
+                }
+                if (retVar.type === TransferOp.RETURN){
+                    return retVar;
+                }
+            }
         }
 
-        return undefined;
+        return retVar;
     }
 
     addSymbol(symbol: Symbol): void {

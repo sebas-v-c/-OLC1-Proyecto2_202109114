@@ -1,7 +1,7 @@
 import { Statement } from "../abastract/ast";
 import Environment from "../tools/environments";
 import ReturnType from "../tools/returnType";
-import { Primitive } from "../tools/types";
+import { Primitive, TransferOp } from "../tools/types";
 import Tree from "../tools/tree";
 import { Node } from "../abastract/ast";
 import { Exception } from "../errors";
@@ -37,12 +37,14 @@ export class While implements Statement {
             return new Exception('Semantic',`Invalid expression in WHILE condition`, this.line, this.column, table.name);
         }
 
-        let res: any = undefined;
+        let res: ReturnType | Exception |undefined = undefined;
         while(flag.value){
-            res = this.block.interpret(tree, table)
-            if (res !== undefined){
-                if (res.value instanceof Exception){
-                    return res;
+            if (this.block instanceof CodeBlock){
+                res = this.block.interpret(tree, table)
+                if (res !== undefined){
+                    if (res instanceof Exception){
+                        return res;
+                    }
                 }
             }
 
@@ -52,6 +54,15 @@ export class While implements Statement {
             }
             if (flag.value instanceof Exception) {
                 return flag.value;
+            }
+            // To handle control words
+            if (res instanceof ReturnType){
+                if (res.type === TransferOp.BREAK){
+                    break;
+                }
+                if (res.type === TransferOp.CONTINUE){
+                    continue;
+                }
             }
 
         }

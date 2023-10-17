@@ -193,27 +193,30 @@ instructions:
 
 instruction:
 /*-------------------------------SQL LANGUAGE GRAMMARS-------------------------------*/
-    ddl                 { $$ = $1; }
-|   dml                 { $$ = $1; }
+    ddl                     { $$ = $1; }
+|   dml                     { $$ = $1; }
 /*-------------------------------STRUCTURES-------------------------------*/
-|   if_struct           { $$ = $1; }
-|   case_struct         { $$ = $1; }
-|   while_struct        { $$ = $1; }
-|   for_struct          { $$ = $1; }
+|   if_struct               { $$ = $1; }
+|   case_struct             { $$ = $1; }
+|   while_struct            { $$ = $1; }
+|   for_struct              { $$ = $1; }
 /*-------------------------------CONTROL-------------------------------*/
-|   RW_BREAK            { $$ = $1; }
-|   RW_CONTINUE         { $$ = $1; }
+|   RW_BREAK                { $$ = $1; }
+|   RW_CONTINUE             { $$ = $1; }
+|   RW_RETURN expression    { $$ = $1; }
+|   RW_RETURN               { $$ = $1; }
 /*-------------------------------FUNCTIONS&METHODS-------------------------------*/
-|   declare_function    { $$ = $1; }
-|   declare_method      { $$ = $1; }    
+|   declare_function        { $$ = $1; }
+|   declare_method          { $$ = $1; }    
+|   call_func_mth           { $$ = $1; }    
 /*-------------------------------DECLARATION-------------------------------*/
-|   declare_var         { $$ = $1; }
-|   set_var             { $$ = $1; }
+|   declare_var             { $$ = $1; }
+|   set_var                 { $$ = $1; }
 /*-------------------------------ENV-------------------------------*/
-|   encapsulated        { $$ = $1; }
+|   encapsulated            { $$ = $1; }
 /*-------------------------------UTILITY-------------------------------*/
-|   cast                { $$ = $1; }        
-|   print               { $$ = $1; }
+|   cast                    { $$ = $1; }        
+|   print                   { $$ = $1; }
 //|   error               { synErrors.push(new SynError(this._$.first_line, this._$.first_column, "Algo salio mal al chile no c")); $$ = null; }
 ;
 

@@ -31,10 +31,16 @@ export enum LogicalOperator {
     NOT = "NOT"
 }
 
+export enum TransferOp {
+    RETURN = "return",
+    BREAK = "break",
+    CONTINUE = "continue"
+}
+
 export enum Functions {
     FUNC = "func",
     METHOD = "method",
     NATIVE_FN = "native_fn"
 }
 
-export type ValueType = Primitive | Functions
+export type ValueType = Primitive | Functions | TransferOp;

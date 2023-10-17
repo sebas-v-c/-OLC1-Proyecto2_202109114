@@ -1,7 +1,7 @@
 import { Statement } from "../abastract/ast";
 import Environment from "../tools/environments";
 import ReturnType from "../tools/returnType";
-import { Primitive } from "../tools/types";
+import { Primitive, TransferOp } from "../tools/types";
 import Tree from "../tools/tree";
 import { Node } from "../abastract/ast";
 import { Exception } from "../errors";
@@ -46,10 +46,12 @@ export class For implements Statement {
         symbol.value = this.start;
         let res: any = undefined;
         for (let i = this.start; i < this.end; i++){
-            res = this.block.interpret(tree, table)
-            if (res !== undefined){
-                if (res.value instanceof Exception){
-                    return res;
+            if (this.block instanceof CodeBlock){
+                res = this.block.interpret(tree, table)
+                if (res !== undefined){
+                    if (res instanceof Exception){
+                        return res;
+                    }
                 }
             }
             if (!(symbol instanceof Exception)){
@@ -57,6 +59,15 @@ export class For implements Statement {
                 if (!(symbol instanceof Exception)){
                     symbol.value = i + 1;
                     this.block.currentEnv.updateSymbol(symbol);
+                }
+            }
+            // To handle control words
+            if (res instanceof ReturnType){
+                if (res.type === TransferOp.BREAK){
+                    break;
+                }
+                if (res.type === TransferOp.CONTINUE){
+                    continue;
                 }
             }
         }
