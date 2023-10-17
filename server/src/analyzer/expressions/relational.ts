@@ -7,6 +7,8 @@ import { Exception } from "../errors";
 import Symbol from "../tools/symbol";
 import { PrimitiveVar } from "./primitive";
 
+type Ret = { left: ReturnType, right: ReturnType }
+
 
 export class Relational implements Statement {
     public leftExp: Statement;
@@ -81,14 +83,14 @@ export class Relational implements Statement {
     }
 
     _greater_operation(table: Environment, tree: Tree): ReturnType {
-        let leftResult: ReturnType = this.leftExp.getValue(tree, table);
-        if (leftResult.value instanceof Exception) {
-            throw new Exception(leftResult.value.type, leftResult.value.description, this.line, leftResult.value.column, table.name);
+        let results: Ret;
+        try{
+            results = this._testOperators(table, tree);
+        } catch(err){
+            throw err;
         }
-        let rightResult: ReturnType = this.rightExp.getValue(tree, table);
-        if (rightResult.value instanceof Exception) {
-            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
-        }
+        let leftResult: ReturnType = results.left;
+        let rightResult: ReturnType = results.right;
 
         if (leftResult.type === Primitive.DATE && rightResult.type === Primitive.DATE){
             return new ReturnType(Primitive.BOOLEAN, leftResult.value > rightResult.value);
@@ -101,14 +103,14 @@ export class Relational implements Statement {
     }
 
     _less_operation(table: Environment, tree: Tree): ReturnType {
-        let leftResult: ReturnType = this.leftExp.getValue(tree, table);
-        if (leftResult.value instanceof Exception) {
-            throw new Exception(leftResult.value.type, leftResult.value.description, this.line, leftResult.value.column, table.name);
+        let results: Ret;
+        try{
+            results = this._testOperators(table, tree);
+        } catch(err){
+            throw err;
         }
-        let rightResult: ReturnType = this.rightExp.getValue(tree, table);
-        if (rightResult.value instanceof Exception) {
-            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
-        }
+        let leftResult: ReturnType = results.left;
+        let rightResult: ReturnType = results.right;
 
         if (leftResult.type === Primitive.DATE && rightResult.type === Primitive.DATE){
             return new ReturnType(Primitive.BOOLEAN, leftResult.value < rightResult.value);
@@ -122,14 +124,14 @@ export class Relational implements Statement {
 
 
     _geq_operation(table: Environment, tree: Tree): ReturnType {
-        let leftResult: ReturnType = this.leftExp.getValue(tree, table);
-        if (leftResult.value instanceof Exception) {
-            throw new Exception(leftResult.value.type, leftResult.value.description, this.line, leftResult.value.column, table.name);
+        let results: Ret;
+        try{
+            results = this._testOperators(table, tree);
+        } catch(err){
+            throw err;
         }
-        let rightResult: ReturnType = this.rightExp.getValue(tree, table);
-        if (rightResult.value instanceof Exception) {
-            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
-        }
+        let leftResult: ReturnType = results.left;
+        let rightResult: ReturnType = results.right;
 
         if (leftResult.type === Primitive.DATE && rightResult.type === Primitive.DATE){
             return new ReturnType(Primitive.BOOLEAN, leftResult.value >= rightResult.value);
@@ -142,14 +144,14 @@ export class Relational implements Statement {
     }
 
     _leq_operation(table: Environment, tree: Tree): ReturnType {
-        let leftResult: ReturnType = this.leftExp.getValue(tree, table);
-        if (leftResult.value instanceof Exception) {
-            throw new Exception(leftResult.value.type, leftResult.value.description, this.line, leftResult.value.column, table.name);
+        let results: Ret;
+        try{
+            results = this._testOperators(table, tree);
+        } catch(err){
+            throw err;
         }
-        let rightResult: ReturnType = this.rightExp.getValue(tree, table);
-        if (rightResult.value instanceof Exception) {
-            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
-        }
+        let leftResult: ReturnType = results.left;
+        let rightResult: ReturnType = results.right;
 
         if (leftResult.type === Primitive.DATE && rightResult.type === Primitive.DATE){
             return new ReturnType(Primitive.BOOLEAN, leftResult.value <= rightResult.value);
@@ -164,6 +166,21 @@ export class Relational implements Statement {
 
 
     _test_numeric_operation(table: Environment, tree: Tree) {
+        let results: Ret;
+        try{
+            results = this._testOperators(table, tree);
+        } catch(err){
+            throw err;
+        }
+        let leftResult: ReturnType = results.left;
+        let rightResult: ReturnType = results.right;
+
+        if (!((leftResult.type === Primitive.INT || leftResult.type === Primitive.DOUBLE) && (rightResult.type === Primitive.INT || rightResult.type === Primitive.DOUBLE))){
+            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
+        }
+    }
+
+    _testOperators(table: Environment, tree: Tree): Ret {
         let leftResult: ReturnType = this.leftExp.getValue(tree, table);
         if (leftResult.value instanceof Exception) {
             throw new Exception(leftResult.value.type, leftResult.value.description, this.line, leftResult.value.column, table.name);
@@ -173,10 +190,9 @@ export class Relational implements Statement {
             throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
         }
 
-        if (!((leftResult.type === Primitive.INT || leftResult.type === Primitive.DOUBLE) && (rightResult.type === Primitive.INT || rightResult.type === Primitive.DOUBLE))){
-            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
-        }
+        return { left: leftResult, right: rightResult };
     }
+
 
     getCST(): Node {
         return new Node("Node");

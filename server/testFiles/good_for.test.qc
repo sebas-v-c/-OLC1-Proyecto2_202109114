@@ -1,8 +1,8 @@
 declare @sumatoria INT;
 
-FOR @var IN 0..1024
+FOR @var IN 0..11
 BEGIN
-    SET @sumatoria = @var;
+    SET @sumatoria = @sumatoria + @var;
 END LOOP;
 
 declare @sumatoria2 INT;

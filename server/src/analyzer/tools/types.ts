@@ -12,7 +12,8 @@ export enum ArithmeticOperator {
     MINUS = "-",
     MULT = "*",
     DIV = "/",
-    MOD = "%"
+    MOD = "%",
+    UMINUS = "- ",
 }
 
 export enum RelationalOperator {
