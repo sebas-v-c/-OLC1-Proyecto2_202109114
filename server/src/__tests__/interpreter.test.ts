@@ -54,6 +54,7 @@ describe("Testing Interpreter", function() {
 
             expect(isException).toBeFalsy();
         }
+        printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@var1", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
@@ -153,7 +154,7 @@ describe("Testing Interpreter", function() {
 
             expect(isException).toBeFalsy();
         }
-
+        printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@var", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
@@ -193,7 +194,7 @@ describe("Testing Interpreter", function() {
 
             expect(isException).toBeFalsy();
         }
-
+        printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@sumatoria", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
@@ -238,6 +239,7 @@ describe("Testing Interpreter", function() {
 
             expect(isException).toBeFalsy();
         }
+        printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@mensaje", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
@@ -287,6 +289,7 @@ describe("Testing Interpreter", function() {
 
             expect(isException).toBeFalsy();
         }
+        printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@contador", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
@@ -325,7 +328,14 @@ describe("Testing Interpreter", function() {
             expect(isException).toBeFalsy();
         }
         /*------------------------------VARIABLE TESTING------------------------------*/
-        console.log(tree.console);
+        printConsole(tree.console);
     });
 
 });
+
+
+function printConsole(cons: string){
+    if (cons.length !== 0){
+        console.log(cons);
+    }
+}
