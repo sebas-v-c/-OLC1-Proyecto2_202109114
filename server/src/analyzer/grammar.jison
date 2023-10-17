@@ -324,7 +324,7 @@ for_struct:
 ;
 
 encapsulated:
-    RW_BEGIN env END    {}
+    RW_BEGIN env END    { $$ = $2; }
 ;
 
 /*-------------------------------FUNCTIONS&METHODS-------------------------------*/

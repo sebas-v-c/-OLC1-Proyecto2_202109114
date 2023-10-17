@@ -88,7 +88,8 @@ describe("Testing Interpreter", function() {
         tempSym = new Symbol("@var6", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
-            expect(formatDate(tempSym.value)).toBe("2023-10-16");
+            expect(formatDate(tempSym.value)).toBe("2023-10-21");
+
             expect(tempSym.type).toBe(Primitive.DATE);
         }
         tempSym = new Symbol("@var7", Primitive.NULL, null,0, 0, globalEnv);
@@ -197,7 +198,7 @@ describe("Testing Interpreter", function() {
         let tempSym: Symbol | Exception = new Symbol("@sumatoria", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
-            expect(tempSym.value).toBe(1023);
+            expect(tempSym.value).toBe(55);
             expect(tempSym.type).toBe(Primitive.INT);
         }
         tempSym = new Symbol("@chi", Primitive.NULL, null,0, 0, globalEnv);

@@ -39,35 +39,35 @@ export class Arithmetic implements Statement {
             }
             case ArithmeticOperator.MINUS: {
                 try {
-                    return this._greater_operation(table, tree);
+                    return this._minusOperation(table, tree);
                 } catch(err){
                     return new ReturnType(Primitive.NULL, err);
                 }
             }
             case ArithmeticOperator.MULT: {
                 try {
-                    return this._geq_operation(table, tree);
+                    return this._multOperation(table, tree);
                 } catch(err){
                     return new ReturnType(Primitive.NULL, err);
                 }
             }
             case ArithmeticOperator.DIV: {
                 try {
-                    return this._less_operation(table, tree);
+                    return this._divOperation(table, tree);
                 } catch(err){
                     return new ReturnType(Primitive.NULL, err);
                 }
             }
             case ArithmeticOperator.MOD: {
                 try {
-                    return this._leq_operation(table, tree);
+                    return this._modOperation(table, tree);
                 } catch(err){
                     return new ReturnType(Primitive.NULL, err);
                 }
             }
             case ArithmeticOperator.UMINUS: {
                 try {
-                    return this._greater_operation(table, tree);
+                    return this._uminusOperation(table, tree);
                 } catch(err){
                     return new ReturnType(Primitive.NULL, err);
                 }

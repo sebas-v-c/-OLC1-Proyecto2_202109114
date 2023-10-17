@@ -6,6 +6,8 @@ declare @var3 boolean default true;
 declare @var4 boolean default False;
 declare @var7 null default null;
 
+set @var6 = @var6 + 5;
+
 declare @nombre1 varchar;
 
 set @nombre1 = "cbas+ 1234";
