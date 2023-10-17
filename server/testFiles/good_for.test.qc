@@ -3,7 +3,6 @@ declare @sumatoria INT;
 FOR @var IN 0..10
 BEGIN
     SET @sumatoria = @sumatoria + @var;
-    PRINT @var + " FOR_LOOP\n";
 END LOOP;
 
 declare @sumatoria2 INT;
