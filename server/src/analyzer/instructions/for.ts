@@ -34,20 +34,22 @@ export class For implements Statement {
 
     interpret(tree: Tree, table: Environment) {
         let symbol: Symbol | Exception = table.getSymbol(new Symbol(this.variableName, Primitive.NULL, null, 0, 0, table))
+        const newForEnv: Environment = new Environment(table, "for_env");
 
         if (symbol instanceof Exception){
-            symbol = new Symbol(this.variableName, Primitive.INT, this.start, this.line, this.column, this.block.currentEnv)
-            this.block.addSymbol(symbol);
+            symbol = new Symbol(this.variableName, Primitive.INT, this.start, this.line, this.column, newForEnv);
+            newForEnv.setSymbol(symbol);
         }
         if (symbol.type !== Primitive.INT){
             return new Exception("Type Error", `Variable of type '${symbol.type}' is not assigname to type 'int'`, this.line, this.column, "for_env");
         }
 
+
         symbol.value = this.start;
         let res: any = undefined;
         for (let i = this.start; i < this.end; i++){
             if (this.block instanceof CodeBlock){
-                res = this.block.interpret(tree, table)
+                res = this.block.interpret(tree, newForEnv)
                 if (res !== undefined){
                     if (res instanceof Exception){
                         return res;
@@ -55,10 +57,10 @@ export class For implements Statement {
                 }
             }
             if (!(symbol instanceof Exception)){
-                symbol = this.block.currentEnv.getSymbol(symbol);
+                symbol = newForEnv.getSymbol(symbol);
                 if (!(symbol instanceof Exception)){
                     symbol.value = i + 1;
-                    this.block.currentEnv.updateSymbol(symbol);
+                    newForEnv.updateSymbol(symbol);
                 }
             }
             // To handle control words

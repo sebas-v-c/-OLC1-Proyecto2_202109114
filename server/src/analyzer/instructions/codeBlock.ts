@@ -31,15 +31,10 @@ export class CodeBlock implements Statement {
 
     interpret(tree: Tree, table: Environment): ReturnType | Exception | undefined {
         // In case want to initiate the new environment with a default symbol
-        this.currentEnv = new Environment(table, this.envName);
-        if (this.symbol !== undefined){
-            this.symbol.environment = this.currentEnv;
-            this.currentEnv.setSymbol(this.symbol);
-        }
         let retVar: ReturnType | Exception | undefined;
         for (let instruction of this.instructions){
             // TODO make sure that a break, continue, return is called here
-            retVar = instruction.interpret(tree, this.currentEnv);
+            retVar = instruction.interpret(tree, table);
 
             if (retVar instanceof Exception){
                 tree.errors.push(retVar);
@@ -60,10 +55,6 @@ export class CodeBlock implements Statement {
         }
 
         return retVar;
-    }
-
-    addSymbol(symbol: Symbol): void {
-        this.symbol = symbol;
     }
 
     getCST(): Node {

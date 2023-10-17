@@ -6,6 +6,7 @@ import Tree from "../tools/tree";
 import { Node } from "../abastract/ast";
 import { Exception } from "../errors";
 import { CodeBlock } from "./codeBlock";
+import Symbol from "../tools/symbol";
 
 
 export class While implements Statement {
@@ -37,10 +38,12 @@ export class While implements Statement {
             return new Exception('Semantic',`Invalid expression in WHILE condition`, this.line, this.column, table.name);
         }
 
+        const newWhileEnv: Environment = new Environment(table, "while_env");
+
         let res: ReturnType | Exception |undefined = undefined;
         while(flag.value){
             if (this.block instanceof CodeBlock){
-                res = this.block.interpret(tree, table)
+                res = this.block.interpret(tree, newWhileEnv)
                 if (res !== undefined){
                     if (res instanceof Exception){
                         return res;
@@ -48,9 +51,9 @@ export class While implements Statement {
                 }
             }
 
-            flag = this.condition?.getValue(tree, table)
+            flag = this.condition?.getValue(tree, newWhileEnv)
             if (flag === undefined) {
-                return new Exception('Semantic', `Invalid expression in WHILE condition`, this.line, this.column, table.name);
+                return new Exception('Semantic', `Invalid expression in WHILE condition`, this.line, this.column, "while_env");
             }
             if (flag.value instanceof Exception) {
                 return flag.value;
