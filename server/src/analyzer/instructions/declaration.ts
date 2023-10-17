@@ -45,6 +45,9 @@ export class Declaration implements Statement {
         if (this.expression === undefined) {
             for (const symbol of symbols){
                 result = table.setSymbol(symbol);
+                if (result instanceof Exception){
+                    return result;
+                }
             }
         } else {
             value = this.expression.getValue(tree, table);

@@ -145,6 +145,7 @@
     const { SetVar } = require("./instructions/setVar");
     const { If } = require("./instructions/if");
     const { SimpleCase, SearchedCase } = require("./instructions/case");
+    const { Function, Method } = require("./instructions/function");
     const { For } = require("./instructions/for");
     const { While } = require("./instructions/while");
     const { Print } = require("./instructions/print");
@@ -340,11 +341,11 @@ encapsulated:
 
 /*-------------------------------FUNCTIONS&METHODS-------------------------------*/
 declare_function:
-    RW_CREATE RW_FUNCTION TK_ID TK_LPAR typed_arguments TK_RPAR RETURNS primitive RW_BEGIN env RW_END   {}
+    RW_CREATE RW_FUNCTION TK_ID TK_LPAR typed_var_arguments TK_RPAR RETURNS type RW_BEGIN env RW_END   { $$ = new Function($3, $5, $8, $10, @1.first_line, @1.first_column); }
 ;
 
 declare_method:
-    RW_CREATE RW_PROCEDURE TK_ID typed_var_arguments RW_AS RW_BEGIN env RW_END  {}
+    RW_CREATE RW_PROCEDURE TK_ID typed_var_arguments RW_AS RW_BEGIN env RW_END  { $$ = new Method($3, $4, $7, @1.first_line, @1.first_column); }
 ;
 
 /*-------------------------------DECLARATION-------------------------------*/
