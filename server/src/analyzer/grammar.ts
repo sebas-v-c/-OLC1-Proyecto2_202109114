@@ -30,9 +30,10 @@ import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, Pro
     const { If } = require("./instructions/if");
     const { For } = require("./instructions/for");
     const { CodeBlock } = require("./instructions/codeBlock");
-    const { Primitive, RelationalOperator } = require("./tools/types");
+    const { Primitive, RelationalOperator, ArithmeticOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
     const { Relational } = require("./expressions/relational");
+    const { Arithmetic } = require("./expressions/arithmetic");
     const { CallVar } = require("./expressions/callVar");
 
 export class QCrypterParser extends JisonParser implements JisonParserApi {
@@ -172,6 +173,24 @@ case 99:
 break;
 case 100:
  this.$ = new PrimitiveVar(null, Primitive.NULL, _$[$0].first_line, _$[$0].first_column); 
+break;
+case 101:
+ this.$ = new Arithmetic($$[$0-2], ArithmeticOperator.PLUS, $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+break;
+case 102:
+ this.$ = new Arithmetic($$[$0-2], ArithmeticOperator.MINUS, $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+break;
+case 103:
+ this.$ = new Arithmetic($$[$0-2], ArithmeticOperator.DIV, $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+break;
+case 104:
+ this.$ = new Arithmetic($$[$0-2], ArithmeticOperator.MULT, $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+break;
+case 105:
+ this.$ = new Arithmetic($$[$0-2], ArithmeticOperator.MOD, $$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+break;
+case 106:
+ this.$ = new Arithmetic(undefined, ArithmeticOperator.UMINUS, $$[$0], _$[$0-1].first_line, _$[$0-1].first_column); 
 break;
         }
     }

@@ -140,9 +140,10 @@
     const { If } = require("./instructions/if");
     const { For } = require("./instructions/for");
     const { CodeBlock } = require("./instructions/codeBlock");
-    const { Primitive, RelationalOperator } = require("./tools/types");
+    const { Primitive, RelationalOperator, ArithmeticOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
     const { Relational } = require("./expressions/relational");
+    const { Arithmetic } = require("./expressions/arithmetic");
     const { CallVar } = require("./expressions/callVar");
 %}
 
@@ -393,12 +394,12 @@ primitive:
 ;
 
 arithmetic:
-    expression TK_PLUS expression       {}
-|   expression TK_MINUS expression      {}
-|   expression TK_DIV expression        {}
-|   expression TK_STAR expression       {}
-|   expression TK_MOD expression        {}
-|   TK_MINUS expression %prec UMINUS    {}
+    expression TK_PLUS expression       { $$ = new Arithmetic($1, ArithmeticOperator.PLUS, $3, @1.first_line, @1.first_column); }
+|   expression TK_MINUS expression      { $$ = new Arithmetic($1, ArithmeticOperator.MINUS, $3, @1.first_line, @1.first_column); }
+|   expression TK_DIV expression        { $$ = new Arithmetic($1, ArithmeticOperator.DIV, $3, @1.first_line, @1.first_column); }
+|   expression TK_STAR expression       { $$ = new Arithmetic($1, ArithmeticOperator.MULT, $3, @1.first_line, @1.first_column); }
+|   expression TK_MOD expression        { $$ = new Arithmetic($1, ArithmeticOperator.MOD, $3, @1.first_line, @1.first_column); }
+|   TK_MINUS expression %prec UMINUS    { $$ = new Arithmetic(undefined, ArithmeticOperator.UMINUS, $2, @1.first_line, @1.first_column); }
 ;
 
     
