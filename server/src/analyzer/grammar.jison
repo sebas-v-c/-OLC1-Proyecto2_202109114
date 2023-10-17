@@ -156,6 +156,7 @@
     const { Relational } = require("./expressions/relational");
     const { Arithmetic } = require("./expressions/arithmetic");
     const { CallVar } = require("./expressions/callVar");
+    const { CallFunc } = require("./expressions/callFunc");
 %}
 
 
@@ -266,8 +267,8 @@ set_arguments:
 ;
 
 value_arguments:
-    value_arguments TK_COMA expression  {}
-|   expression                          {}
+    value_arguments TK_COMA expression  { $1.push($3); $$ = $1; }
+|   expression                          { $$ = [$1]; }
 ;
 
 arguments:
@@ -419,7 +420,7 @@ arithmetic:
 
     
 call_func_mth:
-    TK_ID TK_LPAR arguments TK_RPAR {}
+    TK_ID TK_LPAR value_arguments TK_RPAR { $$ = new CallFunc($1, $3, @1.first_line, @1.first_column); }
 ;
 
 /*-------------------------------FUNCTIONS-------------------------------*/

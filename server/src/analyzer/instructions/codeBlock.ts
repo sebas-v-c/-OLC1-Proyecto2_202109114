@@ -33,7 +33,7 @@ export class CodeBlock implements Statement {
         // In case want to initiate the new environment with a default symbol
         let retVar: ReturnType | Exception | undefined;
         for (let instruction of this.instructions){
-            // TODO make sure that a break, continue, return is called here
+            // TODO make sure that a break, continue, returned is called here in the interpret method
             retVar = instruction.interpret(tree, table);
 
             if (retVar instanceof Exception){

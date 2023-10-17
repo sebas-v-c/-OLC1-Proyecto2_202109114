@@ -41,7 +41,7 @@ export class For implements Statement {
             newForEnv.setSymbol(symbol);
         }
         if (symbol.type !== Primitive.INT){
-            return new Exception("Type Error", `Variable of type '${symbol.type}' is not assigname to type 'int'`, this.line, this.column, "for_env");
+            return new Exception("Type Error", `Variable of type '${symbol.type}' is not assignable to type 'int'`, this.line, this.column, "for_env");
         }
 
 
