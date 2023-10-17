@@ -222,7 +222,6 @@ describe("Testing Interpreter", function() {
 
         const parser = new QCrypterParser()
         instructions = parser.parse(data);
-
         tree = new Tree(instructions);
 
         globalEnv = createGlobalEnv();
@@ -257,6 +256,43 @@ describe("Testing Interpreter", function() {
         if (tempSym instanceof Symbol){
             expect(tempSym.value).toBe("APROBADO");
             expect(tempSym.type).toBe(Primitive.VARCHAR);
+        }
+    });
+
+    /*-------------------------------------------------TESTING-------------------------------------------------*/
+    it("Testing good while structure Input", function() {
+        var testPath = path.join(__dirname, '..', '..', 'testFiles', 'good_while.test.qc');
+        const data = readFileSync(testPath, 'utf8');
+
+        /*------------------------------INSTRUCTIONS TESTING------------------------------*/
+        let tree: Tree | null;
+        let globalEnv: Environment | null;
+
+        let instructions: Array<Statement>
+
+        const parser = new QCrypterParser()
+        instructions = parser.parse(data);
+        tree = new Tree(instructions);
+
+        globalEnv = createGlobalEnv();
+        tree.globalTable = globalEnv;
+
+        for (let instruction of tree.instructions) {
+            let value: any = instruction.interpret(tree, globalEnv)
+            let isException: boolean = value instanceof Exception;
+            if (isException) {
+                console.log(value);
+                console.log(globalEnv);
+            }
+
+            expect(isException).toBeFalsy();
+        }
+        /*------------------------------VARIABLE TESTING------------------------------*/
+        let tempSym: Symbol | Exception = new Symbol("@contador", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        if (tempSym instanceof Symbol){
+            expect(tempSym.value).toBe(10);
+            expect(tempSym.type).toBe(Primitive.INT);
         }
     });
 });

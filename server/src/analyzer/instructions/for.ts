@@ -48,7 +48,6 @@ export class For implements Statement {
             res = this.block.interpret(tree, table)
             if (res !== undefined){
                 if (res.value instanceof Exception){
-
                     return res;
                 }
             }

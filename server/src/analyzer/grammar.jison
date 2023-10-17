@@ -140,9 +140,11 @@
     const { If } = require("./instructions/if");
     const { SimpleCase, SearchedCase } = require("./instructions/case");
     const { For } = require("./instructions/for");
+    const { While } = require("./instructions/while");
     const { CodeBlock } = require("./instructions/codeBlock");
-    const { Primitive, RelationalOperator, ArithmeticOperator } = require("./tools/types");
+    const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
+    const { Logical } = require("./expressions/logical");
     const { Relational } = require("./expressions/relational");
     const { Arithmetic } = require("./expressions/arithmetic");
     const { CallVar } = require("./expressions/callVar");
@@ -155,9 +157,10 @@
 %left "RW_OR"
 %left "RW_AND"
 %right "RW_NOT"
-%left "TK_EQEQ" "TK_NOTEQ" "TK_LESS" "TK_LEQ" "TK_GREATER" "TK_GEQ" "TK_EQ"
-%left "TK_PLUS" "TK_MINUS" "TK_MOD"
-%left "TK_STAR" "TK_DIV"
+%left "TK_EQ" "TK_NOTEQ"
+%left "TK_LESS" "TK_LEQ" "TK_GREATER" "TK_GEQ"
+%left "TK_PLUS" "TK_MINUS"
+%left "TK_STAR" "TK_DIV" "TK_MOD"
 %right "UMINUS"
 
 /*to regonize this token we should call it with %prec UMINUS after delcaring a production
@@ -291,8 +294,8 @@ if_struct:
 ;
 
 case_struct:
-    simple_case     { $$ = $1; }
-|   searched_case   { $$ = $1; }
+    searched_case   { $$ = $1; }
+|   simple_case     { $$ = $1; }
 ;
 
 simple_case:
@@ -308,16 +311,16 @@ simple_case_cases:
 
 searched_case:
     RW_CASE searched_case_cases RW_ELSE primitive RW_END                { $$ = new SearchedCase($2, $4, undefined, @1.first_line, @1.first_column); }
-|   RW_CASE searched_case_cases RW_ELSE primitive RW_END RW_AS TK_ID    { $$ = new SearchedCase($2, $4, $7, @1.first_line, @1.first_column); }
+|   RW_CASE searched_case_cases RW_ELSE primitive RW_END RW_AS TK_VAR   { $$ = new SearchedCase($2, $4, $7, @1.first_line, @1.first_column); }
 ;
 
 searched_case_cases:
-    searched_case_cases RW_WHEN relational RW_THEN primitive { $1.push({when: $3, then: $5}); $$ = $1; }
-|   RW_WHEN relational RW_THEN primitive                     { $$ = [{when: $2, then: $4}]; }
+    searched_case_cases RW_WHEN expression RW_THEN primitive    { $1.push({when: $3, then: $5}); $$ = $1; }
+|   RW_WHEN expression RW_THEN primitive                        { $$ = [{when: $2, then: $4}]; }
 ;
 
 while_struct:
-    RW_WHILE expression RW_BEGIN env RW_END {}
+    RW_WHILE expression RW_BEGIN env RW_END { $$ = new While($2, $4, @1.first_line, @1.first_column); }
 ;
 
 for_struct:
@@ -358,15 +361,15 @@ env:
 
 /*-------------------------------EXPRESSIONS-------------------------------*/
 expression:
-    TK_LPAR select_stmt TK_RPAR { $$ = $2; }
+    logic                       { $$ = $1; }
 |   relational                  { $$ = $1; }
-|   logic                       { $$ = $1; }
 |   primitive                   { $$ = $1; }
 |   arithmetic                  { $$ = $1; }
 |   call_func_mth               { $$ = $1; }
 |   cast                        { $$ = $1; } 
 |   TK_VAR                      { $$ = new CallVar($1, @1.first_line, @1.first_column); }
-|   TK_RPAR expression TK_LPAR  { $$ = $1; }
+|   TK_LPAR expression TK_RPAR  { $$ = $2; }
+|   TK_LPAR select_stmt TK_RPAR { $$ = $2; }
 ;
 
 relational:
@@ -379,9 +382,9 @@ relational:
 ;
 
 logic:
-    expression RW_AND expression    {}
-|   expression RW_OR expression     {}
-|   RW_NOT expression               {}
+    expression RW_AND expression    { $$ = new Logical($1, LogicalOperator.AND, $3, @1.first_line, @1.first_column); }
+|   expression RW_OR expression     { $$ = new Logical($1, LogicalOperator.OR, $3, @1.first_line, @1.first_column); }
+|   RW_NOT expression               { $$ = new Logical(undefined, LogicalOperator.NOT, $2, @1.first_line, @1.first_column); }
 ;
 
 primitive:
