@@ -11,7 +11,7 @@ import { formatDate } from '../analyzer/utils/utils';
 import { Primitive } from '../analyzer/tools/types';
 
 
-describe("Testing Interpreter", function() {
+describe("Testing Interpreter Logics", function() {
     /*-------------------------------------------------TESTING-------------------------------------------------*/
     it("Testing good assign declare Input", function() {
         var testPath = path.join(__dirname, '..', '..', 'testFiles', 'good_declare_assign.test.qc');
