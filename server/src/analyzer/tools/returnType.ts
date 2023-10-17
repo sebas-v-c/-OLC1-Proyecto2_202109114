@@ -5,7 +5,7 @@ export default class ReturnType {
     constructor(public type: ValueType, public value: any){}
 
     public toString(): string {
-        return this.value;
+        return this.value.toString();
     }
 
 }

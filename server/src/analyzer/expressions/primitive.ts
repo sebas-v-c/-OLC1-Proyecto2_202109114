@@ -48,7 +48,6 @@ export class PrimitiveVar implements Statement {
                 this.value = new Date(this.value);
             }
         }
-
         return new ReturnType(this.type, this.value);
     }
 
