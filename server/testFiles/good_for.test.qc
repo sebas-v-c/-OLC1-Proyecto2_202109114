@@ -9,7 +9,7 @@ declare @sumatoria2 INT;
 declare @chi INT default 10;
 
 
-FOR @var IN 0..1024
+FOR @var IN 0..2
 BEGIN
     SET @chi = @var;
 END LOOP;

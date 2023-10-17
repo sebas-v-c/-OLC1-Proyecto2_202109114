@@ -361,16 +361,15 @@ describe("Testing Interpreter", function() {
         }
         printConsole(tree.console);
 
-
         /*------------------------------VARIABLE TESTING------------------------------*/
-        let tempSym: Symbol | Exception = new Symbol("@contador", Primitive.NULL, null,0, 0, globalEnv);
+        let tempSym: Symbol | Exception = new Symbol("@result", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
-            expect(tempSym.value).toBe(10);
-            expect(tempSym.type).toBe(Primitive.INT);
+            expect(tempSym.value).toBe(78.53975);
+            expect(tempSym.type).toBe(Primitive.DOUBLE);
         }
-    });
 
+    });
 });
 
 

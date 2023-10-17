@@ -148,6 +148,9 @@
     const { SimpleCase, SearchedCase } = require("./instructions/case");
     const { Function, Method } = require("./instructions/function");
     const { For } = require("./instructions/for");
+    const { Continue } = require("./instructions/continue");
+    const { Break } = require("./instructions/break");
+    const { Return } = require("./instructions/return");
     const { While } = require("./instructions/while");
     const { Print } = require("./instructions/print");
     const { CodeBlock } = require("./instructions/codeBlock");
@@ -203,14 +206,14 @@ instruction:
 |   while_struct            { $$ = $1; }
 |   for_struct              { $$ = $1; }
 /*-------------------------------CONTROL-------------------------------*/
-|   RW_BREAK                { $$ = $1; }
-|   RW_CONTINUE             { $$ = $1; }
-|   RW_RETURN expression    { $$ = $1; }
-|   RW_RETURN               { $$ = $1; }
+|   RW_BREAK                { $$ = new Break(@1.first_line, @1.first_column); }
+|   RW_CONTINUE             { $$ = new Continue(@1.first_line, @1.first_column); }
+|   RW_RETURN expression    { $$ = new Return($2, @1.first_line, @1.first_column); }
+|   RW_RETURN               { $$ = new Return(undefined, @1.first_line, @1.first_column); }
 /*-------------------------------FUNCTIONS&METHODS-------------------------------*/
+|   call_func_mth           { $$ = $1; }    
 |   declare_function        { $$ = $1; }
 |   declare_method          { $$ = $1; }    
-|   call_func_mth           { $$ = $1; }    
 /*-------------------------------DECLARATION-------------------------------*/
 |   declare_var             { $$ = $1; }
 |   set_var                 { $$ = $1; }

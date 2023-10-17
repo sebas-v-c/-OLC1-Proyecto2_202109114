@@ -35,7 +35,6 @@ export class CodeBlock implements Statement {
         for (let instruction of this.instructions){
             // TODO make sure that a break, continue, returned is called here in the interpret method
             retVar = instruction.interpret(tree, table);
-
             if (retVar instanceof Exception){
                 tree.errors.push(retVar);
                 tree.updateConsole(retVar.toString());
@@ -46,10 +45,12 @@ export class CodeBlock implements Statement {
 
             if (retVar instanceof ReturnType){
                 if (retVar.type === TransferOp.BREAK || retVar.type === TransferOp.CONTINUE) {
+                    // this operations return  an instance of type ReturnType({TransferOp.BREAK or TransferOp.CONTINUE}, null)
                     return retVar;
                 }
                 if (retVar.type === TransferOp.RETURN){
-                    return retVar;
+                    // this operations return  an instance of type ReturnType(TransferOp.RETURN, ReturnType)
+                    return retVar.value;
                 }
             }
         }

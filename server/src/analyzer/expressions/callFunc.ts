@@ -22,6 +22,10 @@ export class CallFunc implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
+        const ret: ReturnType =  this.getValue(tree, table)
+        if (ret.value instanceof Exception){
+            return ret.value;
+        }
         return undefined;
     }
 
@@ -46,7 +50,7 @@ export class CallFunc implements Statement {
             const toSaveSym = new Symbol(calledFunc.args[i].id.toLowerCase(), calledFunc.args[i].type, null, this.line, this.column, funcEnv);
             const receivedSym = this.argExpr[i].getValue(tree, funcEnv);
             if (toSaveSym.type !== receivedSym.type){
-                return new ReturnType(Primitive.NULL, new Exception("Type Error", `Variable of type '${receivedSym.type}' is not assignable to type '${toSaveSym.type}'`, this.line, this.column, "for_env"));
+                return new ReturnType(Primitive.NULL, new Exception("Type Error", `Variable of type '${receivedSym.type}' is not assignable to type '${toSaveSym.type}'`, this.line, this.column, funcEnv.name));
             }
             toSaveSym.value = receivedSym.value;
             funcEnv.setSymbol(toSaveSym);
@@ -59,7 +63,7 @@ export class CallFunc implements Statement {
                 if (ret.type === calledFunc.retType){
                     return ret;
                 } else {
-                    return new ReturnType(Primitive.NULL, new Exception("Type Error", `Variable of type '${ret.type}' can't return a '${calledFunc.retType}'`, this.line, this.column, "for_env"));
+                    return new ReturnType(Primitive.NULL, new Exception("Type Error", `Variable of type '${ret.type}' can't return a '${calledFunc.retType}'`, this.line, this.column, funcEnv.name));
                 }
             }
             if (ret instanceof Exception){
@@ -67,7 +71,7 @@ export class CallFunc implements Statement {
             }
             if (ret === undefined){
                 // here i return a type error because the function return indefined
-                return new ReturnType(Primitive.NULL, new Exception("Type Errror", `Variable of type '${"undefined"}' is can't return a '${calledFunc.retType}'`, this.line, this.column, "for_env"));
+                return new ReturnType(Primitive.NULL, new Exception("Type Errror", `Variable of type '${"undefined"}' is can't return a '${calledFunc.retType}'`, this.line, this.column, funcEnv.name));
             }
         }
 
@@ -77,7 +81,7 @@ export class CallFunc implements Statement {
             }
             if (ret instanceof ReturnType){
                 if (ret.value !== null){
-                    return new ReturnType(Primitive.NULL, new Exception("Semantic", `A METHOD can't return a value`, this.line, this.column, "for_env"));
+                    return new ReturnType(Primitive.NULL, new Exception("Semantic", `A METHOD can't return a value`, this.line, this.column, funcEnv.name));
                 }
             }
         }
