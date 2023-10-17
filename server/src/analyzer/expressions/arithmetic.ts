@@ -102,6 +102,10 @@ export class Arithmetic implements Statement {
         if (leftResult.type === Primitive.VARCHAR && rightResult.type === Primitive.VARCHAR){
             return new ReturnType(Primitive.VARCHAR, leftResult.value + rightResult.value);
         }
+        if ((leftResult.type === Primitive.DOUBLE || leftResult.type === Primitive.INT || leftResult.type === Primitive.VARCHAR)
+            && (rightResult.type === Primitive.INT || rightResult.type === Primitive.DOUBLE || rightResult.type === Primitive.VARCHAR)){
+            return new ReturnType(Primitive.DOUBLE, leftResult.value + rightResult.value);
+        }
 
         throw new Exception("Type Error", `"+" not supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
     }

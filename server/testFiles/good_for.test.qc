@@ -1,12 +1,14 @@
 declare @sumatoria INT;
 
-FOR @var IN 0..11
+FOR @var IN 0..10
 BEGIN
     SET @sumatoria = @sumatoria + @var;
+    PRINT @var + " FOR_LOOP\n";
 END LOOP;
 
 declare @sumatoria2 INT;
 declare @chi INT default 10;
+
 
 FOR @var IN 0..1024
 BEGIN

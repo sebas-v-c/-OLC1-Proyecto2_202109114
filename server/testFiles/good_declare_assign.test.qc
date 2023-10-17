@@ -27,4 +27,4 @@ SET @edad = 25;
 
 DECLARE @SI INT;
 
-SET @nombre1 = '\n\"\"aaaa';
+SET @nombre1 = "\n\"\"aaaa";

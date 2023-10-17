@@ -18,6 +18,7 @@ import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, Pro
     const clean_errors = () => {
         errors = [];
     }
+    let controlString = "";
 
 
     // files to import should be the js files
@@ -304,10 +305,14 @@ export class QCrypterLexer extends JisonLexer implements JisonLexerApi {
         /^(?:[0-9]+\.[0-9]+\b)/i,
         /^(?:[0-9]+\b)/i,
         /^(?:_*[a-zA-Z\xf1\xd1][a-zA-Z0-9\xf1\xd1\_]*)/i,
-        /^(?:"[^\"]*")/i,
-        /^(?:'[^\"]*')/i,
-        /^(?:'(?:[^\n\"\\]|\\.)*')/i,
-        /^(?:"(?:[^\n\"\\]|\\.)*")/i,
+        /^(?:["])/i,
+        /^(?:[^"\\]+)/i,
+        /^(?:\\")/i,
+        /^(?:\\n)/i,
+        /^(?:\\t)/i,
+        /^(?:\\\\)/i,
+        /^(?:\\\\')/i,
+        /^(?:["])/i,
         /^(?:\()/i,
         /^(?:\))/i,
         /^(?:;)/i,
@@ -328,7 +333,7 @@ export class QCrypterLexer extends JisonLexer implements JisonLexerApi {
         /^(?:$)/i,
         /^(?:.)/i
     ];
-    conditions: any = {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82],"inclusive":true}}
+    conditions: any = {"string":{"rules":[61,62,63,64,65,66,67],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86],"inclusive":true}}
     performAction (yy:any,yy_:any,$avoiding_name_collisions:any,YY_START:any): any {
           var YYSTATE=YY_START;
         switch($avoiding_name_collisions) {
@@ -452,51 +457,59 @@ export class QCrypterLexer extends JisonLexer implements JisonLexerApi {
       break;
     case 59:return "TK_ID";
       break;
-    case 60:return "TK_VARCHAR";
+    case 60:controlString=""; this.pushState("string");
       break;
-    case 61:return "TK_VARCHAR";
+    case 61:controlString+=yy_.yytext; 
       break;
-    case 62:return "TK_VARCHAR";
+    case 62:controlString+="\"";
       break;
-    case 63:return "TK_VARCHAR";
+    case 63:controlString+="\n";
       break;
-    case 64:return "TK_LPAR";
+    case 64:controlString+="\t";
       break;
-    case 65:return "TK_RPAR";
+    case 65:controlString+="\\";
       break;
-    case 66:return "TK_SCOLON";
+    case 66:controlString+="\'";
       break;
-    case 67:return "TK_DOT";
+    case 67:yy_.yytext=controlString; this.popState(); return 106;
       break;
-    case 68:return "TK_COMA";
+    case 68:return "TK_LPAR";
       break;
-    case 69:return "TK_PLUS";
+    case 69:return "TK_RPAR";
       break;
-    case 70:return "TK_MINUS";
+    case 70:return "TK_SCOLON";
       break;
-    case 71:return "TK_STAR";
+    case 71:return "TK_DOT";
       break;
-    case 72:return "TK_DIV";
+    case 72:return "TK_COMA";
       break;
-    case 73:return "TK_MOD";
+    case 73:return "TK_PLUS";
       break;
-    case 74:return "TK_GEQ";
+    case 74:return "TK_MINUS";
       break;
-    case 75:return "TK_LEQ";
+    case 75:return "TK_STAR";
       break;
-    case 76:return "TK_EQEQ";
+    case 76:return "TK_DIV";
       break;
-    case 77:return "TK_NOTEQ";
+    case 77:return "TK_MOD";
       break;
-    case 78:return "TK_GREATER";
+    case 78:return "TK_GEQ";
       break;
-    case 79:return "TK_LESS";
+    case 79:return "TK_LEQ";
       break;
-    case 80:return "TK_EQ";
+    case 80:return "TK_EQEQ";
       break;
-    case 81:return 5;
+    case 81:return "TK_NOTEQ";
       break;
-    case 82: lexErrors.push(new LexError(yy_.yylloc.first_line, yy_.yylloc.first_column, yy_.yytext)); return "INVALID"; 
+    case 82:return "TK_GREATER";
+      break;
+    case 83:return "TK_LESS";
+      break;
+    case 84:return "TK_EQ";
+      break;
+    case 85:return 5;
+      break;
+    case 86: lexErrors.push(new LexError(yy_.yylloc.first_line, yy_.yylloc.first_column, yy_.yytext)); return "INVALID"; 
       break;
         }
     }

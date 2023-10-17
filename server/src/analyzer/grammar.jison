@@ -15,12 +15,14 @@
     const clean_errors = () => {
         errors = [];
     }
+    let controlString = "";
 %}
 
 /*---------------------------lexical definitions---------------------------*/
 
 %lex 
 %options case-insensitive
+%x string
 
 %%
 
@@ -98,10 +100,14 @@
 [0-9]+\b                                return "TK_INT";
 (\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*         return "TK_ID";
 //                              if this doesnt work use this.begin() instead
-\"[^\"]*\"                              return "TK_VARCHAR";
-\'[^\"]*\'                              return "TK_VARCHAR";
-\'(([^\n\"\\]|\\.)*)\'                  return "TK_VARCHAR";
-\"(([^\n\"\\]|\\.)*)\"                  return "TK_VARCHAR";
+["]                             {controlString=""; this.pushState("string");}
+<string>[^"\\]+                 {controlString+=yytext; }
+<string>"\\\""                  {controlString+="\"";}
+<string>"\\n"                   {controlString+="\n";}
+<string>"\\t"                   {controlString+="\t";}
+<string>"\\\\"                  {controlString+="\\";}
+<string>"\\\'"                  {controlString+="\'";}
+<string>["]                     {yytext=controlString; this.popState(); return 'TK_VARCHAR';}
 
 "("                             return "TK_LPAR";
 ")"                             return "TK_RPAR";

@@ -9,6 +9,7 @@ import { CodeBlock } from "./codeBlock";
 import Symbol from "../tools/symbol";
 
 
+
 export class For implements Statement {
     public variableName: string;
     public block: CodeBlock;
@@ -54,23 +55,15 @@ export class For implements Statement {
             if (!(symbol instanceof Exception)){
                 symbol = this.block.currentEnv.getSymbol(symbol);
                 if (!(symbol instanceof Exception)){
-                    symbol.value = i;
+                    symbol.value = i + 1;
                     this.block.currentEnv.updateSymbol(symbol);
                 }
-            }
-        }
-        // TODO fix later
-        if (!(symbol instanceof Exception)){
-            res = this.block.interpret(tree, table);
-            symbol = this.block.currentEnv.getSymbol(symbol)
-            if (!(symbol instanceof Exception)){
-                symbol.value = this.end;
-                this.block.currentEnv.updateSymbol(symbol);
             }
         }
 
         return res;
     }
+
 
     getCST(): Node {
 

@@ -41,7 +41,7 @@ export class PrimitiveVar implements Statement {
                 break;
             }
             case Primitive.VARCHAR: {
-                this.value = this.value.slice(1, -1);
+                this.value = this.value;
                 break;
             }
             case Primitive.DATE: {
