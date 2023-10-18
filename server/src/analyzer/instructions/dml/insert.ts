@@ -6,20 +6,20 @@ import Tree from "../../tools/tree";
 import { Node } from "../../abastract/ast";
 import { Exception } from "../../errors";
 
-export class Drop implements Statement {
-    constructor(public id: string, public line: number, public column: number,){}
+export class Insert implements Statement {
+    public cols: Array<string>;
+    public vals: Array<Statement>;
+    constructor(public id: string, cols: Array<string>, vals: Array<Statement>, public line: number, public column: number){
+        this.cols = cols;
+    }
 
     getValue(tree: Tree, table: Environment): ReturnType {
         return new ReturnType(Primitive.NULL, undefined);
     }
 
 
+    // TODO
     interpret(tree: Tree, table: Environment) {
-        let dbTable = table.getTable(this.id, this.line, this.column);
-        if (dbTable instanceof Exception){
-            return dbTable;
-        }
-        return table.dropTable(dbTable, this.line, this.column);
     }
 
     getCST(): Node {

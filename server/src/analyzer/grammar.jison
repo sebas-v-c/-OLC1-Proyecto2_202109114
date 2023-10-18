@@ -160,6 +160,9 @@
     const { Alter, AlterActions } = require("./instructions/ddl/alter");
     const { Drop } = require("./instructions/ddl/drop");
 
+    const { Insert } = require("./instructions/dml/insert");
+    const { Truncate } = require("./instructions/dml/truncate");
+
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
     const { Logical } = require("./expressions/logical");
@@ -239,10 +242,10 @@ ddl:
 ;
 
 dml:
-    RW_INSERT RW_INTO TK_ID TK_LPAR arguments TK_RPAR RW_VALUES TK_RPAR value_arguments TK_RPAR {  }
+    RW_INSERT RW_INTO TK_ID TK_LPAR arguments TK_RPAR RW_VALUES TK_RPAR value_arguments TK_RPAR { $$ = new Insert($3, $5, $9, @1.first_line, @1.first_column); }
 |   select_stmt                                                                                 { $$ = $1; }    
 |   RW_UPDATE TK_ID RW_SET set_arguments RW_WHERE expression                                    {  }
-|   RW_TRUNCATE RW_TABLE TK_ID                                                                  {  }
+|   RW_TRUNCATE RW_TABLE TK_ID                                                                  { $$ = new Truncate($3, @1.first_line, @1.first_column); }
 |   RW_DELETE RW_FROM TK_ID RW_WHERE expression                                                 {  }
 ;
 
@@ -282,8 +285,8 @@ value_arguments:
 ;
 
 arguments:
-    arguments TK_COMA TK_ID {}
-|   TK_ID                   {}
+    arguments TK_COMA TK_ID { $1.push($3); $$ = $1; }
+|   TK_ID                   { $$ = [$1]; }
 ;
 
 // TODO make this save the specified value
