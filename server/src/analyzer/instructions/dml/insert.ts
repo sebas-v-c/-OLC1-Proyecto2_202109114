@@ -20,7 +20,6 @@ export class Insert implements Statement {
     }
 
 
-    // TODO
     interpret(tree: Tree, table: Environment) {
         let dbTable = table.getTable(this.id, this.line, this.column);
         if (dbTable instanceof Exception){
