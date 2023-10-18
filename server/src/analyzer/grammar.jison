@@ -162,9 +162,12 @@
 
     const { Insert } = require("./instructions/dml/insert");
     const { Truncate } = require("./instructions/dml/truncate");
+    const { Update } = require("./instructions/dml/update");
+    const { WherePredicate } = require("./instructions/dml/whereType");
 
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
+    const { IdVar } = require("./expressions/id");
     const { Logical } = require("./expressions/logical");
     const { Relational } = require("./expressions/relational");
     const { Arithmetic } = require("./expressions/arithmetic");
@@ -244,7 +247,7 @@ ddl:
 dml:
     RW_INSERT RW_INTO TK_ID TK_LPAR arguments TK_RPAR RW_VALUES TK_LPAR value_arguments TK_RPAR { $$ = new Insert($3, $5, $9, @1.first_line, @1.first_column); }
 |   select_stmt                                                                                 { $$ = $1; }    
-|   RW_UPDATE TK_ID RW_SET set_arguments RW_WHERE expression                                    {  }
+|   RW_UPDATE TK_ID RW_SET set_arguments RW_WHERE where_cond                                    { $$ = new Update($2, $4, $6 ,@1.first_line, @1.first_column); }
 |   RW_TRUNCATE RW_TABLE TK_ID                                                                  { $$ = new Truncate($3, @1.first_line, @1.first_column); }
 |   RW_DELETE RW_FROM TK_ID RW_WHERE expression                                                 {  }
 ;
@@ -267,6 +270,19 @@ select_stmt:
 //|   RW_SELECT TK_VAR AS TK_ID                                   {}
 ;
 
+// I created this class because I'm lazy (I don't want write "new WherePred" every single time)
+where_cond:
+    expression  { $$ = new WherePredicate($1, @1.first_line, @1.first_column); }
+;
+
+/*
+log_operator:
+    RW_AND  { $$ = LogicalOperator.AND; }
+|   RW_OR   { $$ = LogicalOperator.OR; }
+|   RW_NOT  { $$ = LogicalOperator.NOT; }
+;
+*/
+
 /*-------------------------------ARGUMENTS-------------------------------*/
 select_arguments:
     TK_STAR         {}
@@ -275,8 +291,8 @@ select_arguments:
 
 // TODO make this save the specified value
 set_arguments:
-    set_arguments TK_COMA TK_ID TK_EQ TK_ID {}
-|   TK_ID TK_EQ TK_ID                       {}
+    set_arguments TK_COMA TK_ID TK_EQ expression { $1.push({col: $3, val: $5}); $$ = $1; }
+|   TK_ID TK_EQ expression                       { $$ = [{col: $1, val: $2}]; }
 ;
 
 value_arguments:
@@ -393,6 +409,7 @@ expression:
 |   call_func_mth               { $$ = $1; }
 |   cast                        { $$ = $1; } 
 |   TK_VAR                      { $$ = new CallVar($1, @1.first_line, @1.first_column); }
+|   TK_ID                       { $$ = new IdVar($1, @1.first_line, @1.first_column); } // This will return a simple string that represents an id (interpreted as a column)
 |   TK_LPAR expression TK_RPAR  { $$ = $2; }
 |   TK_LPAR select_stmt TK_RPAR { $$ = $2; }
 ;

@@ -43,4 +43,9 @@ export enum Functions {
     NATIVE_FN = "native_fn"
 }
 
-export type ValueType = Primitive | Functions | TransferOp;
+export enum Id {
+    ID = "id"
+}
+
+
+export type ValueType = Primitive | Functions | TransferOp | Id;
