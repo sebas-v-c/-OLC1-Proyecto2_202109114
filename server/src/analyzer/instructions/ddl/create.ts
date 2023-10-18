@@ -32,8 +32,7 @@ export class Create implements Statement {
         for (let arg of this.args){
             newDbTable.addColumn(arg.id, arg.type, this.line, this.column);
         }
-        table.setTable(newDbTable, this.line, this.column);
-        return undefined;
+        return table.setTable(newDbTable, this.line, this.column);
     }
 
     getCST(): Node {

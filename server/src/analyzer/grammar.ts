@@ -38,7 +38,9 @@ import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, Pro
     const { While } = require("./instructions/while");
     const { Print } = require("./instructions/print");
     const { CodeBlock } = require("./instructions/codeBlock");
+
     const { Create } = require("./instructions/ddl/create");
+    const { Alter, AlterActions } = require("./instructions/ddl/alter");
 
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
@@ -99,8 +101,23 @@ break;
 case 23:
  this.$ = new Create($$[$0-3], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column); 
 break;
-case 24: case 25: case 26: case 28: case 29: case 30:
+case 24:
+ this.$ = new Alter($$[$0-1], $$[$0], _$[$0-3].first_line, _$[$0-3].first_column); 
+break;
+case 25: case 26: case 28: case 29: case 30:
   
+break;
+case 31:
+ this.$ = {type: AlterActions.ADD, col: $$[$0-1], colType: $$[$0]}; 
+break;
+case 32:
+ this.$ = {type: AlterActions.DROP, col: $$[$0]}; 
+break;
+case 33:
+ this.$ = {type: AlterActions.RENAMETABLE, newId: $$[$0]}; 
+break;
+case 34:
+ this.$ = {type: AlterActions.RENAMECOL, col: $$[$0-2], newId: $$[$0]}; 
 break;
 case 43:
  $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; 
@@ -285,8 +302,9 @@ export class QCrypterLexer extends JisonLexer implements JisonLexerApi {
         /^(?:\s+)/i,
         /^(?:--.*)/i,
         /^(?:[/][*][^*]*[*]+(?:[^/*][^*]*[*]+)*[/])/i,
-        /^(?:[ \r\t]+\nALTER\b)/i,
+        /^(?:[ \r\t]+\n)/i,
         /^(?:CREATE\b)/i,
+        /^(?:ALTER\b)/i,
         /^(?:DROP\b)/i,
         /^(?:RENAME\b)/i,
         /^(?:INSERT\b)/i,
@@ -370,7 +388,7 @@ export class QCrypterLexer extends JisonLexer implements JisonLexerApi {
         /^(?:$)/i,
         /^(?:.)/i
     ];
-    conditions: any = {"string":{"rules":[61,62,63,64,65,66,67],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86],"inclusive":true}}
+    conditions: any = {"string":{"rules":[62,63,64,65,66,67,68],"inclusive":false},"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87],"inclusive":true}}
     performAction (yy:any,yy_:any,$avoiding_name_collisions:any,YY_START:any): any {
           var YYSTATE=YY_START;
         switch($avoiding_name_collisions) {
@@ -380,173 +398,175 @@ export class QCrypterLexer extends JisonLexer implements JisonLexerApi {
       break;
     case 2:// MultiLineComment
       break;
-    case 3:return "RW_ALTER";
+    case 3:return;
       break;
     case 4:return "RW_CREATE";
       break;
-    case 5:return "RW_DROP";
+    case 5:return "RW_ALTER";
       break;
-    case 6:return "RW_RENAME";
+    case 6:return "RW_DROP";
       break;
-    case 7:return "RW_INSERT";
+    case 7:return "RW_RENAME";
       break;
-    case 8:return "RW_UPDATE";
+    case 8:return "RW_INSERT";
       break;
-    case 9:return "RW_TRUNCATE";
+    case 9:return "RW_UPDATE";
       break;
-    case 10:return "RW_DELETE";
+    case 10:return "RW_TRUNCATE";
       break;
-    case 11:return "RW_SELECT";
+    case 11:return "RW_DELETE";
       break;
-    case 12:return "RW_FROM";
+    case 12:return "RW_SELECT";
       break;
-    case 13:return "RW_WHERE";
+    case 13:return "RW_FROM";
       break;
-    case 14:return "RW_INTO";
+    case 14:return "RW_WHERE";
       break;
-    case 15:return "RW_VALUES";
+    case 15:return "RW_INTO";
       break;
-    case 16:return "RW_ADD";
+    case 16:return "RW_VALUES";
       break;
-    case 17:return "RW_COLUMN";
+    case 17:return "RW_ADD";
       break;
-    case 18:return "RW_RENAME";
+    case 18:return "RW_COLUMN";
       break;
-    case 19:return "RW_TO";
+    case 19:return "RW_RENAME";
       break;
-    case 20:return "RW_TABLE";
+    case 20:return "RW_TO";
       break;
-    case 21:return "RW_INT";
+    case 21:return "RW_TABLE";
       break;
-    case 22:return "RW_DOUBLE";
+    case 22:return "RW_INT";
       break;
-    case 23:return "RW_DATE";
+    case 23:return "RW_DOUBLE";
       break;
-    case 24:return "RW_VARCHAR";
+    case 24:return "RW_DATE";
       break;
-    case 25:return "RW_BOOLEAN";
+    case 25:return "RW_VARCHAR";
       break;
-    case 26:return "RW_TRUE";
+    case 26:return "RW_BOOLEAN";
       break;
-    case 27:return "RW_FALSE";
+    case 27:return "RW_TRUE";
       break;
-    case 28:return "RW_NULL";
+    case 28:return "RW_FALSE";
       break;
-    case 29:return "RW_NOT"; 
+    case 29:return "RW_NULL";
       break;
-    case 30:return "RW_AND";
+    case 30:return "RW_NOT"; 
       break;
-    case 31:return "RW_OR";
+    case 31:return "RW_AND";
       break;
-    case 32:return "RW_BEGIN";
+    case 32:return "RW_OR";
       break;
-    case 33:return "RW_END";
+    case 33:return "RW_BEGIN";
       break;
-    case 34:return "RW_DECLARE";
+    case 34:return "RW_END";
       break;
-    case 35:return "RW_DEFAULT";
+    case 35:return "RW_DECLARE";
       break;
-    case 36:return "RW_SET";
+    case 36:return "RW_DEFAULT";
       break;
-    case 37:return "RW_AS";
+    case 37:return "RW_SET";
       break;
-    case 38:return "RW_CAST";
+    case 38:return "RW_AS";
       break;
-    case 39:return "RW_PRINT";
+    case 39:return "RW_CAST";
       break;
-    case 40:return "RW_IF";
+    case 40:return "RW_PRINT";
       break;
-    case 41:return "RW_THEN";
+    case 41:return "RW_IF";
       break;
-    case 42:return "RW_ELSE";
+    case 42:return "RW_THEN";
       break;
-    case 43:return "RW_CASE";
+    case 43:return "RW_ELSE";
       break;
-    case 44:return "RW_WHEN";
+    case 44:return "RW_CASE";
       break;
-    case 45:return "RW_WHILE";
+    case 45:return "RW_WHEN";
       break;
-    case 46:return "RW_FOR";
+    case 46:return "RW_WHILE";
       break;
-    case 47:return "RW_IN";
+    case 47:return "RW_FOR";
       break;
-    case 48:return "RW_LOOP";
+    case 48:return "RW_IN";
       break;
-    case 49:return "RW_BREAK";
+    case 49:return "RW_LOOP";
       break;
-    case 50:return "RW_CONTINUE";
+    case 50:return "RW_BREAK";
       break;
-    case 51:return "RW_FUNCTION";
+    case 51:return "RW_CONTINUE";
       break;
-    case 52:return "RW_PROCEDURE";
+    case 52:return "RW_FUNCTION";
       break;
-    case 53:return "RW_RETURNS";
+    case 53:return "RW_PROCEDURE";
       break;
-    case 54:return "RW_RETURN";
+    case 54:return "RW_RETURNS";
       break;
-    case 55:return "TK_DATE";
+    case 55:return "RW_RETURN";
       break;
-    case 56:return "TK_VAR";
+    case 56:return "TK_DATE";
       break;
-    case 57:return "TK_DOUBLE";
+    case 57:return "TK_VAR";
       break;
-    case 58:return "TK_INT";
+    case 58:return "TK_DOUBLE";
       break;
-    case 59:return "TK_ID";
+    case 59:return "TK_INT";
       break;
-    case 60:controlString=""; this.pushState("string");
+    case 60:return "TK_ID";
       break;
-    case 61:controlString+=yy_.yytext; 
+    case 61:controlString=""; this.pushState("string");
       break;
-    case 62:controlString+="\"";
+    case 62:controlString+=yy_.yytext; 
       break;
-    case 63:controlString+="\n";
+    case 63:controlString+="\"";
       break;
-    case 64:controlString+="\t";
+    case 64:controlString+="\n";
       break;
-    case 65:controlString+="\\";
+    case 65:controlString+="\t";
       break;
-    case 66:controlString+="\'";
+    case 66:controlString+="\\";
       break;
-    case 67:yy_.yytext=controlString; this.popState(); return 107;
+    case 67:controlString+="\'";
       break;
-    case 68:return "TK_LPAR";
+    case 68:yy_.yytext=controlString; this.popState(); return 107;
       break;
-    case 69:return "TK_RPAR";
+    case 69:return "TK_LPAR";
       break;
-    case 70:return "TK_SCOLON";
+    case 70:return "TK_RPAR";
       break;
-    case 71:return "TK_DOT";
+    case 71:return "TK_SCOLON";
       break;
-    case 72:return "TK_COMA";
+    case 72:return "TK_DOT";
       break;
-    case 73:return "TK_PLUS";
+    case 73:return "TK_COMA";
       break;
-    case 74:return "TK_MINUS";
+    case 74:return "TK_PLUS";
       break;
-    case 75:return "TK_STAR";
+    case 75:return "TK_MINUS";
       break;
-    case 76:return "TK_DIV";
+    case 76:return "TK_STAR";
       break;
-    case 77:return "TK_MOD";
+    case 77:return "TK_DIV";
       break;
-    case 78:return "TK_GEQ";
+    case 78:return "TK_MOD";
       break;
-    case 79:return "TK_LEQ";
+    case 79:return "TK_GEQ";
       break;
-    case 80:return "TK_EQEQ";
+    case 80:return "TK_LEQ";
       break;
-    case 81:return "TK_NOTEQ";
+    case 81:return "TK_EQEQ";
       break;
-    case 82:return "TK_GREATER";
+    case 82:return "TK_NOTEQ";
       break;
-    case 83:return "TK_LESS";
+    case 83:return "TK_GREATER";
       break;
-    case 84:return "TK_EQ";
+    case 84:return "TK_LESS";
       break;
-    case 85:return 5;
+    case 85:return "TK_EQ";
       break;
-    case 86: lexErrors.push(new LexError(yy_.yylloc.first_line, yy_.yylloc.first_column, yy_.yytext)); return "INVALID"; 
+    case 86:return 5;
+      break;
+    case 87: lexErrors.push(new LexError(yy_.yylloc.first_line, yy_.yylloc.first_column, yy_.yytext)); return "INVALID"; 
       break;
         }
     }

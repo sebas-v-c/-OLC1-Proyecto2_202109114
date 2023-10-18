@@ -34,8 +34,9 @@
 
 /*---------------------------Reserved Words---------------------------*/
 
-"ALTER"                         return "RW_ALTER";
+""                              return;
 "CREATE"                        return "RW_CREATE";
+"ALTER"                         return "RW_ALTER";
 "DROP"                          return "RW_DROP";
 "RENAME"                        return "RW_RENAME";
 
@@ -154,7 +155,9 @@
     const { While } = require("./instructions/while");
     const { Print } = require("./instructions/print");
     const { CodeBlock } = require("./instructions/codeBlock");
+
     const { Create } = require("./instructions/ddl/create");
+    const { Alter, AlterActions } = require("./instructions/ddl/alter");
 
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
@@ -230,7 +233,7 @@ instruction:
 /*-------------------------------SQL LANGUAGE GRAMMARS-------------------------------*/
 ddl:
     RW_CREATE RW_TABLE TK_ID TK_LPAR typed_arguments TK_RPAR    { $$ = new Create($3, $5, @1.first_line, @1.first_column); }
-|   RW_ALTER RW_TABLE TK_ID alter_actions                       {  }
+|   RW_ALTER RW_TABLE TK_ID alter_actions                       { $$ = new Alter($3, $4, @1.first_line, @1.first_column); }
 |   RW_DROP RW_TABLE TK_ID                                      {  }
 ;
 
@@ -243,10 +246,10 @@ dml:
 ;
 
 alter_actions:
-    RW_ADD TK_ID type                       {}
-|   RW_DROP RW_COLUMN TK_ID                 {}
-|   RW_RENAME RW_TO TK_ID                   {}
-|   RW_RENAME RW_COLUMN TK_ID RW_TO TK_ID   {}
+    RW_ADD TK_ID type                       { $$ = {type: AlterActions.ADD, col: $2, colType: $3}; }
+|   RW_DROP RW_COLUMN TK_ID                 { $$ = {type: AlterActions.DROP, col: $3}; }
+|   RW_RENAME RW_TO TK_ID                   { $$ = {type: AlterActions.RENAMETABLE, newId: $3}; }
+|   RW_RENAME RW_COLUMN TK_ID RW_TO TK_ID   { $$ = {type: AlterActions.RENAMECOL, col: $3, newId: $5}; }
 ;
 
 select_stmt:

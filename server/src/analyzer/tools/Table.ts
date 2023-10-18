@@ -12,7 +12,7 @@ export default class Table {
     // DDL actions
     addColumn(name: string, type: Primitive, line: number, column: number): Exception | undefined{
         if (this.columns.has(name.toLowerCase())){
-            return new Exception("DB", `Table name ${name.toLowerCase()} is already defined`, line, column);
+            return new Exception("DB", `Column name ${name.toLowerCase()} is already defined`, line, column);
         }
 
         this.columns.set(name.toLowerCase(), new Column(name.toLowerCase(), type));
@@ -20,15 +20,20 @@ export default class Table {
 
     dropColumn(name: string): Exception | undefined{
         if (!this.columns.has(name.toLowerCase())){
-            return new Exception("DB", `Table name ${name} does not exist`, 0, 0);
+            return new Exception("DB", `Column name ${name.toLowerCase()} does not exist`, 0, 0);
         }
 
         this.columns.delete(name.toLocaleLowerCase());
     }
 
     renameColumn(oldName: string, newName: string): Exception | undefined {
+        oldName = oldName.toLowerCase();
+        newName = newName.toLowerCase();
         if (!this.columns.has(oldName)){
-            return new Exception("DB", `Table name ${oldName} does not exist`, 0, 0);
+            console.log("-----------------------DEBUG-----------------");
+            console.log(this.columns);
+            console.log("-----------------------END DEBUG-----------------");
+            return new Exception("DB", `Column name '${oldName}' does not exist`, 0, 0);
         }
 
         let oldCol = this.columns.get(oldName);
@@ -40,18 +45,18 @@ export default class Table {
     }
 
     updateColumn(col: Column): Exception | undefined{
-        if (!this.columns.has(col.name)){
-            return new Exception("DB", `Table name ${col.name} does not exist`, 0, 0);
+        if (!this.columns.has(col.name.toLowerCase())){
+            return new Exception("DB", `Column name '${col.name.toLowerCase()}' does not exist`, 0, 0);
         }
 
-        this.columns.set(col.name, col);
+        this.columns.set(col.name.toLowerCase(), col);
     }
 
     getColumn(name: string): Exception | Column{
-        if (!this.columns.has(name)){
-            return new Exception("DB", `Table name ${name} does not exist`, 0, 0);
+        if (!this.columns.has(name.toLowerCase())){
+            return new Exception("DB", `Column name '${name.toLowerCase()}' does not exist`, 0, 0);
         } else {
-            return this.columns.get(name) as Column;
+            return this.columns.get(name.toLowerCase()) as Column;
         }
     }
 

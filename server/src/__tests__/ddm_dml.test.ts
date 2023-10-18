@@ -9,6 +9,7 @@ import { Exception } from '../analyzer/errors';
 import Symbol from '../analyzer/tools/symbol';
 import { formatDate } from '../analyzer/utils/utils';
 import { Primitive } from '../analyzer/tools/types';
+import { Column } from '../analyzer/tools/Table';
 
 
 describe("Testing Interpreter DML and DDL", function() {
@@ -63,7 +64,6 @@ describe("Testing Interpreter DML and DDL", function() {
         let globalEnv: Environment | null;
 
         let instructions: Array<Statement>
-
         const parser = new QCrypterParser()
         instructions = parser.parse(data);
 
@@ -84,7 +84,18 @@ describe("Testing Interpreter DML and DDL", function() {
             expect(isException).toBeFalsy();
         }
         printConsole(tree.console);
+
         /*------------------------------VARIABLE TESTING------------------------------*/
+        const db = globalEnv.db;
+        expect(db.has("personas")).toBe(true);
+        expect(db.has("clientes")).toBe(false);
+        const table = db.get("personas");
+        expect(table).toBeTruthy();
+        //console.log(db.get("personas"));
+        const lbCol = table?.getColumn("KILOS");
+        //console.log(lbCol)
+        expect(lbCol?.type).toBe(Primitive.DOUBLE);
+
         let tempSym: Symbol | Exception = new Symbol("@var", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){

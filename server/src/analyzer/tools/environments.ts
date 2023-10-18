@@ -83,17 +83,17 @@ export default class Environment {
         env.db.delete(table.id);
     }
 
-    public getTable(table: Table, line: number, column: number): Table | Exception{
+    public getTable(tableName: string, line: number, column: number): Table | Exception{
         const env = this.getGlobalEnv();
 
-        if (!env.db.has(table.id)){
-            return new Exception("Semantic", `Table ${table.id} isn't defined in the current scope`, line, column, this.name);
+        if (!env.db.has(tableName.toLowerCase())){
+            return new Exception("Semantic", `Table ${tableName} isn't defined in the current scope`, line, column, this.name);
         }
 
-        return env.db.get(table.id) as Table
+        return env.db.get(tableName.toLowerCase()) as Table
     }
 
-    private getGlobalEnv(): Environment{
+    public getGlobalEnv(): Environment{
         if (this.parent !== undefined)
             return this.parent.getGlobalEnv();
         return this;
