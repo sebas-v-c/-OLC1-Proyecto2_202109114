@@ -38,6 +38,8 @@ import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, Pro
     const { While } = require("./instructions/while");
     const { Print } = require("./instructions/print");
     const { CodeBlock } = require("./instructions/codeBlock");
+    const { Create } = require("./instructions/ddl/create");
+
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
     const { Logical } = require("./expressions/logical");
@@ -94,7 +96,10 @@ break;
 case 14:
  this.$ = new Return(undefined, _$[$0].first_line, _$[$0].first_column); 
 break;
-case 23: case 24: case 25: case 26: case 28: case 29: case 30:
+case 23:
+ this.$ = new Create($$[$0-3], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column); 
+break;
+case 24: case 25: case 26: case 28: case 29: case 30:
   
 break;
 case 43:
@@ -107,7 +112,7 @@ case 47: case 49:
  $$[$0-3].push({id: $$[$0-1], type: $$[$0]}); this.$ = $$[$0-3]; 
 break;
 case 48:
- this.$ = $$[$0-1] == null ? [{}] : [{id: $$[$0-1], type: $$[$0]}]; 
+ this.$ = [{id: $$[$0-1], type: $$[$0]}]; 
 break;
 case 50:
  this.$ = [{id: $$[$0-1], type: $$[$0]}];

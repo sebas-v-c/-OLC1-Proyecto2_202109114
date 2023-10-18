@@ -54,7 +54,7 @@ describe("Testing Interpreter Logics", function() {
 
             expect(isException).toBeFalsy();
         }
-        printConsole(tree.console);
+        //printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@var1", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
@@ -154,7 +154,7 @@ describe("Testing Interpreter Logics", function() {
 
             expect(isException).toBeFalsy();
         }
-        printConsole(tree.console);
+        //printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@var", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
@@ -194,7 +194,7 @@ describe("Testing Interpreter Logics", function() {
 
             expect(isException).toBeFalsy();
         }
-        printConsole(tree.console);
+        //printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@sumatoria", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
@@ -239,7 +239,7 @@ describe("Testing Interpreter Logics", function() {
 
             expect(isException).toBeFalsy();
         }
-        printConsole(tree.console);
+        //printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@mensaje", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
@@ -289,7 +289,7 @@ describe("Testing Interpreter Logics", function() {
 
             expect(isException).toBeFalsy();
         }
-        printConsole(tree.console);
+        //printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@contador", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
@@ -329,7 +329,7 @@ describe("Testing Interpreter Logics", function() {
             expect(isException).toBeFalsy();
         }
         /*------------------------------VARIABLE TESTING------------------------------*/
-        printConsole(tree.console);
+        //printConsole(tree.console);
     });
 
     /*-------------------------------------------------TESTING-------------------------------------------------*/
@@ -359,7 +359,7 @@ describe("Testing Interpreter Logics", function() {
 
             expect(isException).toBeFalsy();
         }
-        printConsole(tree.console);
+        //printConsole(tree.console);
 
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@result", Primitive.NULL, null,0, 0, globalEnv);

@@ -154,6 +154,8 @@
     const { While } = require("./instructions/while");
     const { Print } = require("./instructions/print");
     const { CodeBlock } = require("./instructions/codeBlock");
+    const { Create } = require("./instructions/ddl/create");
+
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
     const { Logical } = require("./expressions/logical");
@@ -227,7 +229,7 @@ instruction:
 
 /*-------------------------------SQL LANGUAGE GRAMMARS-------------------------------*/
 ddl:
-    RW_CREATE RW_TABLE TK_ID TK_LPAR typed_arguments TK_RPAR    {  }
+    RW_CREATE RW_TABLE TK_ID TK_LPAR typed_arguments TK_RPAR    { $$ = new Create($3, $5, @1.first_line, @1.first_column); }
 |   RW_ALTER RW_TABLE TK_ID alter_actions                       {  }
 |   RW_DROP RW_TABLE TK_ID                                      {  }
 ;
@@ -283,7 +285,7 @@ arguments:
 // TODO make this save the specified value
 typed_arguments:
     typed_arguments TK_COMA TK_ID type  { $1.push({id: $3, type: $4}); $$ = $1; }
-|   TK_ID type                          { $$ = $1 == null ? [{}] : [{id: $1, type: $2}]; }
+|   TK_ID type                          { $$ = [{id: $1, type: $2}]; }
 ;
 
 // TODO make this save the specified value

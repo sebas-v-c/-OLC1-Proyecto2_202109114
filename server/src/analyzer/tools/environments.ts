@@ -1,4 +1,3 @@
-
 import Symbol from "./symbol";
 import { Exception } from "../errors";
 import Table from "./Table";
@@ -52,6 +51,8 @@ export default class Environment {
     }
 
     public updateTableName(oldName: string, newName: string){
+        oldName = oldName.toLowerCase();
+        newName = newName.toLowerCase();
         const env = this.getGlobalEnv();
         if (!env.db.has(oldName)){
             return new Exception("DB", `Table name ${oldName} does not exist`, 0, 0);

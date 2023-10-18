@@ -42,7 +42,7 @@ describe("Testing Interpreter DML and DDL", function() {
 
             expect(isException).toBeFalsy();
         }
-        printConsole(tree.console);
+        //printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@var", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);

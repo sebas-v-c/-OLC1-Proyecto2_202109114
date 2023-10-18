@@ -6,24 +6,24 @@ export default class Table {
     public id: string;
     public columns: Map<string, Column>;
     constructor(id: string){
-        this.id = id;
+        this.id = id.toLowerCase();
         this.columns = new Map();
     }
     // DDL actions
-    addColumn(name: string, type: Primitive, line, column): Exception | undefined{
-        if (this.columns.has(name)){
-            return new Exception("DB", `Table name ${name} is already defined`, line, column);
+    addColumn(name: string, type: Primitive, line: number, column: number): Exception | undefined{
+        if (this.columns.has(name.toLowerCase())){
+            return new Exception("DB", `Table name ${name.toLowerCase()} is already defined`, line, column);
         }
 
-        this.columns.set(name, new Column(name, type));
+        this.columns.set(name.toLowerCase(), new Column(name.toLowerCase(), type));
     }
 
     dropColumn(name: string): Exception | undefined{
-        if (!this.columns.has(name)){
+        if (!this.columns.has(name.toLowerCase())){
             return new Exception("DB", `Table name ${name} does not exist`, 0, 0);
         }
 
-        this.columns.delete(name);
+        this.columns.delete(name.toLocaleLowerCase());
     }
 
     renameColumn(oldName: string, newName: string): Exception | undefined {
@@ -34,8 +34,8 @@ export default class Table {
         let oldCol = this.columns.get(oldName);
         if (oldCol !== undefined){
             this.columns.delete(oldName);
-            oldCol.name = newName
-            this.columns.set(newName, oldCol);
+            oldCol.name = newName.toLowerCase();
+            this.columns.set(oldCol.name, oldCol);
         }
     }
 
@@ -65,8 +65,10 @@ export default class Table {
 
 export class Column {
     public data: Array<ReturnType>;
+    public name: string;
 
-    constructor(public name: string, public type: Primitive){
+    constructor(name: string, public type: Primitive){
+        this.name = name.toLowerCase();
         this.data = [];
     }
 
