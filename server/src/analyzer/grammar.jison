@@ -242,7 +242,7 @@ ddl:
 ;
 
 dml:
-    RW_INSERT RW_INTO TK_ID TK_LPAR arguments TK_RPAR RW_VALUES TK_RPAR value_arguments TK_RPAR { $$ = new Insert($3, $5, $9, @1.first_line, @1.first_column); }
+    RW_INSERT RW_INTO TK_ID TK_LPAR arguments TK_RPAR RW_VALUES TK_LPAR value_arguments TK_RPAR { $$ = new Insert($3, $5, $9, @1.first_line, @1.first_column); }
 |   select_stmt                                                                                 { $$ = $1; }    
 |   RW_UPDATE TK_ID RW_SET set_arguments RW_WHERE expression                                    {  }
 |   RW_TRUNCATE RW_TABLE TK_ID                                                                  { $$ = new Truncate($3, @1.first_line, @1.first_column); }

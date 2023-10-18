@@ -4,3 +4,6 @@ CREATE TABLE Clientes
     Nombre VARCHAR,
     CorreoElectronico VARCHAR
 );
+
+INSERT INTO Clientes (Nombre, CorreoElectronico)
+VALUES ("Juan Perez", "juan@example.com");

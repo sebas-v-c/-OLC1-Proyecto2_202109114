@@ -2,6 +2,7 @@ import { Exception } from "../errors";
 import ReturnType from "./returnType";
 import { Primitive } from "./types";
 
+// TODO set line and number in errors
 export default class Table {
     public id: string;
     public columns: Map<string, Column>;
@@ -77,7 +78,15 @@ export class Column {
         this.data = [];
     }
 
-    validateData(value: ReturnType): boolean{
+    addData(value: ReturnType): Exception | undefined{
+        if (!this.isValidData(value)){
+            return new Exception("Type Error", `Data of value ${value.type} can't be assigned to column of type ${this.type}`, 0, 0);
+        }
+
+        this.data.push(value);
+    }
+
+    isValidData(value: ReturnType): boolean{
         return value.type === this.type;
     }
 
