@@ -1,6 +1,7 @@
 
 import Symbol from "./symbol";
 import { Exception } from "../errors";
+import Table from "./Table";
 
 
 export function createGlobalEnv() {
@@ -30,14 +31,52 @@ export default class Environment {
     public name: string;
     public parent?: Environment;
     public table: Map<string, Symbol>;
+    public db: Map<string, Table>
 
     constructor(parent?: Environment, name: string = "Global") {
         const global = parent ? true : false;
         this.parent = parent;
         this.table = new Map();
         this.name = name;
+        this.db = new Map();
+    }
+    // DB OPERATIONS
+    public setTable(table: Table, line: number, column: number): undefined | Exception{
+        let env: Environment = this.getGlobalEnv();
+        if (env.db.has(table.id)){
+            return new Exception("Semantic", `Table name ${table.id} aready defined the Data Base`, line, column, "global");
+        }
+
+        env.db.set(table.id, table);
     }
 
+    public updateTable(table: Table, line: number, column: number): undefined | Exception{
+        const env = this.getGlobalEnv();
+
+        if (!env.db.has(table.id)){
+            return new Exception("Semantic", `Table ${table.id} isn't defined in the current scope`, line, column, this.name);
+        }
+        env.db.set(table.id, table);
+    }
+
+    public getTable(table: Table, line: number, column: number): Table | Exception{
+        const env = this.getGlobalEnv();
+
+        if (!env.db.has(table.id)){
+            return new Exception("Semantic", `Table ${table.id} isn't defined in the current scope`, line, column, this.name);
+        }
+
+        return env.db.get(table.id) as Table
+    }
+
+    private getGlobalEnv(): Environment{
+        if (this.parent !== undefined)
+            return this.parent.getGlobalEnv();
+        return this;
+    }
+
+
+    // LOGIC OPERATIONS
     public setSymbol(symbol: Symbol){
         let env: Environment | Exception = this.resolveSymbol(symbol);
         if (env instanceof Exception){
