@@ -31,7 +31,22 @@ export class Insert implements Statement {
         }
 
         for (let i = 0; i < this.cols.length; i++){
-            const col: Column | Exception = dbTable.getColumn(this.cols[i]);
+            let col = dbTable.getColumn(this.cols[i]);
+
+            if (col instanceof Exception){ return col; }
+            let res: ReturnType = this.vals[i].getValue(tree, table);
+            if (res.value instanceof Exception){
+                return res.value;
+            }
+
+            if (!col.isValidData(res)){
+                return new Exception("Type Error", `Value of type ${res.type} cannot be assigned to column of value ${col.type}`, this.line, this.column);
+            }
+        }
+
+        let col: Column | Exception | undefined = undefined;
+        for (let i = 0; i < this.cols.length; i++){
+            col = dbTable.getColumn(this.cols[i]);
 
             if (col instanceof Exception){ return col; }
 
@@ -40,11 +55,17 @@ export class Insert implements Statement {
             if (res.value instanceof Exception){
                 return res.value;
             }
-            let resCol: Exception | undefined = col.addData(res);
+            let resCol: Exception | undefined = col.addData(res)
             if (resCol instanceof Exception){
                 return resCol;
             }
         }
+
+        // fill the rest of the table with null types
+        if (col !== undefined){
+            dbTable.fillNullValues(col);
+        }
+
 
         return undefined;
     }

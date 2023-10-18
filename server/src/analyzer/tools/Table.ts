@@ -31,9 +31,6 @@ export default class Table {
         oldName = oldName.toLowerCase();
         newName = newName.toLowerCase();
         if (!this.columns.has(oldName)){
-            console.log("-----------------------DEBUG-----------------");
-            console.log(this.columns);
-            console.log("-----------------------END DEBUG-----------------");
             return new Exception("DB", `Column name '${oldName}' does not exist`, 0, 0);
         }
 
@@ -58,6 +55,27 @@ export default class Table {
             return new Exception("DB", `Column name '${name.toLowerCase()}' does not exist`, 0, 0);
         } else {
             return this.columns.get(name.toLowerCase()) as Column;
+        }
+    }
+
+    fillNullValues(column: Column){
+        const keyArr = Array.from(this.columns.keys());
+        for (let i = 0; i < keyArr.length; i++){
+            let col = this.columns.get(keyArr[i]);
+            if (col instanceof Column){
+                if (col.data.length < column.data.length){
+                    col.data.push(new ReturnType(Primitive.NULL, null));
+                }
+            }
+        }
+
+
+        for (let col of this.columns.values()){
+            if (col.data.length < column.data.length){
+                for (let i = 0; column.data.length; i++){
+                    col.data.push(new ReturnType(Primitive.NULL, null));
+                }
+            }
         }
     }
 

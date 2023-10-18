@@ -9,7 +9,7 @@ import { Exception } from '../analyzer/errors';
 import Symbol from '../analyzer/tools/symbol';
 import { formatDate } from '../analyzer/utils/utils';
 import { Primitive } from '../analyzer/tools/types';
-import { Column } from '../analyzer/tools/Table';
+import Table, { Column } from '../analyzer/tools/Table';
 
 
 describe("Testing Interpreter DML and DDL", function() {
@@ -84,7 +84,6 @@ describe("Testing Interpreter DML and DDL", function() {
             expect(isException).toBeFalsy();
         }
         printConsole(tree.console);
-        console.log(globalEnv);
         /*------------------------------VARIABLE TESTING------------------------------*/
         const db = globalEnv.db;
         expect(db.has("personas")).toBe(true);
@@ -124,11 +123,37 @@ describe("Testing Interpreter DML and DDL", function() {
                 console.log(value);
                 console.log(globalEnv);
             }
-
             expect(isException).toBeFalsy();
         }
         printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
+        let env = globalEnv.db.get("clientes");
+        if (env instanceof Table){
+            let col = env.columns.get("id_cliente");
+            if (col instanceof Column){
+                expect(col.data[0].value).toBe(null);
+            }
+            col = env.columns.get("nombre");
+            if (col instanceof Column){
+                expect(col.data[0].value).toBe("Juan Perez");
+            }
+            col = env.columns.get("correoelectronico");
+            if (col instanceof Column){
+                expect(col.data[0].value).toBe("juan@example.com");
+            }
+        }
+        let val: Column | Exception | undefined = globalEnv.db.get("clientes")?.getColumn("nombre");
+        if (val instanceof Column){
+            expect(val.data[0].value).toBe("Juan Perez");
+        } else { expect(val instanceof Column).toBe(true); }
+        val = globalEnv.db.get("clientes")?.getColumn("correoelectronico");
+
+        if (val instanceof Column){
+            expect(val.data[0].value).toBe("juan@example.com");
+        } else { expect(val instanceof Column).toBe(true); }
+
+
+
         let tempSym: Symbol | Exception = new Symbol("@var", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
