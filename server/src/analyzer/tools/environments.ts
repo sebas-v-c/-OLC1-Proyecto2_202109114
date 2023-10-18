@@ -40,8 +40,9 @@ export default class Environment {
         this.name = name;
         this.db = new Map();
     }
-    // DB OPERATIONS
-    public setTable(table: Table, line: number, column: number): undefined | Exception{
+
+    // DDL actions
+    public setTable(table: Table, line: number, column: number): undefined | Exception {
         let env: Environment = this.getGlobalEnv();
         if (env.db.has(table.id)){
             return new Exception("Semantic", `Table name ${table.id} aready defined the Data Base`, line, column, "global");
@@ -74,7 +75,6 @@ export default class Environment {
             return this.parent.getGlobalEnv();
         return this;
     }
-
 
     // LOGIC OPERATIONS
     public setSymbol(symbol: Symbol){
