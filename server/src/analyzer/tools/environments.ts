@@ -51,6 +51,20 @@ export default class Environment {
         env.db.set(table.id, table);
     }
 
+    public updateTableName(oldName: string, newName: string){
+        const env = this.getGlobalEnv();
+        if (!env.db.has(oldName)){
+            return new Exception("DB", `Table name ${oldName} does not exist`, 0, 0);
+        }
+
+        let oldTable = env.db.get(oldName);
+        if (oldTable !== undefined){
+            env.db.delete(oldName);
+            oldTable.id = newName;
+            env.db.set(newName, oldTable);
+        }
+    }
+
     public updateTable(table: Table, line: number, column: number): undefined | Exception{
         const env = this.getGlobalEnv();
 
@@ -58,6 +72,14 @@ export default class Environment {
             return new Exception("Semantic", `Table ${table.id} isn't defined in the current scope`, line, column, this.name);
         }
         env.db.set(table.id, table);
+    }
+
+    public dropTable(table: Table, line: number, column: number){
+        const env = this.getGlobalEnv();
+        if (!env.db.has(table.id)){
+            return new Exception("Semantic", `Table ${table.id} isn't defined in the current scope`, line, column, this.name);
+        }
+        env.db.delete(table.id);
     }
 
     public getTable(table: Table, line: number, column: number): Table | Exception{
