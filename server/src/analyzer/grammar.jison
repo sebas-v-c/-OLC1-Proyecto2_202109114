@@ -163,7 +163,7 @@
     const { Insert } = require("./instructions/dml/insert");
     const { Truncate } = require("./instructions/dml/truncate");
     const { Update } = require("./instructions/dml/update");
-    const { WherePredicate } = require("./instructions/dml/whereType");
+    const { WherePredicate } = require("./instructions/dml/wherePredicate");
 
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");

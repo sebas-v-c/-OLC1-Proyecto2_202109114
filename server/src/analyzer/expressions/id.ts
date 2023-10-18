@@ -6,6 +6,7 @@ import Tree from "../tools/tree";
 
 
 export class IdVar implements Statement {
+    public type: Id;
     public value: any;
     public line: number;
     public column: number;
@@ -14,7 +15,9 @@ export class IdVar implements Statement {
         this.value = value;
         this.line = line;
         this.column = column;
+        this.type = Id.ID;
     }
+
 
     interpret(tree: Tree, table: Environment) {
         return undefined;
