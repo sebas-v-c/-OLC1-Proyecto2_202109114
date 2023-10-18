@@ -22,3 +22,12 @@ RENAME TO Personas;
 
 ALTER TABLE Personas
 RENAME COLUMN Libras TO Kilos;
+
+CREATE TABLE Toy
+(
+    Fecha DATE,
+    Nombre VARCHAR,
+    CorreoElectronico VARCHAR
+);
+
+DROP TABLE Toy;

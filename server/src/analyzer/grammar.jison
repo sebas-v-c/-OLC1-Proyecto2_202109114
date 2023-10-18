@@ -158,6 +158,7 @@
 
     const { Create } = require("./instructions/ddl/create");
     const { Alter, AlterActions } = require("./instructions/ddl/alter");
+    const { Drop } = require("./instructions/ddl/drop");
 
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
@@ -234,7 +235,7 @@ instruction:
 ddl:
     RW_CREATE RW_TABLE TK_ID TK_LPAR typed_arguments TK_RPAR    { $$ = new Create($3, $5, @1.first_line, @1.first_column); }
 |   RW_ALTER RW_TABLE TK_ID alter_actions                       { $$ = new Alter($3, $4, @1.first_line, @1.first_column); }
-|   RW_DROP RW_TABLE TK_ID                                      {  }
+|   RW_DROP RW_TABLE TK_ID                                      { $$ = new Drop($3, @1.first_line, @1.first_column); }
 ;
 
 dml:

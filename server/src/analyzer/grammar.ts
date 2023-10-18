@@ -41,6 +41,7 @@ import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, Pro
 
     const { Create } = require("./instructions/ddl/create");
     const { Alter, AlterActions } = require("./instructions/ddl/alter");
+    const { Drop } = require("./instructions/ddl/drop");
 
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
@@ -104,7 +105,10 @@ break;
 case 24:
  this.$ = new Alter($$[$0-1], $$[$0], _$[$0-3].first_line, _$[$0-3].first_column); 
 break;
-case 25: case 26: case 28: case 29: case 30:
+case 25:
+ this.$ = new Drop($$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
+break;
+case 26: case 28: case 29: case 30:
   
 break;
 case 31:

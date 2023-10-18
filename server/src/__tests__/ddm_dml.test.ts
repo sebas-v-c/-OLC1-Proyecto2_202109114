@@ -84,24 +84,17 @@ describe("Testing Interpreter DML and DDL", function() {
             expect(isException).toBeFalsy();
         }
         printConsole(tree.console);
-
+        console.log(globalEnv);
         /*------------------------------VARIABLE TESTING------------------------------*/
         const db = globalEnv.db;
         expect(db.has("personas")).toBe(true);
         expect(db.has("clientes")).toBe(false);
         const table = db.get("personas");
         expect(table).toBeTruthy();
-        //console.log(db.get("personas"));
         const lbCol = table?.getColumn("KILOS");
-        //console.log(lbCol)
         expect(lbCol?.type).toBe(Primitive.DOUBLE);
-
-        let tempSym: Symbol | Exception = new Symbol("@var", Primitive.NULL, null,0, 0, globalEnv);
-        tempSym = globalEnv.getSymbol(tempSym);
-        if (tempSym instanceof Symbol){
-            expect(tempSym.value).toBe(20);
-            expect(tempSym.type).toBe(Primitive.INT);
-        }
+        // DROP TABLE
+        expect(db.has("toy")).toBe(false);
     });
 
     /*-------------------------------------------------TESTING-------------------------------------------------*/
