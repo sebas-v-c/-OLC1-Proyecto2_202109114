@@ -1,4 +1,4 @@
-import { Node, Statement } from "../abastract/ast";
+import { Node, Statement, WhereExp } from "../abastract/ast";
 import Environment from "../tools/environments";
 import ReturnType from "../tools/returnType";
 import { ArithmeticOperator, LogicalOperator, Primitive, RelationalOperator } from "../tools/types";
@@ -6,10 +6,11 @@ import Tree from "../tools/tree";
 import { Exception } from "../errors";
 import Symbol from "../tools/symbol";
 import { PrimitiveVar } from "./primitive";
+import Table from "../tools/Table";
 
 type Ret = { left: ReturnType, right: ReturnType }
 
-export class Logical implements Statement {
+export class Logical implements WhereExp {
     public leftExp: Statement;
     public rightExp: Statement;
     public operator: LogicalOperator;
@@ -22,6 +23,10 @@ export class Logical implements Statement {
         this.rightExp = rightExp;
         this.line = line;
         this.column = column;
+    }
+    // TODO
+    getIndexValue(tree: Tree, table: Environment, db: Table): number[] {
+        throw new Error("Method not implemented.");
     }
 
     interpret(tree: Tree, table: Environment) {

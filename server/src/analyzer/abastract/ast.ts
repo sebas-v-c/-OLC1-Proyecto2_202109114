@@ -1,6 +1,7 @@
 import Environment from "../tools/environments";
 import Tree from "../tools/tree";
 import ReturnType from "../tools/returnType";
+import Table from "../tools/Table";
 
 
 export interface Statement {
@@ -11,6 +12,10 @@ export interface Statement {
     interpret(tree: Tree, table: Environment): any;
     getCST(): Node;
     getAST(): Node;
+}
+
+export interface WhereExp extends Statement {
+    getIndexValue(tree: Tree, table: Environment, db: Table): number[];
 }
 
 export class Node {

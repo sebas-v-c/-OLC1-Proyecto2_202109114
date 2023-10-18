@@ -1,5 +1,7 @@
 import { Statement } from "../../abastract/ast";
 import Table from "../../tools/Table";
+import Environment from "../../tools/environments";
+import Tree from "../../tools/tree";
 
 
 export class WherePredicate {
@@ -7,9 +9,11 @@ export class WherePredicate {
         console.log(JSON.stringify(condition, null, 2));
     }
 
-    getColumnIndexesFromCondition(condition: Statement, table: Table): number[]{
+    getColumnIndexes(tree: Tree, table: Environment, db: Table): number[]{
 
         return [2];
     }
+
+
 
 }
