@@ -11,6 +11,7 @@ export class Insert implements Statement {
     public vals: Array<Statement>;
     constructor(public id: string, cols: Array<string>, vals: Array<Statement>, public line: number, public column: number){
         this.cols = cols;
+        this.vals = vals;
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {

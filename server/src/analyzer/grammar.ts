@@ -43,6 +43,9 @@ import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, Pro
     const { Alter, AlterActions } = require("./instructions/ddl/alter");
     const { Drop } = require("./instructions/ddl/drop");
 
+    const { Insert } = require("./instructions/dml/insert");
+    const { Truncate } = require("./instructions/dml/truncate");
+
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
     const { Logical } = require("./expressions/logical");
@@ -108,8 +111,14 @@ break;
 case 25:
  this.$ = new Drop($$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
-case 26: case 28: case 29: case 30:
+case 26:
+ this.$ = new Insert($$[$0-7], $$[$0-5], $$[$0-1], _$[$0-9].first_line, _$[$0-9].first_column); 
+break;
+case 28: case 30:
   
+break;
+case 29:
+ this.$ = new Truncate($$[$0], _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 31:
  this.$ = {type: AlterActions.ADD, col: $$[$0-1], colType: $$[$0]}; 
@@ -123,10 +132,10 @@ break;
 case 34:
  this.$ = {type: AlterActions.RENAMECOL, col: $$[$0-2], newId: $$[$0]}; 
 break;
-case 43:
+case 43: case 45:
  $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; 
 break;
-case 44:
+case 44: case 46:
  this.$ = [$$[$0]]; 
 break;
 case 47: case 49:

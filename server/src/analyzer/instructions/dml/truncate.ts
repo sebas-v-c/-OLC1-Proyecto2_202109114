@@ -13,14 +13,14 @@ export class Insert implements Statement {
         return new ReturnType(Primitive.NULL, undefined);
     }
 
-
-    // TODO
     interpret(tree: Tree, table: Environment) {
         let dbTable = table.getTable(this.id, this.line, this.column);
         if (dbTable instanceof Exception){
             return dbTable;
         }
-        return table.dropTable(dbTable, this.line, this.column);
+        dbTable.truncateTable();
+
+        return table.updateTable(dbTable, this.line, this.column);
     }
 
     getCST(): Node {
