@@ -40,25 +40,26 @@ export class Logical implements WhereExp {
                 try {
                     return this._andOperation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, null);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
             case LogicalOperator.OR: {
                 try {
                     return this._orOperation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, err);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
             case LogicalOperator.NOT: {
                 try {
                     return this._notOperation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, err);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
         }
     }
+    // I should change this but I'm a lazy bastard so IDC
 
     _andOperation(table: Environment, tree: Tree): ReturnType {
         let results: Ret;
@@ -96,9 +97,6 @@ export class Logical implements WhereExp {
 
     _notOperation(table: Environment, tree: Tree): ReturnType {
         let rightResult: ReturnType = this.rightExp.getValue(tree, table);
-        if (rightResult.value instanceof Exception){
-            throw rightResult.value;
-        }
 
         if (rightResult.type === Primitive.BOOLEAN){
             return new ReturnType(Primitive.BOOLEAN, !rightResult.value);
@@ -108,13 +106,13 @@ export class Logical implements WhereExp {
     }
 
     _testOperators(table: Environment, tree: Tree): Ret {
-        let leftResult: ReturnType = this.leftExp.getValue(tree, table);
-        if (leftResult.value instanceof Exception) {
-            throw new Exception(leftResult.value.type, leftResult.value.description, this.line, leftResult.value.column, table.name);
-        }
-        let rightResult: ReturnType = this.rightExp.getValue(tree, table);
-        if (rightResult.value instanceof Exception) {
-            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
+        let leftResult: ReturnType;
+        let rightResult: ReturnType;
+        try {
+            leftResult = this.leftExp.getValue(tree, table);
+            rightResult = this.rightExp.getValue(tree, table);
+        } catch (err){
+            throw err;
         }
 
         return { left: leftResult, right: rightResult };
