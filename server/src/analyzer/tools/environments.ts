@@ -1,21 +1,81 @@
 import Symbol from "./symbol";
 import { Exception } from "../errors";
 import Table from "./Table";
+import { Functions, Primitive, ValueType } from "./types";
+import { Func, Function } from "../instructions/function";
+import { CodeBlock } from "../instructions/codeBlock";
+import { Return } from "../instructions/return";
+import { CallVar } from "../expressions/callVar";
+import ReturnType from "./returnType";
 
 
 export function createGlobalEnv() {
     const env = new Environment();
     // Define a native builtin method
 
+    env.setSymbol(new Symbol(
+        "LOWER",
+        Functions.NATIVE_FN,
+        new Function(
+            "LOWER",
+            [{id: "@str", type: Primitive.VARCHAR}],
+            Primitive.VARCHAR,
+            new CodeBlock(
+                [new Return(
+                    new CallVar(
+                        "@str", 0, 0
+                    ), 0, 0,
+                    (arg: ReturnType) => {
+                        arg = arg.value.toLowerCase();
+                        return arg;
+                    }
+                )], 0, 0
+            ), 0, 0), 0, 0, env));
+
+    env.setSymbol(new Symbol(
+        "UPPER",
+        Functions.NATIVE_FN,
+        new Function(
+            "UPPER",
+            [{id: "@str", type: Primitive.VARCHAR}],
+            Primitive.VARCHAR,
+            new CodeBlock(
+                [new Return(
+                    new CallVar(
+                        "@str", 0, 0
+                    ), 0, 0,
+                    (arg: ReturnType) => {
+                        arg = arg.value.toUpperCase();
+                        return arg;
+                    }
+                )], 0, 0
+            ), 0, 0), 0, 0, env));
+
+    env.setSymbol(new Symbol(
+        "LEN",
+        Functions.NATIVE_FN,
+        new Function(
+            "LEN",
+            [{id: "@str", type: Primitive.VARCHAR}],
+            Primitive.INT,
+            new CodeBlock(
+                [new Return(
+                    new CallVar(
+                        "@str", 0, 0
+                    ), 0, 0,
+                    (arg: ReturnType) => {
+                        arg.value = arg.value.length;
+                        arg.type = Primitive.INT;
+                        return arg;
+                    }
+                )], 0, 0
+            ), 0, 0), 0, 0, env));
+
+
+
     // TODO
-    // delcare lower function
-    //env.setSymbol(new Symbol("LOWER"))
     // declare upper function
-    //env.setSymbol(new Symbol("UPPER"))
-    // declare round function
     //env.setSymbol(new Symbol("ROUND"))
-    // declare LENGHT function
-    //env.setSymbol(new Symbol("LENGTH"))
     // declare TRUNCATE function
     //env.setSymbol(new Symbol("TRUNCATE"))
     // declare typeof function

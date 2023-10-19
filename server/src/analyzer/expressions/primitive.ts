@@ -19,7 +19,7 @@ export class PrimitiveVar implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
-        return undefined;
+        return this.getValue(tree, table);
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {

@@ -13,7 +13,7 @@ export class Return implements Statement {
     public column;
     public expression: Statement;
 
-    constructor(expression: Statement, line: number, column: number){
+    constructor(expression: Statement, line: number, column: number, public func?:(arg: ReturnType) => ReturnType ){
         this.expression = expression;
         this.line = line;
         this.column = column;
@@ -27,6 +27,10 @@ export class Return implements Statement {
         let res: ReturnType;
         try {
             res = this.expression.getValue(tree, table);
+            if (this.func !== undefined){
+                res = this.func(res)
+            }
+
         } catch(err){
             tree.errors.push(err as Exception); throw err;
         }
