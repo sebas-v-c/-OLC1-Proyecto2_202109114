@@ -32,6 +32,7 @@ export function createGlobalEnv() {
         new NativeFunc(
             "UPPER",
             [{id: "@str", type: Primitive.VARCHAR}],
+
             (strVar) =>{
                 strVar.value = (strVar.value as string).toUpperCase();
                 return strVar;
@@ -99,7 +100,21 @@ export function createGlobalEnv() {
             "TYPEOF",
             [{id: "@val", type: Any.ANY}],
             (val) =>{
-                return new ReturnType(Primitive.VARCHAR, val.type);
+                let valType: Primitive = Primitive.NULL;
+                if (Number.isInteger(val.value)){
+                    valType = Primitive.INT;
+                } else if (val.value instanceof Date){
+                    valType = Primitive.DATE;
+                } else if (val.value === null){
+                    valType = Primitive.NULL;
+                } else if (typeof val.value === 'boolean'){
+                    valType = Primitive.BOOLEAN;
+                } else if (typeof val.value === 'string'){
+                    valType = Primitive.VARCHAR;
+                } else {
+                    valType = Primitive.DOUBLE;
+                }
+                return new ReturnType(Primitive.VARCHAR, valType);
             },
             0,0
         ), 0, 0, env

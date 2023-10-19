@@ -42,7 +42,7 @@
 
 "INSERT"                        return "RW_INSERT";
 "UPDATE"                        return "RW_UPDATE";
-"TRUNCATE"                      return "RW_TRUNCATE";
+"TRUNCATE "                      return "RW_TRUNCATE";
 "DELETE"                        return "RW_DELETE";
 "SELECT"                        return "RW_SELECT";
 "FROM"                          return "RW_FROM";

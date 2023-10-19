@@ -60,6 +60,7 @@ export class CallFunc implements Statement {
                 }
             }
             toSaveSym.value = receivedSym.value;
+            //symbol = receivedSym.type;
             funcEnv.setSymbol(toSaveSym);
         }
 
@@ -67,7 +68,7 @@ export class CallFunc implements Statement {
         if (symbol.type === Functions.NATIVE_FN){
             // to get the value from the Native func function
             try{
-                ret = (symbol.value as NativeFunc).getValue(tree, funcEnv);
+                ret = calledFunc.getValue(tree, funcEnv);
             } catch(err){
                 tree.errors.push(err as Exception); throw err;
             }
@@ -80,7 +81,7 @@ export class CallFunc implements Statement {
         }
 
         // a native function always returns a value too
-        if (symbol.type === Functions.FUNC || symbol.type === Functions.NATIVE_FN){
+        if (symbol.type === Functions.FUNC){
             if (ret instanceof ReturnType){
                 if (ret.type === calledFunc.retType){
                     return ret;
@@ -97,6 +98,20 @@ export class CallFunc implements Statement {
                     throw err;
             }
         }
+
+        if (symbol.type === Functions.NATIVE_FN){
+            if (ret instanceof ReturnType){
+                return ret;
+            }
+            if (ret === undefined){
+                // here i return a type error because the function return indefined
+                    let err = new Exception("Type Error", `Variable of type 'undefined' can't return a '${calledFunc.retType}'`, this.line, this.column, funcEnv.name);
+                    tree.errors.push(err);
+                    throw err;
+            }
+        }
+
+
 
         if (symbol.type === Functions.METHOD){
             if (ret instanceof Exception){

@@ -341,7 +341,7 @@ export class QCrypterLexer extends JisonLexer implements JisonLexerApi {
         /^(?:RENAME\b)/i,
         /^(?:INSERT\b)/i,
         /^(?:UPDATE\b)/i,
-        /^(?:TRUNCATE\b)/i,
+        /^(?:TRUNCATE )/i,
         /^(?:DELETE\b)/i,
         /^(?:SELECT\b)/i,
         /^(?:FROM\b)/i,

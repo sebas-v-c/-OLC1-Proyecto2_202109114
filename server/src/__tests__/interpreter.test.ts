@@ -410,8 +410,101 @@ describe("Testing Interpreter Logics", function() {
             expect(tempSym.value).toBe(78.53975);
             expect(tempSym.type).toBe(Primitive.DOUBLE);
         }
+    });
+
+    /*-------------------------------------------------TESTING-------------------------------------------------*/
+    it("Testing native functions Input", function() {
+        var testPath = path.join(__dirname, '..', '..', 'testFiles', 'good_native_funcs.test.qc');
+        const data = readFileSync(testPath, 'utf8');
+        /*------------------------------INSTRUCTIONS TESTING------------------------------*/
+        let tree: Tree | null;
+        let globalEnv: Environment | null;
+
+        let instructions: Array<Statement>
+
+        const parser = new QCrypterParser()
+        instructions = parser.parse(data);
+        tree = new Tree(instructions);
+
+        globalEnv = createGlobalEnv();
+        tree.globalTable = globalEnv;
+
+        for (let instruction of tree.instructions) {
+            let value;
+            try{
+                value = instruction.interpret(tree, globalEnv)
+            } catch(err){
+                console.log("----------------------------------ERROR VAL----------------------------------")
+                console.log(err);
+                console.log("----------------------------------VALUE RETURNED----------------------------------")
+                console.log(value);
+                console.log("----------------------------------GLOBAL ENV----------------------------------")
+                console.log(globalEnv);
+                console.log("----------------------------------ERRORS FROM TREE----------------------------------")
+                console.log(tree.errors);
+                expect(err).toBeFalsy();
+            }
+        }
+        //printConsole(tree.console);
+        /*------------------------------VARIABLE TESTING------------------------------*/
+        // Testing typeof
+        let tempSym: Symbol = new Symbol("@res1", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(Primitive.INT);
+        expect(tempSym.type).toBe(Primitive.VARCHAR);
+        tempSym = new Symbol("@res2", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(Primitive.VARCHAR);
+        expect(tempSym.type).toBe(Primitive.VARCHAR);
+        tempSym = new Symbol("@res3", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(Primitive.BOOLEAN);
+        expect(tempSym.type).toBe(Primitive.VARCHAR);
+        tempSym = new Symbol("@res4", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(Primitive.BOOLEAN);
+        expect(tempSym.type).toBe(Primitive.VARCHAR);
+        tempSym = new Symbol("@res5", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(Primitive.DOUBLE);
+        expect(tempSym.type).toBe(Primitive.VARCHAR);
+        tempSym = new Symbol("@res6", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(Primitive.DATE);
+        expect(tempSym.type).toBe(Primitive.VARCHAR);
+        tempSym = new Symbol("@res7", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(Primitive.NULL);
+        expect(tempSym.type).toBe(Primitive.VARCHAR);
+        // testing lower
+        tempSym = new Symbol("@resLower", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe("simon");
+        expect(tempSym.type).toBe(Primitive.VARCHAR);
+        // testing upper
+        tempSym = new Symbol("@resUpper", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe("SIMON");
+        expect(tempSym.type).toBe(Primitive.VARCHAR);
+        // testing round
+        tempSym = new Symbol("@resRound", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(3.1416);
+        expect(tempSym.type).toBe(Primitive.DOUBLE);
+        // testing len
+        tempSym = new Symbol("@resLen", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(5);
+        expect(tempSym.type).toBe(Primitive.INT);
+        // testing truncate
+        tempSym = new Symbol("@resTrunc", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(3.1415);
+        expect(tempSym.type).toBe(Primitive.DOUBLE);
 
     });
+
+
 
     /*-------------------------------------------------TESTING-------------------------------------------------*/
     /*

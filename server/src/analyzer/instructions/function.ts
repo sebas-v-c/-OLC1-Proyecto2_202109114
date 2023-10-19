@@ -14,7 +14,7 @@ export interface VarArgs {
 }
 
 
-export class Func {
+export abstract class Func implements Statement{
     constructor(
         public id: string,
         public args: Array<VarArgs>,
@@ -22,9 +22,13 @@ export class Func {
         public line: number,
         public column: number,
         public retType?: Primitive){}
+    abstract getValue(tree: Tree, table: Environment): ReturnType;
+    abstract interpret(tree: Tree, table: Environment): any;
+    abstract getCST(): Node;
+    abstract getAST(): Node;
 }
 
-export class Function extends Func implements Statement {
+export class Function extends Func {
     constructor(id: string, args: Array<VarArgs>, retType: Primitive, block: CodeBlock, line: number, column: number,){
         super(id, args, block, line, column, retType);
     }
@@ -36,10 +40,11 @@ export class Function extends Func implements Statement {
     interpret(tree: Tree, table: Environment) {
         let symbol: Symbol;
 
+
         symbol = new Symbol(
             this.id,
             Functions.FUNC,
-            new Func(this.id, this.args, this.block, this.line, this.column, this.retType),
+            this,
             this.line,
             this.column,
             table
@@ -61,8 +66,9 @@ export class Function extends Func implements Statement {
     }
 }
 
-export class NativeFunc implements Statement{
+export class NativeFunc extends Func {
     constructor(public id: string, public args: Array<VarArgs>, public func: (...args: ReturnType[]) => ReturnType, public line: number, public column: number,){
+        super(id, args, new CodeBlock([], line, column), line, column);
     }
     getValue(tree: Tree, table: Environment): ReturnType {
         let resVal: Array<ReturnType> = [];
@@ -85,7 +91,7 @@ export class NativeFunc implements Statement{
 }
 
 
-export class Method extends Func implements Statement {
+export class Method extends Func {
     constructor(id: string, args: Array<VarArgs>, block: CodeBlock, line: number, column: number,){
         super(id, args, block, line, column);
     }
@@ -99,7 +105,7 @@ export class Method extends Func implements Statement {
         symbol = new Symbol(
             this.id,
             Functions.METHOD,
-            new Func(this.id, this.args, this.block, this.line, this.column),
+            this,
             this.line,
             this.column,
             table

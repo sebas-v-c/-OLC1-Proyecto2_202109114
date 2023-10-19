@@ -7,7 +7,7 @@ import { Node } from "../../abastract/ast";
 import { Exception } from "../../errors";
 import Table from "../../tools/Table";
 
-export class Insert implements Statement {
+export class Truncate implements Statement {
     constructor(public id: string, public line: number, public column: number){}
 
     getValue(tree: Tree, table: Environment): ReturnType {
