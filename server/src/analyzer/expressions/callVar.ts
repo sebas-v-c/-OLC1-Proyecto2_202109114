@@ -24,11 +24,11 @@ export class CallVar implements Statement {
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {
-        let symbol: Exception | Symbol;
-        symbol = table.getSymbol(new Symbol(this.id, Primitive.NULL, null, this.line, this.column, table));
-
-        if (symbol instanceof Exception){
-            throw new Exception('Sementic', `Variable name: ${this.id} does not exist in current scope`, this.line, this.column, table.name);
+        let symbol: Symbol;
+        try {
+            symbol = table.getSymbol(new Symbol(this.id, Primitive.NULL, null, this.line, this.column, table));
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
 
         return new ReturnType(symbol.type, symbol.value);
