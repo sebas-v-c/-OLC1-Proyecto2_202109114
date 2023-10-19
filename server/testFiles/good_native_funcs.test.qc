@@ -6,6 +6,8 @@ declare @var4 boolean default False;
 declare @var5 double default 3.1415912;
 declare @var6 date default 2023-10-16;
 declare @var7 null default null;
+declare @var8 varchar default "12341.1234123";
+declare @var9 varchar default "2023-10-16";
 
 -- DECLARING RESULT VARIABLES
 declare @res1 varchar;
@@ -37,3 +39,19 @@ set @resUpper = UPPER(@var2);
 set @resRound = rounD(@var5, 4);
 set @resLen = LEN(@var2);
 set @resTrunc = Truncate(@var5, 4);
+
+-- TESTING CAST
+/*Ya me dio hueva xd*/
+declare @toInt int;
+declare @toDouble double;
+declare @toVarchar varchar;
+declare @toBoolean BOOLEAN;
+declare @toDate DATE;
+declare @toNull NULL;
+
+set @toInt = CAST(@var8 AS INT);
+set @toDouble = CAST(@var8 AS DOUBLE);
+set @toVarchar = CAST(@var5 AS varchar);
+set @toBoolean = CAST(@var6 AS BOOLEAN);
+set @toDate = CAST(@var9 AS DATE);
+set @toNull = CAST(@var1 AS NULL);

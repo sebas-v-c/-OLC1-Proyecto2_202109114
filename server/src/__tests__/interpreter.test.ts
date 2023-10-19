@@ -501,7 +501,31 @@ describe("Testing Interpreter Logics", function() {
         tempSym = globalEnv.getSymbol(tempSym);
         expect(tempSym.value).toBe(3.1415);
         expect(tempSym.type).toBe(Primitive.DOUBLE);
-
+        // testing cast func
+        tempSym = new Symbol("@toInt", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(12341);
+        expect(tempSym.type).toBe(Primitive.INT);
+        tempSym = new Symbol("@toDouble", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(12341.1234123);
+        expect(tempSym.type).toBe(Primitive.DOUBLE);
+        tempSym = new Symbol("@toVarchar", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe("3.1415912");
+        expect(tempSym.type).toBe(Primitive.VARCHAR);
+        tempSym = new Symbol("@toBoolean", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(true);
+        expect(tempSym.type).toBe(Primitive.BOOLEAN);
+        tempSym = new Symbol("@toNull", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        expect(tempSym.value).toBe(null);
+        expect(tempSym.type).toBe(Primitive.NULL);
+        tempSym = new Symbol("@toDate", Primitive.NULL, null,0, 0, globalEnv);
+        tempSym = globalEnv.getSymbol(tempSym);
+        //expect(tempSym.value).toBe(2023-10-16T00:00:00.000Z);
+        expect(tempSym.type).toBe(Primitive.DATE);
     });
 
 

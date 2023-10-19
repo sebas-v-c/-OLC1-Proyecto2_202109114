@@ -44,7 +44,8 @@ export enum Functions {
 }
 
 export enum Id {
-    ID = "id"
+    ID = "id",
+    RESERVED = "reserved"
 }
 
 export enum Any {

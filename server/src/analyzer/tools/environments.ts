@@ -1,7 +1,7 @@
 import Symbol from "./symbol";
 import { Exception } from "../errors";
 import Table from "./Table";
-import { Any, Functions, Primitive, ValueType } from "./types";
+import { Any, Functions, Id, Primitive, ValueType } from "./types";
 import { Func, Function, NativeFunc } from "../instructions/function";
 import { CodeBlock } from "../instructions/codeBlock";
 import { Return } from "../instructions/return";

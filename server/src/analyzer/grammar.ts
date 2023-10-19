@@ -58,6 +58,7 @@ import { JisonParser, JisonParserApi, StateType, SymbolsType, TerminalsType, Pro
     const { Arithmetic } = require("./expressions/arithmetic");
     const { CallVar } = require("./expressions/callVar");
     const { CallFunc } = require("./expressions/callFunc");
+    const { Cast } = require("./expressions/cast");
 
 export class QCrypterParser extends JisonParser implements JisonParserApi {
     $?: any;
@@ -328,6 +329,9 @@ case 111:
 break;
 case 112:
  this.$ = new CallFunc($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); 
+break;
+case 113:
+ this.$ = new Cast($$[$0-3], $$[$0-1])
 break;
 case 114:
  this.$ = new Print($$[$0], _$[$0-1].first_line, _$[$0-1].first_column); 

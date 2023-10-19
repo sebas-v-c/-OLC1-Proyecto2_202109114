@@ -175,6 +175,7 @@
     const { Arithmetic } = require("./expressions/arithmetic");
     const { CallVar } = require("./expressions/callVar");
     const { CallFunc } = require("./expressions/callFunc");
+    const { Cast } = require("./expressions/cast");
 %}
 
 
@@ -457,7 +458,7 @@ call_func_mth:
 
 /*-------------------------------FUNCTIONS-------------------------------*/
 cast:
-    RW_CAST TK_LPAR expression RW_AS type TK_RPAR   {}
+    RW_CAST TK_LPAR expression RW_AS type TK_RPAR   { $$ = new Cast($3, $5)}
 ;
 
 print:
