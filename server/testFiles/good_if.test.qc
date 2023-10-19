@@ -6,7 +6,7 @@ BEGIN
 END;
 
 
-IF @var < 5 THEN
+IF @var < 10 THEN
     SET @VAR = 20 + 5;
 ELSE
      declare @var2 varchar;

@@ -131,7 +131,7 @@ export class Relational implements WhereExp {
             return new ReturnType(Primitive.BOOLEAN, leftResult.value > rightResult.value);
         }
 
-        throw new Exception("Type Error", `">" to supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
+        throw new Exception("Type Error", `''>' not supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
     }
 
     _less_operation(table: Environment, tree: Tree): ReturnType {
@@ -151,7 +151,7 @@ export class Relational implements WhereExp {
             return new ReturnType(Primitive.BOOLEAN, leftResult.value < rightResult.value);
         }
 
-        throw new Exception("Type Error", `">" to supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
+        throw new Exception("Type Error", `'<' not supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
     }
 
 
@@ -172,7 +172,7 @@ export class Relational implements WhereExp {
             return new ReturnType(Primitive.BOOLEAN, leftResult.value >= rightResult.value);
         }
 
-        throw new Exception("Type Error", `">=" to supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
+        throw new Exception("Type Error", `'>=' not supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
     }
 
     _leq_operation(table: Environment, tree: Tree): ReturnType {
@@ -192,7 +192,7 @@ export class Relational implements WhereExp {
             return new ReturnType(Primitive.BOOLEAN, leftResult.value <= rightResult.value);
         }
 
-        throw new Exception("Type Error", `"<=" to supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
+        throw new Exception("Type Error", `'<=' not supported between instances of ${leftResult.type} and ${rightResult.type}`, this.line, this.column, table.name);
     }
 
 
