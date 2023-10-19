@@ -33,14 +33,20 @@ describe("Testing Interpreter DML and DDL", function() {
 
 
         for (let instruction of tree.instructions) {
-            let value: any = instruction.interpret(tree, globalEnv)
-            let isException: boolean = value instanceof Exception;
-            if (isException) {
+            let value;
+            try{
+                value = instruction.interpret(tree, globalEnv)
+            } catch(err){
+                console.log("----------------------------------ERROR VAL----------------------------------")
+                console.log(err);
+                console.log("----------------------------------VALUE RETURNED----------------------------------")
                 console.log(value);
+                console.log("----------------------------------GLOBAL ENV----------------------------------")
                 console.log(globalEnv);
+                console.log("----------------------------------ERRORS FROM TREE----------------------------------")
+                console.log(tree.errors);
+                expect(err).toBeFalsy();
             }
-
-            expect(isException).toBeFalsy();
         }
         //printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
@@ -75,14 +81,20 @@ describe("Testing Interpreter DML and DDL", function() {
 
 
         for (let instruction of tree.instructions) {
-            let value: any = instruction.interpret(tree, globalEnv)
-            let isException: boolean = value instanceof Exception;
-            if (isException) {
+            let value;
+            try{
+                value = instruction.interpret(tree, globalEnv)
+            } catch(err){
+                console.log("----------------------------------ERROR VAL----------------------------------")
+                console.log(err);
+                console.log("----------------------------------VALUE RETURNED----------------------------------")
                 console.log(value);
+                console.log("----------------------------------GLOBAL ENV----------------------------------")
                 console.log(globalEnv);
+                console.log("----------------------------------ERRORS FROM TREE----------------------------------")
+                console.log(tree.errors);
+                expect(err).toBeFalsy();
             }
-
-            expect(isException).toBeFalsy();
         }
         printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
@@ -118,13 +130,20 @@ describe("Testing Interpreter DML and DDL", function() {
 
 
         for (let instruction of tree.instructions) {
-            let value: any = instruction.interpret(tree, globalEnv)
-            let isException: boolean = value instanceof Exception;
-            if (isException) {
+            let value;
+            try{
+                value = instruction.interpret(tree, globalEnv)
+            } catch(err){
+                console.log("----------------------------------ERROR VAL----------------------------------")
+                console.log(err);
+                console.log("----------------------------------VALUE RETURNED----------------------------------")
                 console.log(value);
+                console.log("----------------------------------GLOBAL ENV----------------------------------")
                 console.log(globalEnv);
+                console.log("----------------------------------ERRORS FROM TREE----------------------------------")
+                console.log(tree.errors);
+                expect(err).toBeFalsy();
             }
-            expect(isException).toBeFalsy();
         }
         printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
@@ -187,14 +206,20 @@ describe("Testing Interpreter DML and DDL", function() {
 
 
         for (let instruction of tree.instructions) {
-            let value: any = instruction.interpret(tree, globalEnv)
-            let isException: boolean = value instanceof Exception;
-            if (isException) {
+            let value;
+            try{
+                value = instruction.interpret(tree, globalEnv)
+            } catch(err){
+                console.log("----------------------------------ERROR VAL----------------------------------")
+                console.log(err);
+                console.log("----------------------------------VALUE RETURNED----------------------------------")
                 console.log(value);
+                console.log("----------------------------------GLOBAL ENV----------------------------------")
                 console.log(globalEnv);
+                console.log("----------------------------------ERRORS FROM TREE----------------------------------")
+                console.log(tree.errors);
+                expect(err).toBeFalsy();
             }
-
-            expect(isException).toBeFalsy();
         }
         printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
