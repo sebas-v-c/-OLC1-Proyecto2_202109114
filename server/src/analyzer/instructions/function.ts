@@ -43,14 +43,11 @@ export class Function extends Func implements Statement {
             table
         );
 
-
-        let result: Exception | undefined = table.setSymbol(symbol);
-
-        if (result instanceof Exception){
-            return result;
+        try{
+            table.setSymbol(symbol);
+        }catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
-
-        return result;
     }
 
     getCST(): Node {
