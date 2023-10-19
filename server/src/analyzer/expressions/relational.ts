@@ -4,7 +4,9 @@ import ReturnType from "../tools/returnType";
 import { Primitive, RelationalOperator } from "../tools/types";
 import Tree from "../tools/tree";
 import { Exception } from "../errors";
-import Table from "../tools/Table";
+import Table, { Column } from "../tools/Table";
+import { IdVar } from "./id";
+import { array, boolean } from "joi";
 
 type Ret = { left: ReturnType, right: ReturnType }
 
@@ -25,9 +27,120 @@ export class Relational implements WhereExp {
     }
     // TODO
     getIndexValue(tree: Tree, table: Environment, dbTable: Table): number[] {
-        //throw new Error("Method not implemented.");
-        console.log(this.leftExp, this.rightExp);
-        return [1];
+        let colName: string;
+        let expr: Statement;
+
+        if (this.leftExp instanceof IdVar){
+            colName = this.leftExp.value;
+            expr = this.rightExp;
+        } else {
+            colName = (this.rightExp as IdVar).value;
+            expr = this.leftExp;
+        }
+
+        let ret: ReturnType;
+        try {
+            ret = expr.getValue(tree, table);
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
+        }
+
+        /**
+         * All powerful function that returns the indexes of a column that matches a condition
+         * @author: sebas-v-c
+         * @param {Array} array The column array
+         * @param {(element: T) => boolean} cond the condition that should be matched
+         */
+        function filterColumn<T>(
+            array: T[],
+            cond: (element: T) => boolean
+        ): number[]{
+            return array.map((element, index) => ({ element, index }))
+                .filter(({element}) => cond(element))
+                .map(({index}) => index);
+        }
+
+        switch(this.operator){
+            case RelationalOperator.EQ: {
+                try {
+                    let col: Column = dbTable.getColumn(colName);
+                    if (!col.isValidData(ret)){
+                        // TODO change this as needed
+                        // this will return an empty array, instead of throwing an error
+                        return [];
+                    }
+                    const cleanCols: any[] = col.data.map(obj => obj.value);
+                    return filterColumn(cleanCols, (element: number) => element === ret.value);
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
+                }
+            }
+            case RelationalOperator.GEQ: {
+                try {
+                    let col: Column = dbTable.getColumn(colName);
+                    if (!col.isValidData(ret)){
+                        // TODO change this as needed
+                        // this will return an empty array, instead of throwing an error
+                        return [];
+                    }
+                    const cleanCols: any[] = col.data.map(obj => obj.value);
+                    return filterColumn(cleanCols, (element: number) => element >= ret.value);
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
+                }
+            }
+            case RelationalOperator.GREATER: {
+                try {
+                    let col: Column = dbTable.getColumn(colName);
+                    if (!col.isValidData(ret)){
+                        // TODO change this as needed
+                        // this will return an empty array, instead of throwing an error
+                        return [];
+                    }
+                    const cleanCols: any[] = col.data.map(obj => obj.value);
+                    return filterColumn(cleanCols, (element: number) => element > ret.value);
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
+                }
+            }
+            case RelationalOperator.LEQ: {
+                try {
+                    let col: Column = dbTable.getColumn(colName);
+                    if (!col.isValidData(ret)){
+                        // TODO change this as needed
+                        // this will return an empty array, instead of throwing an error
+                        return [];
+                    }
+                    const cleanCols: any[] = col.data.map(obj => obj.value);
+                    return filterColumn(cleanCols, (element: number) => element <= ret.value);
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
+                }
+            }
+            case RelationalOperator.LESS: {
+                try {
+                    let col: Column = dbTable.getColumn(colName);
+                    if (!col.isValidData(ret)){
+                        // TODO change this as needed
+                        // this will return an empty array, instead of throwing an error
+                        return [];
+                    }
+                    const cleanCols: any[] = col.data.map(obj => obj.value);
+                    return filterColumn(cleanCols, (element: number) => element <= ret.value);
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
+                }
+            }
+            case RelationalOperator.NEQ: {
+                try {
+                    let col: Column = dbTable.getColumn(colName);
+                    const cleanCols: any[] = col.data.map(obj => obj.value);
+                    return filterColumn(cleanCols, (element: number) => element !== ret.value);
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
+                }
+            }
+        }
     }
 
     interpret(tree: Tree, table: Environment) {
