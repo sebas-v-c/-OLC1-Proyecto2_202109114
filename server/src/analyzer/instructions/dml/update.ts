@@ -42,6 +42,7 @@ export class Update implements Statement {
         }
     }
 
+
     getCST(): Node {
         return new Node("Node");
     }
