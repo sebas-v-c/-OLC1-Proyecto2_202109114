@@ -23,8 +23,10 @@ export class Relational implements WhereExp {
         this.line = line;
         this.column = column;
     }
-    getIndexValue(tree: Tree, table: Environment, db: Table): number[] {
-        throw new Error("Method not implemented.");
+    // TODO
+    getIndexValue(tree: Tree, table: Environment, dbTable: Table): number[] {
+        //throw new Error("Method not implemented.");
+        return [1];
     }
 
     interpret(tree: Tree, table: Environment) {

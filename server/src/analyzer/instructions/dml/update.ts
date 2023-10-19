@@ -6,7 +6,7 @@ import Tree from "../../tools/tree";
 import { Node } from "../../abastract/ast";
 import { Exception } from "../../errors";
 import { Column } from "../../tools/Table";
-import { WherePredicate } from "./whereType";
+import { WherePredicate } from "./wherePredicate";
 
 interface ColVal {
     col: string;
@@ -28,6 +28,14 @@ export class Update implements Statement {
 
 
     interpret(tree: Tree, table: Environment) {
+        const dbTable = table.getTable(this.id, this.line, this.column);
+        if (dbTable instanceof Exception){
+            return dbTable
+        }
+
+        let arr: Array<number> = [];
+        arr = this.cond.getColumnIndexes(tree, table, dbTable);
+        console.log(arr);
     }
 
     getCST(): Node {

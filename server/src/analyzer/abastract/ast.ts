@@ -15,7 +15,7 @@ export interface Statement {
 }
 
 export interface WhereExp extends Statement {
-    getIndexValue(tree: Tree, table: Environment, db: Table): number[];
+    getIndexValue(tree: Tree, table: Environment, dbTable: Table): number[];
 }
 
 export class Node {

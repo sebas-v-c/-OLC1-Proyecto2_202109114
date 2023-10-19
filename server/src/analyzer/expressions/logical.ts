@@ -25,8 +25,9 @@ export class Logical implements WhereExp {
         this.column = column;
     }
     // TODO
-    getIndexValue(tree: Tree, table: Environment, db: Table): number[] {
-        throw new Error("Method not implemented.");
+    getIndexValue(tree: Tree, table: Environment, dbTable: Table): number[] {
+        //throw new Error("Method not implemented.");
+        return [0];
     }
 
     interpret(tree: Tree, table: Environment) {
