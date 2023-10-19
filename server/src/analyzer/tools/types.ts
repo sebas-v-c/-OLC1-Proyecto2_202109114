@@ -47,5 +47,9 @@ export enum Id {
     ID = "id"
 }
 
+export enum Any {
+    ANY = "anyvar"
+}
 
-export type ValueType = Primitive | Functions | TransferOp | Id;
+
+export type ValueType = Primitive | Functions | TransferOp | Id | Any;

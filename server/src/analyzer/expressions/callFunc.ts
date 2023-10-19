@@ -1,11 +1,11 @@
 import { Node, Statement } from "../abastract/ast";
 import Environment from "../tools/environments";
 import ReturnType from "../tools/returnType";
-import { Functions, Primitive } from "../tools/types";
+import { Any, Functions, Primitive } from "../tools/types";
 import Tree from "../tools/tree";
 import { Exception } from "../errors";
 import Symbol from "../tools/symbol";
-import { Func } from "../instructions/function";
+import { Func, NativeFunc } from "../instructions/function";
 
 
 export class CallFunc implements Statement {
@@ -52,20 +52,33 @@ export class CallFunc implements Statement {
             const toSaveSym = new Symbol(calledFunc.args[i].id.toLowerCase(), calledFunc.args[i].type, null, this.line, this.column, funcEnv);
             const receivedSym = this.argExpr[i].getValue(tree, funcEnv);
             if (toSaveSym.type !== receivedSym.type){
-                let err =new Exception("Type Error", `Variable of type '${receivedSym.type}' is not assignable to type '${toSaveSym.type}'`, this.line, this.column, funcEnv.name);
-                tree.errors.push(err);
-                throw err;
+                // if tosave symbol is of value any, then accept the symbol
+                if (toSaveSym.type !== Any.ANY){
+                    let err = new Exception("Type Error", `Variable of type '${receivedSym.type}' is not assignable to type '${toSaveSym.type}'`, this.line, this.column, funcEnv.name);
+                    tree.errors.push(err);
+                    throw err;
+                }
             }
             toSaveSym.value = receivedSym.value;
             funcEnv.setSymbol(toSaveSym);
         }
 
         let ret: ReturnType | void;
-        try {
-            ret = calledFunc.block.interpret(tree, funcEnv);
-        } catch(err){
-            tree.errors.push(err as Exception); throw err;
+        if (symbol.type === Functions.NATIVE_FN){
+            // to get the value from the Native func function
+            try{
+                ret = (symbol.value as NativeFunc).getValue(tree, funcEnv);
+            } catch(err){
+                tree.errors.push(err as Exception); throw err;
+            }
+        } else {
+            try {
+                ret = calledFunc.block.interpret(tree, funcEnv);
+            } catch (err) {
+                tree.errors.push(err as Exception); throw err;
+            }
         }
+
         // a native function always returns a value too
         if (symbol.type === Functions.FUNC || symbol.type === Functions.NATIVE_FN){
             if (ret instanceof ReturnType){

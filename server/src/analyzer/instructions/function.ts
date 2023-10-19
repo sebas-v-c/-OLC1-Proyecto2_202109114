@@ -1,16 +1,18 @@
 import { Statement } from "../abastract/ast";
 import Environment from "../tools/environments";
 import ReturnType from "../tools/returnType";
-import { Functions, Primitive } from "../tools/types";
+import { Any, Functions, Primitive } from "../tools/types";
 import Tree from "../tools/tree";
 import { Node } from "../abastract/ast";
 import { Exception } from "../errors";
 import { CodeBlock } from "./codeBlock";
 import Symbol from "../tools/symbol";
+import { CallVar } from "../expressions/callVar";
 
 export interface VarArgs {
-    id: string, type: Primitive
+    id: string, type: Primitive | Any
 }
+
 
 export class Func {
     constructor(
@@ -59,15 +61,28 @@ export class Function extends Func implements Statement {
     }
 }
 
-/*
-export class NativeFunc extends Func implements Statement {
-    constructor(id: string, args: Array<VarArgs>, func: (...args: any[]) => any, line: number, column: number,){
-        super(id, args,
-              new CodeBlock( new  ), line, column
-             );
+export class NativeFunc implements Statement{
+    constructor(public id: string, public args: Array<VarArgs>, public func: (...args: ReturnType[]) => ReturnType, public line: number, public column: number,){
+    }
+    getValue(tree: Tree, table: Environment): ReturnType {
+        let resVal: Array<ReturnType> = [];
+        for (let arg of this.args){
+            let callvar = new CallVar(arg.id, 0, 0);
+            resVal.push(callvar.getValue(tree, table));
+        }
+        return this.func(...resVal);
+
+    }
+    interpret(tree: Tree, table: Environment) {
+        throw new Error("Method not implemented.");
+    }
+    getCST(): Node {
+        throw new Error("Method not implemented.");
+    }
+    getAST(): Node {
+        throw new Error("Method not implemented.");
     }
 }
-*/
 
 
 export class Method extends Func implements Statement {
@@ -81,7 +96,6 @@ export class Method extends Func implements Statement {
 
     interpret(tree: Tree, table: Environment) {
         let symbol: Symbol;
-
         symbol = new Symbol(
             this.id,
             Functions.METHOD,

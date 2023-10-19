@@ -1,8 +1,8 @@
 import Symbol from "./symbol";
 import { Exception } from "../errors";
 import Table from "./Table";
-import { Functions, Primitive, ValueType } from "./types";
-import { Func, Function } from "../instructions/function";
+import { Any, Functions, Primitive, ValueType } from "./types";
+import { Func, Function, NativeFunc } from "../instructions/function";
 import { CodeBlock } from "../instructions/codeBlock";
 import { Return } from "../instructions/return";
 import { CallVar } from "../expressions/callVar";
@@ -11,76 +11,99 @@ import ReturnType from "./returnType";
 
 export function createGlobalEnv() {
     const env = new Environment();
-    // Define a native builtin method
-
+    // Define a native builtin functions
     env.setSymbol(new Symbol(
-        "LOWER",
+        "lower",
         Functions.NATIVE_FN,
-        new Function(
+        new NativeFunc(
             "LOWER",
             [{id: "@str", type: Primitive.VARCHAR}],
-            Primitive.VARCHAR,
-            new CodeBlock(
-                [new Return(
-                    new CallVar(
-                        "@str", 0, 0
-                    ), 0, 0,
-                    (arg: ReturnType) => {
-                        arg = arg.value.toLowerCase();
-                        return arg;
-                    }
-                )], 0, 0
-            ), 0, 0), 0, 0, env));
+            (strVar) =>{
+                strVar.value = (strVar.value as string).toLowerCase();
+                return strVar;
+            },
+            0,0
+        ), 0, 0, env
+    ));
 
     env.setSymbol(new Symbol(
-        "UPPER",
+        "upper",
         Functions.NATIVE_FN,
-        new Function(
+        new NativeFunc(
             "UPPER",
             [{id: "@str", type: Primitive.VARCHAR}],
-            Primitive.VARCHAR,
-            new CodeBlock(
-                [new Return(
-                    new CallVar(
-                        "@str", 0, 0
-                    ), 0, 0,
-                    (arg: ReturnType) => {
-                        arg = arg.value.toUpperCase();
-                        return arg;
-                    }
-                )], 0, 0
-            ), 0, 0), 0, 0, env));
+            (strVar) =>{
+                strVar.value = (strVar.value as string).toUpperCase();
+                return strVar;
+            },
+            0,0
+        ), 0, 0, env
+    ));
 
     env.setSymbol(new Symbol(
-        "LEN",
+        "len",
         Functions.NATIVE_FN,
-        new Function(
+        new NativeFunc(
             "LEN",
             [{id: "@str", type: Primitive.VARCHAR}],
-            Primitive.INT,
-            new CodeBlock(
-                [new Return(
-                    new CallVar(
-                        "@str", 0, 0
-                    ), 0, 0,
-                    (arg: ReturnType) => {
-                        arg.value = arg.value.length;
-                        arg.type = Primitive.INT;
-                        return arg;
-                    }
-                )], 0, 0
-            ), 0, 0), 0, 0, env));
+            (strVar) =>{
+                strVar.value = (strVar.value as string).length;
+                strVar.type = Primitive.INT;
+                return strVar;
+            },
+            0,0
+        ), 0, 0, env
+    ));
 
+    env.setSymbol(new Symbol(
+        "round",
+        Functions.NATIVE_FN,
+        new NativeFunc(
+            "ROUND",
+            [{id: "@num", type: Primitive.DOUBLE}, {id: "@round", type: Primitive.INT}],
+            (num, round) =>{
+                let newNum: number = Number(num.value);
+                let newRound: number = Number(round.value);
+                const multiplier = Math.pow(10, newRound);
+                num.value = Math.round(newNum * multiplier)/multiplier;
+                num.type = Primitive.DOUBLE;
+                return num;
+            },
+            0,0
+        ), 0, 0, env
+    ));
 
+    // verify this
+    env.setSymbol(new Symbol(
+        "truncate",
+        Functions.NATIVE_FN,
+        new NativeFunc(
+            "TRUNCATE",
+            [{id: "@num", type: Primitive.DOUBLE}, {id: "@round", type: Primitive.INT}],
+            (num, round) =>{
+                let newNum: number = Number(num.value);
+                let newRound: number = Number(round.value);
+                const multiplier = Math.pow(10, newRound);
+                num.value = Math.trunc(newNum * multiplier)/multiplier;
+                num.type = Primitive.DOUBLE;
+                return num;
+            },
+            0,0
+        ), 0, 0, env
+    ));
 
-    // TODO
-    // declare upper function
-    //env.setSymbol(new Symbol("ROUND"))
-    // declare TRUNCATE function
-    //env.setSymbol(new Symbol("TRUNCATE"))
-    // declare typeof function
-    //env.setSymbol(new Symbol("TYPEOF"))
-
+    env.setSymbol(new Symbol(
+        "typeof",
+        Functions.NATIVE_FN,
+        new NativeFunc(
+            "TYPEOF",
+            [{id: "@val", type: Any.ANY}],
+            (val) =>{
+                return new ReturnType(Primitive.VARCHAR, val.type);
+            },
+            0,0
+        ), 0, 0, env
+    ));
     return env;
 }
 
