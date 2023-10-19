@@ -11,27 +11,27 @@ export default class Table {
         this.columns = new Map();
     }
     // DDL actions
-    addColumn(name: string, type: Primitive, line: number, column: number): Exception | undefined{
+    addColumn(name: string, type: Primitive, line: number, column: number): void{
         if (this.columns.has(name.toLowerCase())){
-            return new Exception("DB", `Column name ${name.toLowerCase()} is already defined`, line, column);
+            throw new Exception("DB", `Column name ${name.toLowerCase()} is already defined`, line, column);
         }
 
         this.columns.set(name.toLowerCase(), new Column(name.toLowerCase(), type));
     }
 
-    dropColumn(name: string): Exception | undefined{
+    dropColumn(name: string): void{
         if (!this.columns.has(name.toLowerCase())){
-            return new Exception("DB", `Column name ${name.toLowerCase()} does not exist`, 0, 0);
+            throw new Exception("DB", `Column name ${name.toLowerCase()} does not exist`, 0, 0);
         }
 
         this.columns.delete(name.toLocaleLowerCase());
     }
 
-    renameColumn(oldName: string, newName: string): Exception | undefined {
+    renameColumn(oldName: string, newName: string): void {
         oldName = oldName.toLowerCase();
         newName = newName.toLowerCase();
         if (!this.columns.has(oldName)){
-            return new Exception("DB", `Column name '${oldName}' does not exist`, 0, 0);
+            throw new Exception("DB", `Column name '${oldName}' does not exist`, 0, 0);
         }
 
         let oldCol = this.columns.get(oldName);
@@ -42,23 +42,23 @@ export default class Table {
         }
     }
 
-    updateColumn(col: Column): Exception | undefined{
+    updateColumn(col: Column): void {
         if (!this.columns.has(col.name.toLowerCase())){
-            return new Exception("DB", `Column name '${col.name.toLowerCase()}' does not exist`, 0, 0);
+            throw new Exception("DB", `Column name '${col.name.toLowerCase()}' does not exist`, 0, 0);
         }
 
         this.columns.set(col.name.toLowerCase(), col);
     }
 
-    getColumn(name: string): Exception | Column{
+    getColumn(name: string): Column{
         if (!this.columns.has(name.toLowerCase())){
-            return new Exception("DB", `Column name '${name.toLowerCase()}' does not exist`, 0, 0);
+            throw new Exception("DB", `Column name '${name.toLowerCase()}' does not exist`, 0, 0);
         } else {
             return this.columns.get(name.toLowerCase()) as Column;
         }
     }
 
-    fillNullValues(column: Column){
+    fillNullValues(column: Column): void{
         const keyArr = Array.from(this.columns.keys());
         for (let i = 0; i < keyArr.length; i++){
             let col = this.columns.get(keyArr[i]);
@@ -96,9 +96,9 @@ export class Column {
         this.data = [];
     }
 
-    addData(value: ReturnType): Exception | undefined{
+    addData(value: ReturnType): void{
         if (!this.isValidData(value)){
-            return new Exception("Type Error", `Data of value ${value.type} can't be assigned to column of type ${this.type}`, 0, 0);
+            throw new Exception("Type Error", `Data of value ${value.type} can't be assigned to column of type ${this.type}`, 0, 0);
         }
 
         this.data.push(value);

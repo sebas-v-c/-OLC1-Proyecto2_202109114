@@ -28,7 +28,7 @@ export class CallVar implements Statement {
         symbol = table.getSymbol(new Symbol(this.id, Primitive.NULL, null, this.line, this.column, table));
 
         if (symbol instanceof Exception){
-            return new ReturnType(Primitive.NULL, new Exception('Sementic', `Variable name: ${this.id} does not exist in current scope`, this.line, this.column, table.name));
+            throw new Exception('Sementic', `Variable name: ${this.id} does not exist in current scope`, this.line, this.column, table.name);
         }
 
         return new ReturnType(symbol.type, symbol.value);

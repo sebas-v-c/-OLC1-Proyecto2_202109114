@@ -41,10 +41,10 @@ export default class Environment {
     }
 
     // DDL actions
-    public setTable(table: Table, line: number, column: number): undefined | Exception {
+    public setTable(table: Table, line: number, column: number): void {
         let env: Environment = this.getGlobalEnv();
         if (env.db.has(table.id)){
-            return new Exception("Semantic", `Table name ${table.id} aready defined the Data Base`, line, column, "global");
+            throw new Exception("Semantic", `Table name ${table.id} aready defined the Data Base`, line, column, "global");
         }
 
         env.db.set(table.id, table);
@@ -55,7 +55,7 @@ export default class Environment {
         newName = newName.toLowerCase();
         const env = this.getGlobalEnv();
         if (!env.db.has(oldName)){
-            return new Exception("DB", `Table name ${oldName} does not exist`, 0, 0);
+            throw new Exception("DB", `Table name ${oldName} does not exist`, 0, 0);
         }
 
         let oldTable = env.db.get(oldName);
@@ -66,28 +66,28 @@ export default class Environment {
         }
     }
 
-    public updateTable(table: Table, line: number, column: number): undefined | Exception{
+    public updateTable(table: Table, line: number, column: number): void {
         const env = this.getGlobalEnv();
 
         if (!env.db.has(table.id)){
-            return new Exception("Semantic", `Table ${table.id} isn't defined in the current scope`, line, column, this.name);
+            throw new Exception("Semantic", `Table ${table.id} isn't defined in the current scope`, line, column, this.name);
         }
         env.db.set(table.id, table);
     }
 
-    public dropTable(table: Table, line: number, column: number){
+    public dropTable(table: Table, line: number, column: number): void{
         const env = this.getGlobalEnv();
         if (!env.db.has(table.id)){
-            return new Exception("Semantic", `Table ${table.id} isn't defined in the current scope`, line, column, this.name);
+            throw new Exception("Semantic", `Table ${table.id} isn't defined in the current scope`, line, column, this.name);
         }
         env.db.delete(table.id);
     }
 
-    public getTable(tableName: string, line: number, column: number): Table | Exception{
+    public getTable(tableName: string, line: number, column: number): Table{
         const env = this.getGlobalEnv();
 
         if (!env.db.has(tableName.toLowerCase())){
-            return new Exception("Semantic", `Table ${tableName} isn't defined in the current scope`, line, column, this.name);
+            throw new Exception("Semantic", `Table ${tableName} isn't defined in the current scope`, line, column, this.name);
         }
 
         return env.db.get(tableName.toLowerCase()) as Table
@@ -101,45 +101,38 @@ export default class Environment {
 
     // LOGIC OPERATIONS
     public setSymbol(symbol: Symbol){
-        let env: Environment | Exception = this.resolveSymbol(symbol);
-        if (env instanceof Exception){
+        try {
+            let env: Environment = this.resolveSymbol(symbol);
+            return new Exception("Semantic", `Variable name ${symbol.id} already defined on scope`, symbol.row, symbol.column, this.name);
+        } catch(err){
             symbol.id = symbol.id.toLowerCase();
             symbol.environment = this;
             this.table.set(symbol.id, symbol);
-        } else {
-            return new Exception("Semantic", `Variable name ${symbol.id} already defined on scope`, symbol.row, symbol.column, this.name);
         }
     }
 
     public updateSymbol(symbol: Symbol){
         const env = this.resolveSymbol(symbol);
 
-        if (env instanceof Exception){
-            return env;
-        }
-
         let envVar = env.table.get(symbol.id);
 
         if (envVar !== undefined){
             if (envVar.type === symbol.type) {
                 envVar.value = symbol.value;
-                return undefined;
+                return;
             }
 
-            return new Exception("Semantic", `The variable: ${symbol.id} isn't type: ${symbol.type}`, symbol.row, symbol.column, this.name);
+            throw new Exception("Semantic", `The variable: ${symbol.id} isn't type: ${symbol.type}`, symbol.row, symbol.column, this.name);
         }
     }
 
-    public getSymbol(symbol: Symbol): Exception | Symbol{
+    public getSymbol(symbol: Symbol): Symbol{
         const env = this.resolveSymbol(symbol);
-        if (env instanceof Exception){
-            return env;
-        }
 
         return env.table.get(symbol.id) as Symbol;
     }
 
-    public resolveSymbol(symbol: Symbol): Environment | Exception {
+    public resolveSymbol(symbol: Symbol): Environment {
         symbol.id = symbol.id.toLowerCase();
 
         if (this.table.has(symbol.id)) {
@@ -147,7 +140,7 @@ export default class Environment {
         }
 
         if (this.parent == undefined) {
-            return new Exception("Semantic", `Cannot resolve '${symbol.id}' as it does not exist.`, symbol.row, symbol.column, this.name);
+            throw new Exception("Semantic", `Cannot resolve '${symbol.id}' as it does not exist.`, symbol.row, symbol.column, this.name);
         }
 
         return this.parent.resolveSymbol(symbol);
