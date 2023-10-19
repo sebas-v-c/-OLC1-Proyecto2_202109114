@@ -165,6 +165,7 @@
     const { Update } = require("./instructions/dml/update");
     const { WherePredicate } = require("./instructions/dml/wherePredicate");
     const { Delete } = require("./instructions/dml/delete");
+    const { SelectTable, SelectExpr } = require("./instructions/dml/delete");
 
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
@@ -261,12 +262,12 @@ alter_actions:
 ;
 
 select_stmt:
-    RW_SELECT select_arguments FROM TK_ID                       {}
-|   RW_SELECT select_arguments FROM TK_ID RW_WHERE expression   {}
+    RW_SELECT select_arguments FROM TK_ID                       { $$ = new SelectTable($2, $4, undefined, @1.first_line, @1.first_column); }
+|   RW_SELECT select_arguments FROM TK_ID RW_WHERE expression   { $$ = new SelectTable($2, $4, $6, @1.first_line, @1.first_column); }
 // TODO I DONT KNOW IF THIS IS CORRECT
 //|   RW_SELECT TK_VAR                                            {}
-|   RW_SELECT expression AS TK_ID                               {}
-|   RW_SELECT expression                                        {}
+|   RW_SELECT expression RW_AS TK_ID                            { $$ = new SelectExpr($2, $4, @1.first_line, @1.first_column); }
+|   RW_SELECT expression                                        { $$ = new SelectExpr($2, undefined, @1.first_line, @1.first_column); }
 // TODO I DONT KNOW IF THIS IS CORRECT
 //|   RW_SELECT TK_VAR AS TK_ID                                   {}
 ;
@@ -286,8 +287,8 @@ log_operator:
 
 /*-------------------------------ARGUMENTS-------------------------------*/
 select_arguments:
-    TK_STAR         {}
-|   value_arguments {}
+    TK_STAR         { $$ = [new Primitive($1, Primitive.VARCHAR, @1.first_column, @1.first_line)]; }
+|   value_arguments { $$ = $1; }
 ;
 
 // TODO make this save the specified value

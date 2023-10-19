@@ -204,15 +204,14 @@ describe("Testing Interpreter DML and DDL", function() {
                 expect(col.data[1].value).toBe("panxito@example.com");
             }
         }
-
-        /*
-        let tempSym: Symbol | Exception = new Symbol("@var", Primitive.NULL, null,0, 0, globalEnv);
-        tempSym = globalEnv.getSymbol(tempSym);
-        if (tempSym instanceof Symbol){
-            expect(tempSym.value).toBe(20);
-            expect(tempSym.type).toBe(Primitive.INT);
+        /*TRUNCATE TABLE*/
+        env = globalEnv.db.get("clientes4");
+        if (env instanceof Table){
+            let col = env.columns.get("id_cliente");
+            if (col instanceof Column){
+                expect(col.data.length).toBe(0);
+            }
         }
-        */
     });
 
 
