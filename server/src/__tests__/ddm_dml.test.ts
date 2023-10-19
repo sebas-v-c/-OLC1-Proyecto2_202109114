@@ -146,12 +146,12 @@ describe("Testing Interpreter DML and DDL", function() {
         let val: Column | Exception | undefined = globalEnv.db.get("clientes")?.getColumn("nombre");
         if (val instanceof Column){
             expect(val.data[0].value).toBe("Juan Perez");
-        } else { expect(val instanceof Column).toBe(true); }
+        } else { throw new Exception("test", "Column doesnt exist", 0, 0); }
         val = globalEnv.db.get("clientes")?.getColumn("correoelectronico");
 
         if (val instanceof Column){
             expect(val.data[0].value).toBe("juan@example.com");
-        } else { expect(val instanceof Column).toBe(true); }
+        } else { throw new Exception("test", "Column doesnt exist", 0, 0); }
 
 
 

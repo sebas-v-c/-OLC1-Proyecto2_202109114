@@ -73,6 +73,7 @@ export class Alter implements Statement {
                     tree.errors.push(err as Exception);
                     throw err;
                 }
+                break;
             }
             case AlterActions.DROP: {
                 let dbTable: Table;
@@ -91,6 +92,7 @@ export class Alter implements Statement {
                     tree.errors.push(err as Exception);
                     throw err;
                 }
+                break;
             }
             case AlterActions.RENAMECOL: {
                 let dbTable: Table;
@@ -109,6 +111,7 @@ export class Alter implements Statement {
                     tree.errors.push(err as Exception);
                     throw err;
                 }
+                break;
             }
             case AlterActions.RENAMETABLE: {
                 let pred: RenameTable = this.predicate as RenameTable;
@@ -117,6 +120,7 @@ export class Alter implements Statement {
                 } catch(err){
                     tree.errors.push(err as Exception); throw err;
                 }
+                break;
             }
         }
     }
