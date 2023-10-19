@@ -7,6 +7,7 @@ import { Exception } from "../errors";
 import Symbol from "../tools/symbol";
 import { PrimitiveVar } from "./primitive";
 import Table from "../tools/Table";
+import { WherePredicate } from "../instructions/dml/wherePredicate";
 
 type Ret = { left: ReturnType, right: ReturnType }
 
@@ -27,7 +28,40 @@ export class Logical implements WhereExp {
     // TODO
     getIndexValue(tree: Tree, table: Environment, dbTable: Table): number[] {
         //throw new Error("Method not implemented.");
-        return [0];
+        let leftArr: Array<number>;
+        let rightArr: Array<number>;
+        try {
+            leftArr = (this.leftExp as WhereExp).getIndexValue(tree, table, dbTable);
+        }catch(err){
+            let exc = new Exception("Semantic", `Not valid expression at line: ${this.leftExp.line} and column: ${this.leftExp.column}`, this.line, this.column);
+            if (this.leftExp !== undefined){
+                tree.errors.push(exc as Exception);
+                throw exc;
+            }
+            // make this so type script doesnt cry about it
+            leftArr = [0];
+        }
+
+        try {
+            rightArr = (this.rightExp as WhereExp).getIndexValue(tree, table, dbTable);
+        }catch(err){
+            let exc = new Exception("Semantic", `Not valid expression at line: ${this.rightExp.line} and column: ${this.rightExp.column}`, this.line, this.column);
+            tree.errors.push(exc as Exception);
+            throw exc;
+        }
+
+        switch(this.operator){
+            case LogicalOperator.AND: {
+                return leftArr.filter(item => rightArr.includes(item));
+            }
+            case LogicalOperator.OR: {
+                return [...new Set([...leftArr, ...rightArr])];
+            }
+            case LogicalOperator.NOT: {
+                const tableIndexes: Array<number> = [...Array(dbTable.getTableLength()).keys()]
+                return tableIndexes.filter(index => !rightArr.includes(index));
+            }
+        }
     }
 
     interpret(tree: Tree, table: Environment) {

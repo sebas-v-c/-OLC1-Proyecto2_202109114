@@ -26,6 +26,7 @@ export class Relational implements WhereExp {
     // TODO
     getIndexValue(tree: Tree, table: Environment, dbTable: Table): number[] {
         //throw new Error("Method not implemented.");
+        console.log(this.leftExp, this.rightExp);
         return [1];
     }
 

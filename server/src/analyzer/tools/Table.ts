@@ -10,6 +10,15 @@ export default class Table {
         this.id = id.toLowerCase();
         this.columns = new Map();
     }
+    getTableLength(): number{
+        const keyArr = Array.from(this.columns.keys());
+        const col = this.columns.get(keyArr[0]);
+        if (col === undefined){
+            throw new Exception("DB", `Now column has been defined`, 0,0);
+        }
+        return col.data.length;
+
+    }
     // DDL actions
     addColumn(name: string, type: Primitive, line: number, column: number): void{
         if (this.columns.has(name.toLowerCase())){
