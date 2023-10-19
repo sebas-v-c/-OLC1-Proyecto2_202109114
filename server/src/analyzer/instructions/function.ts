@@ -59,6 +59,16 @@ export class Function extends Func implements Statement {
     }
 }
 
+/*
+export class NativeFunc extends Func implements Statement {
+    constructor(id: string, args: Array<VarArgs>, func: (...args: any[]) => any, line: number, column: number,){
+        super(id, args,
+              new CodeBlock( new  ), line, column
+             );
+    }
+}
+*/
+
 
 export class Method extends Func implements Statement {
     constructor(id: string, args: Array<VarArgs>, block: CodeBlock, line: number, column: number,){

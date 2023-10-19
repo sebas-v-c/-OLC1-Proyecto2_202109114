@@ -33,12 +33,11 @@ export class CodeBlock implements Statement {
         // In case want to initiate the new environment with a default symbol
         let retVar: ReturnType | undefined;
         for (let instruction of this.instructions){
-            // TODO make sure that a break, continue, returned is called here in the interpret method
             try{
                 retVar = instruction.interpret(tree, table);
             } catch(err){
                 tree.errors.push(err as Exception);
-                throw err;
+                throw err
             }
 
             if (retVar instanceof ReturnType){
