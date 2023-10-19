@@ -34,23 +34,31 @@ export class SimpleCase implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
-        let symbol: ReturnType = this.value.getValue(tree, table);
-        let thenSym: ReturnType | undefined = undefined;
-        if (symbol.value instanceof Exception){
-            return symbol.value;
+        let symbol: ReturnType;
+        try{
+            symbol = this.value.getValue(tree, table);
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
 
+        let thenSym: ReturnType | undefined = undefined;
+
         for (let item of this.stmts){
-            if (symbol.value === item.when.getValue(tree, table).value){
-                thenSym = item.then.getValue(tree, table);
-                break;
+            try{
+                if (symbol.value === item.when.getValue(tree, table).value) {
+                    thenSym = item.then.getValue(tree, table);
+                    break;
+                }
+            } catch(err){
+                tree.errors.push(err as Exception); throw err;
             }
         }
 
         if (thenSym === undefined){
-            thenSym = this.elseVal.getValue(tree, table);
-            if (thenSym.value instanceof Exception){
-                return thenSym.value
+            try {
+                thenSym = this.elseVal.getValue(tree, table);
+            } catch(err){
+                tree.errors.push(err as Exception); throw err;
             }
         }
 
@@ -120,10 +128,12 @@ export class SearchedCase implements Statement {
         }
 
         if (this.asVar !== undefined){
-            table.setSymbol(new Symbol(this.asVar, thenRet.type, thenRet.value, this.line, this.column, table));
+            try {
+                table.setSymbol(new Symbol(this.asVar, thenRet.type, thenRet.value, this.line, this.column, table));
+            }catch(err){
+                tree.errors.push(err as Exception); throw err;
+            }
         }
-
-        return undefined;
     }
 
     getCST(): Node {

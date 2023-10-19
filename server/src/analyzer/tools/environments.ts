@@ -103,7 +103,7 @@ export default class Environment {
     public setSymbol(symbol: Symbol){
         try {
             let env: Environment = this.resolveSymbol(symbol);
-            return new Exception("Semantic", `Variable name ${symbol.id} already defined on scope`, symbol.row, symbol.column, this.name);
+            throw new Exception("Semantic", `Variable name ${symbol.id} already defined on scope`, symbol.row, symbol.column, this.name);
         } catch(err){
             symbol.id = symbol.id.toLowerCase();
             symbol.environment = this;
