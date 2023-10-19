@@ -5,6 +5,7 @@ import { Primitive } from "../../tools/types";
 import Tree from "../../tools/tree";
 import { Node } from "../../abastract/ast";
 import Table from "../../tools/Table";
+import { Exception } from "../../errors";
 
 interface Arg {
     id: string, type: Primitive
@@ -32,7 +33,11 @@ export class Create implements Statement {
         for (let arg of this.args){
             newDbTable.addColumn(arg.id, arg.type, this.line, this.column);
         }
-        return table.setTable(newDbTable, this.line, this.column);
+        try {
+            table.setTable(newDbTable, this.line, this.column);
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
+        }
     }
 
     getCST(): Node {
