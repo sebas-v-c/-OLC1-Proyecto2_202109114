@@ -29,7 +29,8 @@ export class Insert implements Statement {
         }
 
         if (this.cols.length !== this.vals.length){
-            throw new Exception('Sementic', `Operation expected ${this.cols.length} parameters, ${this.vals.length} given`, this.line, this.column, table.name);
+            let err = new Exception('Sementic', `Operation expected ${this.cols.length} parameters, ${this.vals.length} given`, this.line, this.column, table.name);
+            tree.errors.push(err); throw err;
         }
 
         for (let i = 0; i < this.cols.length; i++){
@@ -47,7 +48,8 @@ export class Insert implements Statement {
             }
 
             if (!col.isValidData(res)){
-                throw new Exception("Type Error", `Value of type ${res.type} cannot be assigned to column of value ${col.type}`, this.line, this.column);
+                let err = new Exception("Type Error", `Value of type ${res.type} cannot be assigned to column of value ${col.type}`, this.line, this.column);
+                tree.errors.push(err); throw err;
             }
         }
 
