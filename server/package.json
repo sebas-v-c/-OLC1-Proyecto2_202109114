@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "scripts": {
     "test": "cross-env NODE_ENV=test jest --forceExit --runInBand --detectOpenHandles --config=jest.config.js",
-    "test:watch": "cross-env NODE_ENV=test jest --watch --forceExit --runInBand --detectOpenHandles --config=jest.config.js",
+    "test:watch": "cross-env NODE_ENV=test jest --watch --watchAll --forceExit --runInBand --detectOpenHandles --config=jest.config.js",
     "start": "node build/index",
     "build": "tsc",
     "dev": "ts-node-dev src/index",

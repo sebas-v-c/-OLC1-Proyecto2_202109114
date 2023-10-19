@@ -14,6 +14,7 @@ interface ColVal {
 }
 
 
+// TODO this class
 export class Select implements Statement {
     public colVal: Array<ColVal>;
     public cond: WherePredicate;
