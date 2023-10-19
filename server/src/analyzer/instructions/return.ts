@@ -24,10 +24,11 @@ export class Return implements Statement {
             return new ReturnType(TransferOp.RETURN, null);
         }
 
-        let res: ReturnType = this.expression.getValue(tree, table)
-
-        if (res.value instanceof Exception){
-            return res;
+        let res: ReturnType;
+        try {
+            res = this.expression.getValue(tree, table);
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
 
         return new ReturnType(TransferOp.RETURN, res);
