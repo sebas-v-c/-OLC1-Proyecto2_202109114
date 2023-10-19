@@ -28,25 +28,34 @@ export class If implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
-        let flag: ReturnType | undefined = this.condition?.getValue(tree, table);
+        let flag: ReturnType | undefined;
+        try {
+            flag = this.condition?.getValue(tree, table);
+        } catch (err){
+            tree.errors.push(err as Exception); throw err;
+        }
 
         if (flag === undefined){
-            return new Exception('Semantic',`Invalid expression in IF condition`, this.line, this.column, table.name);
+            let err: Exception =new Exception('Semantic',`Invalid expression in IF condition`, this.line, this.column, table.name);
+            tree.errors.push(err); throw err;
         }
 
-        if (flag.value instanceof Exception){
-            return flag.value;
-        }
-
-        let retVar: any = undefined;
+        const ifEnv: Environment = new Environment(table, "if_env");
         if (flag.type === Primitive.BOOLEAN){
             if (flag.value === true){
-                retVar = this.block.interpret(tree, table);
+                try{
+                    return this.block.interpret(tree, ifEnv);
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
+                }
             } else if(this.elseBlock instanceof CodeBlock){
-                retVar = this.elseBlock.interpret(tree, table);
+                try{
+                    return this.block.interpret(tree, ifEnv);
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
+                }
             }
         }
-        return retVar;
     }
 
     getCST(): Node {
