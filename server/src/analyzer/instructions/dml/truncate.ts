@@ -5,6 +5,7 @@ import { Primitive } from "../../tools/types";
 import Tree from "../../tools/tree";
 import { Node } from "../../abastract/ast";
 import { Exception } from "../../errors";
+import Table from "../../tools/Table";
 
 export class Insert implements Statement {
     constructor(public id: string, public line: number, public column: number){}
@@ -14,13 +15,19 @@ export class Insert implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
-        let dbTable = table.getTable(this.id, this.line, this.column);
-        if (dbTable instanceof Exception){
-            return dbTable;
+        let dbTable: Table;
+        try {
+            dbTable = table.getTable(this.id, this.line, this.column);
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
         dbTable.truncateTable();
 
-        return table.updateTable(dbTable, this.line, this.column);
+        try {
+           table.updateTable(dbTable, this.line, this.column);
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
+        }
     }
 
     getCST(): Node {
