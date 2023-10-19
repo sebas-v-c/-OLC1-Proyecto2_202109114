@@ -5,7 +5,7 @@ import { Primitive } from "../../tools/types";
 import Tree from "../../tools/tree";
 import { Node } from "../../abastract/ast";
 import { Exception } from "../../errors";
-import { Column } from "../../tools/Table";
+import Table, { Column } from "../../tools/Table";
 
 export class Insert implements Statement {
     public cols: Array<string>;
@@ -21,43 +21,55 @@ export class Insert implements Statement {
 
 
     interpret(tree: Tree, table: Environment) {
-        let dbTable = table.getTable(this.id, this.line, this.column);
-        if (dbTable instanceof Exception){
-            return dbTable;
+        let dbTable: Table;
+        try{
+            dbTable = table.getTable(this.id, this.line, this.column);
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
 
         if (this.cols.length !== this.vals.length){
-            return new ReturnType(Primitive.NULL, new Exception('Sementic', `Operation expected ${this.cols.length} parameters, ${this.vals.length} given`, this.line, this.column, table.name));
+            throw new Exception('Sementic', `Operation expected ${this.cols.length} parameters, ${this.vals.length} given`, this.line, this.column, table.name);
         }
 
         for (let i = 0; i < this.cols.length; i++){
-            let col = dbTable.getColumn(this.cols[i]);
-
-            if (col instanceof Exception){ return col; }
-            let res: ReturnType = this.vals[i].getValue(tree, table);
-            if (res.value instanceof Exception){
-                return res.value;
+            let col: Column;
+            try {
+                col = dbTable.getColumn(this.cols[i]);
+            } catch (err){
+                tree.errors.push(err as Exception); throw err;
+            }
+            let res: ReturnType;
+            try {
+                res= this.vals[i].getValue(tree, table);
+            } catch(err){
+                tree.errors.push(err as Exception); throw err;
             }
 
             if (!col.isValidData(res)){
-                return new Exception("Type Error", `Value of type ${res.type} cannot be assigned to column of value ${col.type}`, this.line, this.column);
+                throw new Exception("Type Error", `Value of type ${res.type} cannot be assigned to column of value ${col.type}`, this.line, this.column);
             }
         }
 
-        let col: Column | Exception | undefined = undefined;
+        let col: Column | undefined = undefined;
         for (let i = 0; i < this.cols.length; i++){
-            col = dbTable.getColumn(this.cols[i]);
-
-            if (col instanceof Exception){ return col; }
-
-            let res: ReturnType = this.vals[i].getValue(tree, table);
-
-            if (res.value instanceof Exception){
-                return res.value;
+            try{
+                col = dbTable.getColumn(this.cols[i]);
+            } catch(err){
+                tree.errors.push(err as Exception); throw err;
             }
-            let resCol: Exception | undefined = col.addData(res)
-            if (resCol instanceof Exception){
-                return resCol;
+
+            let res: ReturnType;
+            try {
+                res = this.vals[i].getValue(tree, table);
+            } catch(err){
+                tree.errors.push(err as Exception); throw err;
+            }
+
+            try {
+                col.addData(res);
+            } catch(err){
+                tree.errors.push(err as Exception); throw err;
             }
         }
 
