@@ -57,55 +57,66 @@ export class Alter implements Statement {
     interpret(tree: Tree, table: Environment) {
         switch(this.predicate.type){
             case AlterActions.ADD: {
-                let dbTable = table.getTable(this.id, this.line, this.column);
-                if (dbTable instanceof Exception){
-                    return dbTable;
+                let dbTable: Table;
+                try{
+                    dbTable = table.getTable(this.id, this.line, this.column);
+                } catch(err) {
+                    tree.errors.push(err as Exception);
+                    throw err;
                 }
                 let pred: AddCol = this.predicate as AddCol;
-                let res: Exception | undefined;
-                res = dbTable.addColumn(pred.col, pred.colType, this.line, this.column)
-                if (res instanceof Exception){
-                    return res
+
+                try {
+                    dbTable.addColumn(pred.col, pred.colType, this.line, this.column);
+                    table.updateTable(dbTable, this.line, this.column);
+                } catch(err){
+                    tree.errors.push(err as Exception);
+                    throw err;
                 }
-                res = table.updateTable(dbTable, this.line, this.column);
-                return res;
             }
             case AlterActions.DROP: {
-                let dbTable = table.getTable(this.id, this.line, this.column);
-                if (dbTable instanceof Exception){
-                    return dbTable;
+                let dbTable: Table;
+                try{
+                    dbTable = table.getTable(this.id, this.line, this.column);
+                } catch(err) {
+                    tree.errors.push(err as Exception);
+                    throw err;
                 }
                 let pred: Drop = this.predicate as Drop;
-                let res: Exception | undefined;
-                res = dbTable.dropColumn(pred.col);
-                if (res instanceof Exception){
-                    return res
+
+                try {
+                    dbTable.dropColumn(pred.col);
+                    table.updateTable(dbTable, this.line, this.column);
+                } catch(err){
+                    tree.errors.push(err as Exception);
+                    throw err;
                 }
-                res = table.updateTable(dbTable, this.line, this.column);
-                return res;
             }
             case AlterActions.RENAMECOL: {
-                let dbTable = table.getTable(this.id, this.line, this.column);
-                if (dbTable instanceof Exception){
-                    return dbTable;
+                let dbTable: Table;
+                try{
+                    dbTable = table.getTable(this.id, this.line, this.column);
+                } catch(err) {
+                    tree.errors.push(err as Exception);
+                    throw err;
                 }
-
                 let pred: RenameCol = this.predicate as RenameCol;
-                let res: Exception | undefined;
-                res = dbTable.renameColumn(pred.col, pred.newId)
-                if (res instanceof Exception){
-                    return res
+
+                try {
+                    dbTable.renameColumn(pred.col, pred.newId);
+                    table.updateTable(dbTable, this.line, this.column);
+                } catch(err){
+                    tree.errors.push(err as Exception);
+                    throw err;
                 }
-                res = table.updateTable(dbTable, this.line, this.column);
-                return res;
             }
             case AlterActions.RENAMETABLE: {
                 let pred: RenameTable = this.predicate as RenameTable;
-                let res = table.updateTableName(this.id, pred.newId)
-                if (res instanceof Exception){
-                    return res;
+                try{
+                    table.updateTableName(this.id, pred.newId);
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
                 }
-                return undefined;
             }
         }
     }

@@ -27,36 +27,36 @@ export class While implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
-        let flag: ReturnType = this.condition.getValue(tree, table)
-        if (flag === undefined){
-            return new Exception('Semantic',`Invalid expression in WHILE condition`, this.line, this.column, table.name);
+        let flag: ReturnType;
+        try {
+            flag = this.condition.getValue(tree, table)
+        } catch(err){
+            tree.errors.push(err as Exception);
+            throw err;
         }
-        if (flag.value instanceof Exception){
-            return flag.value;
-        }
+
         if (flag.type !== Primitive.BOOLEAN){
-            return new Exception('Semantic',`Invalid expression in WHILE condition`, this.line, this.column, table.name);
+            throw new Exception('Semantic',`Invalid expression in WHILE condition`, this.line, this.column, table.name);
         }
 
         const newWhileEnv: Environment = new Environment(table, "while_env");
 
-        let res: ReturnType | Exception |undefined = undefined;
+        let res: ReturnType | void = undefined;
         while(flag.value){
             if (this.block instanceof CodeBlock){
-                res = this.block.interpret(tree, newWhileEnv)
-                if (res !== undefined){
-                    if (res instanceof Exception){
-                        return res;
-                    }
+                try{
+                    res = this.block.interpret(tree, newWhileEnv);
+                } catch(err){
+                    tree.errors.push(err as Exception);
+                    throw err;
                 }
             }
 
-            flag = this.condition?.getValue(tree, newWhileEnv)
-            if (flag === undefined) {
-                return new Exception('Semantic', `Invalid expression in WHILE condition`, this.line, this.column, "while_env");
-            }
-            if (flag.value instanceof Exception) {
-                return flag.value;
+            try {
+                flag = this.condition.getValue(tree, newWhileEnv)
+            } catch(err){
+                tree.errors.push(err as Exception);
+                throw err;
             }
             // To handle control words
             if (res instanceof ReturnType){
