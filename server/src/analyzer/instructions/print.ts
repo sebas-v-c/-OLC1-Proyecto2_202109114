@@ -24,9 +24,11 @@ export class Print implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
-        let val: ReturnType = this.args.getValue(tree, table);
-        if (val.value instanceof Exception){
-            return val.value;
+        let val: ReturnType;
+        try {
+            val = this.args.getValue(tree, table);
+        }catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
         // TODO change this to be stdout
         if (val.type === Primitive.DATE){
@@ -34,7 +36,6 @@ export class Print implements Statement {
 
         }
         tree.updateConsole(val.value);
-        return undefined
     }
 
     getCST(): Node {
