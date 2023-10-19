@@ -34,7 +34,7 @@ export default class Tree {
     }
 
     public updateConsole(input: string){
-        this.console += `${input}\n`;
+        this.console += `<div>${input}</div>`;
     }
 
     public getDot(root: Node, flag: boolean = true){

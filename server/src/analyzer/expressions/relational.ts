@@ -25,7 +25,7 @@ export class Relational implements WhereExp {
         this.line = line;
         this.column = column;
     }
-    // TODO
+
     getIndexValue(tree: Tree, table: Environment, dbTable: Table): number[] {
         let colName: string;
         let expr: Statement;

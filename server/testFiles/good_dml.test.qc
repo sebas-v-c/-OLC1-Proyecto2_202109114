@@ -14,6 +14,13 @@ VALUES ("Zibas Cbas+", 230948123);
 
 INSERT INTO Clientes (Nombre, CorreoElectronico, ID_Cliente)
 VALUES ("Pancho Sanchez", "panxito@example.com", 111111111);
+-- TESTING SELECT
+SELECT * FROM Clientes WHERE Nombre = "Zibas Cbas+";
+SELECT * FROM Clientes;
+
+SELECT Nombre, ID_Cliente, CorreoElectronico
+FROM Clientes
+WHERE Nombre = "Zibas Cbas+";
 
 -- TESTING UPDATE
 CREATE TABLE Clientes2
@@ -44,7 +51,6 @@ SET
     CorreoElectronico = "correodiferente@maje.com"
 WHERE Nombre = "Juan Perez";
 
--- TESTING SELECT
 -- TESTING DELETE
 CREATE TABLE Clientes3
 (
@@ -83,6 +89,7 @@ INSERT INTO Clientes4 (Nombre, CorreoElectronico, ID_Cliente)
 VALUES ("Pancho Sanchez", "panxito@example.com", 111111111);
 
 TRUNCATE TABLE Clientes4;
+
 
 /*
 UPDATE Clientes

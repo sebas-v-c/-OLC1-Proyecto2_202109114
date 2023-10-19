@@ -10,18 +10,25 @@ import Table, { Column } from "../../tools/Table";
 import { WherePredicate } from "./wherePredicate";
 
 
+
 export class SelectTable implements Statement {
     public cols: Array<Statement>;
     public cond: WherePredicate;
+    public toPrint: boolean;
     constructor(cols: Array<Statement>, public id: string,  cond: WherePredicate ,public line: number, public column: number){
         this.cols = cols;
         this.cond = cond;
+        this.toPrint = true;
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {
-        return new ReturnType(Primitive.NULL, undefined);
+        this.toPrint = false;
+        let res = this.interpret(tree, table)
+        if (res instanceof ReturnType){
+            return res;
+        }
+        throw new Exception("Semantic", `Incorrect use of Select at line: ${this.line}, column: ${this.column}`, this.line,this.column);
     }
-
 
     interpret(tree: Tree, table: Environment) {
         let dbTable: Table;
@@ -32,27 +39,79 @@ export class SelectTable implements Statement {
         }
 
         let arr: Array<number> = [];
-        try {
-            arr = this.cond.getColumnIndexes(tree, table, dbTable);
+        if (this.cond !== undefined){
+            try {
+                arr = this.cond.getColumnIndexes(tree, table, dbTable);
+            } catch (err) {
+                tree.errors.push(err as Exception); throw err;
+            }
+        } else {
+            let len: number =0;
+            try {
+                len = dbTable.getTableLength();
+            } catch (err){}
+            arr = Array.from({ length: len }, (_, index) => index)
+        }
+
+        let resArr: Array<string> = [];
+
+        for (let item of this.cols){
+            try{
+                resArr.push(item.getValue(tree, table).value.toLowerCase());
+            } catch(err){
+                tree.errors.push(err as Exception); throw err;
+            }
+        }
+
+
+        // all cols from the table
+        let tableRows: Array<Array<ReturnType>> = [];
+        let colNames: Array<string>;
+        try{
+            colNames = [...dbTable.columns.keys()];
         } catch(err){
             tree.errors.push(err as Exception); throw err;
         }
-
-        for (let colvalue of this.colVal){
-            try{
-                for (let index of arr){
-                    const col = dbTable.getColumn(colvalue.col);
-                    let res = colvalue.val.getValue(tree, table);
-                    if (!col.isValidData(res)){
-                        throw new Exception("Type Error", `Variable of type '${res.type}' cannot be assigned to column of type '${col.type}'`, 0, 0);
+        if (resArr[0] === "*"){
+            try {
+                for (let item of arr){
+                    let row: Array<ReturnType> = [];
+                    for (let key of dbTable.columns.keys()) {
+                        let col = dbTable.getColumn(key);
+                        row.push(col.data[item]);
                     }
-                    col.data[index] = colvalue.val.getValue(tree, table);
-                    dbTable.updateColumn(col);
+                    tableRows.push(row);
                 }
             } catch(err){
                 tree.errors.push(err as Exception); throw err;
             }
-
+        } else {
+            try {
+                colNames = [...dbTable.columns.keys()];
+                for (let item of arr){
+                    let row: Array<ReturnType> = [];
+                    for (let i = 0; i < colNames.length; i++) {
+                        if (resArr.includes(colNames[i])){
+                            let col = dbTable.getColumn(colNames[i]);
+                            row.push(col.data[item]);
+                        }
+                    }
+                    tableRows.push(row);
+                }
+            } catch(err){
+                tree.errors.push(err as Exception); throw err;
+            }
+        }
+        if (this.toPrint){
+            if (resArr[0] !== "*"){
+                printTable(tableRows, colNames.filter((item) => resArr.includes(item)), tree);
+            } else {
+                printTable(tableRows, colNames, tree);
+            }
+        } else {
+            // TODO changes this as needed
+            // return the first item of the first row by default, this allow us to treat this as an expression
+            return tableRows[0][0];
         }
     }
 
@@ -82,36 +141,6 @@ export class SelectExpr implements Statement {
 
 
     interpret(tree: Tree, table: Environment) {
-        let dbTable: Table;
-        try{
-            dbTable = table.getTable(this.id, this.line, this.column);
-        } catch(err){
-            tree.errors.push(err as Exception); throw err;
-        }
-
-        let arr: Array<number> = [];
-        try {
-            arr = this.cond.getColumnIndexes(tree, table, dbTable);
-        } catch(err){
-            tree.errors.push(err as Exception); throw err;
-        }
-
-        for (let colvalue of this.colVal){
-            try{
-                for (let index of arr){
-                    const col = dbTable.getColumn(colvalue.col);
-                    let res = colvalue.val.getValue(tree, table);
-                    if (!col.isValidData(res)){
-                        throw new Exception("Type Error", `Variable of type '${res.type}' cannot be assigned to column of type '${col.type}'`, 0, 0);
-                    }
-                    col.data[index] = colvalue.val.getValue(tree, table);
-                    dbTable.updateColumn(col);
-                }
-            } catch(err){
-                tree.errors.push(err as Exception); throw err;
-            }
-
-        }
     }
 
 
@@ -123,3 +152,25 @@ export class SelectExpr implements Statement {
         return new Node('NOde');
     }
 }
+
+
+function printTable(tableRows: Array<Array<ReturnType>>, columns: Array<string>, tree: Tree): void {
+        const tbRows = tableRows.map(rowData => {
+            const cells = rowData.map(cellData => `<td>${cellData.value}</td>`).join('');
+            return `<tr>${cells}</tr>`;
+        });
+
+        const table =`
+    <table>
+      <thead>
+        <tr>
+          ${columns.map(columnName => `<th>${columnName}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${tbRows.join('')}
+      </tbody>
+    </table>
+`;
+        tree.updateConsole(table);
+    }

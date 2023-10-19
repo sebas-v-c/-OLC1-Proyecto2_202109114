@@ -42,7 +42,7 @@
 
 "INSERT"                        return "RW_INSERT";
 "UPDATE"                        return "RW_UPDATE";
-"TRUNCATE "                      return "RW_TRUNCATE";
+"TRUNCATE "                     return "RW_TRUNCATE";
 "DELETE"                        return "RW_DELETE";
 "SELECT"                        return "RW_SELECT";
 "FROM"                          return "RW_FROM";
@@ -165,7 +165,7 @@
     const { Update } = require("./instructions/dml/update");
     const { WherePredicate } = require("./instructions/dml/wherePredicate");
     const { Delete } = require("./instructions/dml/delete");
-    const { SelectTable, SelectExpr } = require("./instructions/dml/delete");
+    const { SelectTable, SelectExpr } = require("./instructions/dml/select");
 
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
@@ -263,8 +263,8 @@ alter_actions:
 ;
 
 select_stmt:
-    RW_SELECT select_arguments FROM TK_ID                       { $$ = new SelectTable($2, $4, undefined, @1.first_line, @1.first_column); }
-|   RW_SELECT select_arguments FROM TK_ID RW_WHERE expression   { $$ = new SelectTable($2, $4, $6, @1.first_line, @1.first_column); }
+    RW_SELECT select_arguments RW_FROM TK_ID                        { $$ = new SelectTable($2, $4, undefined, @1.first_line, @1.first_column); }
+|   RW_SELECT select_arguments RW_FROM TK_ID RW_WHERE where_cond    { $$ = new SelectTable($2, $4, $6, @1.first_line, @1.first_column); }
 // TODO I DONT KNOW IF THIS IS CORRECT
 //|   RW_SELECT TK_VAR                                            {}
 |   RW_SELECT expression RW_AS TK_ID                            { $$ = new SelectExpr($2, $4, @1.first_line, @1.first_column); }
@@ -288,7 +288,7 @@ log_operator:
 
 /*-------------------------------ARGUMENTS-------------------------------*/
 select_arguments:
-    TK_STAR         { $$ = [new Primitive($1, Primitive.VARCHAR, @1.first_column, @1.first_line)]; }
+    TK_STAR         { $$ = [new PrimitiveVar($1, Primitive.VARCHAR, @1.first_column, @1.first_line)]; }
 |   value_arguments { $$ = $1; }
 ;
 
