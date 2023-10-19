@@ -33,15 +33,19 @@ export class For implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
-        let symbol: Symbol | Exception = table.getSymbol(new Symbol(this.variableName, Primitive.NULL, null, 0, 0, table))
+        let symbol: Symbol;
         const newForEnv: Environment = new Environment(table, "for_env");
-
-        if (symbol instanceof Exception){
+        try {
+            symbol = table.getSymbol(new Symbol(this.variableName, Primitive.NULL, null, 0, 0, table))
+        } catch(err){
             symbol = new Symbol(this.variableName, Primitive.INT, this.start, this.line, this.column, newForEnv);
             newForEnv.setSymbol(symbol);
         }
+
         if (symbol.type !== Primitive.INT){
-            return new Exception("Type Error", `Variable of type '${symbol.type}' is not assignable to type 'int'`, this.line, this.column, "for_env");
+            let exp: Exception = new Exception("Type Error", `Variable of type '${symbol.type}' is not assignable to type 'int'`, this.line, this.column, "for_env");
+            tree.errors.push(exp);
+            throw exp;
         }
 
 
@@ -49,19 +53,20 @@ export class For implements Statement {
         let res: any = undefined;
         for (let i = this.start; i < this.end; i++){
             if (this.block instanceof CodeBlock){
-                res = this.block.interpret(tree, newForEnv)
-                if (res !== undefined){
-                    if (res instanceof Exception){
-                        return res;
-                    }
+                try{
+                    res = this.block.interpret(tree, newForEnv)
+                } catch(err){
+                    tree.errors.push(err as Exception);
+                    throw err;
                 }
             }
-            if (!(symbol instanceof Exception)){
+            try{
                 symbol = newForEnv.getSymbol(symbol);
-                if (!(symbol instanceof Exception)){
-                    symbol.value = i + 1;
-                    newForEnv.updateSymbol(symbol);
-                }
+                symbol.value = i + 1;
+                newForEnv.updateSymbol(symbol);
+            } catch(err){
+                tree.errors.push(err as Exception);
+                throw err;
             }
             // To handle control words
             if (res instanceof ReturnType){

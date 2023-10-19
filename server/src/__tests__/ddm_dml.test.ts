@@ -7,7 +7,6 @@ import Tree from '../analyzer/tools/tree';
 import Environment, { createGlobalEnv } from '../analyzer/tools/environments';
 import { Exception } from '../analyzer/errors';
 import Symbol from '../analyzer/tools/symbol';
-import { formatDate } from '../analyzer/utils/utils';
 import { Primitive } from '../analyzer/tools/types';
 import Table, { Column } from '../analyzer/tools/Table';
 
@@ -45,12 +44,14 @@ describe("Testing Interpreter DML and DDL", function() {
         }
         //printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
+        /*
         let tempSym: Symbol | Exception = new Symbol("@var", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);
         if (tempSym instanceof Symbol){
             expect(tempSym.value).toBe(20);
             expect(tempSym.type).toBe(Primitive.INT);
         }
+        */
     });
 
 

@@ -23,4 +23,4 @@ OR CorreoElectronico = "juan@example.com";
 
 UPDATE Clientes
 SET Nombre = "Aquiles Castro", ID_Cliente = 1987344
-WHERE 12341;
+WHERE 12341 ;

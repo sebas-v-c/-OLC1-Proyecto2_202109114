@@ -29,18 +29,16 @@ export class CodeBlock implements Statement {
         return new ReturnType(Primitive.NULL, undefined);
     }
 
-    interpret(tree: Tree, table: Environment): ReturnType | Exception | undefined {
+    interpret(tree: Tree, table: Environment): ReturnType | void {
         // In case want to initiate the new environment with a default symbol
-        let retVar: ReturnType | Exception | undefined;
+        let retVar: ReturnType | undefined;
         for (let instruction of this.instructions){
             // TODO make sure that a break, continue, returned is called here in the interpret method
-            retVar = instruction.interpret(tree, table);
-            if (retVar instanceof Exception){
-                tree.errors.push(retVar);
-                tree.updateConsole(retVar.toString());
-                // i'm going to return here to see what happens
-                // TODO verify this behaviour
-                return retVar;
+            try{
+                retVar = instruction.interpret(tree, table);
+            } catch(err){
+                tree.errors.push(err as Exception);
+                throw err;
             }
 
             if (retVar instanceof ReturnType){
