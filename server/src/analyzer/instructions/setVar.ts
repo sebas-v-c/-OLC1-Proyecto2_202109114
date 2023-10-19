@@ -28,33 +28,32 @@ export class SetVar implements Statement {
 
     interpret(tree: Tree, table: Environment) {
         let value: ReturnType;
-        let symbol: Symbol | Exception;
+        let symbol: Symbol;
 
         let result: any;
 
-        symbol = table.getSymbol(new Symbol(this.id, Primitive.NULL, null,this.line, this.column, table));
-
-        if (symbol instanceof Exception){
-            return new Exception("Semantic", `Variable ${this.id} isn't defined in the current scope`, this.line, this.column, table.name);
+        try {
+            symbol = table.getSymbol(new Symbol(this.id, Primitive.NULL, null,this.line, this.column, table));
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
 
-        value = this.expression.getValue(tree, table)
-
-        if (value.value instanceof Exception){
-            return value.value;
+        try {
+            value = this.expression.getValue(tree, table)
+        }catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
 
         if (symbol.type !== value.type){
-            return new Exception("Semantic", `Type: ${value.type} can't be assigned to variable of type: ${symbol.type}`, this.line, this.column, table.name);
+            let err = new Exception("Semantic", `Type: ${value.type} can't be assigned to variable of type: ${symbol.type}`, this.line, this.column, table.name);
+            tree.errors.push(err); throw err;
         }
 
-        result = table.updateSymbol(new Symbol(this.id, value.type, value.value, this.line, this.column, table));
-
-        if (result instanceof Exception){
-            return result;
+        try {
+            result = table.updateSymbol(new Symbol(this.id, value.type, value.value, this.line, this.column, table));
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
-
-        return undefined;
     }
 
     getAST(): Node{
