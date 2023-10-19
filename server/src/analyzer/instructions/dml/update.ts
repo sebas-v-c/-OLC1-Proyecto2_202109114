@@ -5,7 +5,7 @@ import { Primitive } from "../../tools/types";
 import Tree from "../../tools/tree";
 import { Node } from "../../abastract/ast";
 import { Exception } from "../../errors";
-import { Column } from "../../tools/Table";
+import Table, { Column } from "../../tools/Table";
 import { WherePredicate } from "./wherePredicate";
 
 interface ColVal {
@@ -28,14 +28,18 @@ export class Update implements Statement {
 
 
     interpret(tree: Tree, table: Environment) {
-        const dbTable = table.getTable(this.id, this.line, this.column);
-        if (dbTable instanceof Exception){
-            return dbTable
+        let dbTable: Table;
+        try{
+            dbTable = table.getTable(this.id, this.line, this.column);
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
-
         let arr: Array<number> = [];
-        arr = this.cond.getColumnIndexes(tree, table, dbTable);
-        console.log(arr);
+        try {
+            arr = this.cond.getColumnIndexes(tree, table, dbTable);
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
+        }
     }
 
     getCST(): Node {
