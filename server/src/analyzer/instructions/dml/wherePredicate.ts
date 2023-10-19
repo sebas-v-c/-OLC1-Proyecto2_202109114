@@ -19,7 +19,6 @@ export class WherePredicate {
         }
         let arr: Array<number>;
         arr = this.condition.getIndexValue(tree, table, db);
-        console.log(arr);
 
         return arr;
     }

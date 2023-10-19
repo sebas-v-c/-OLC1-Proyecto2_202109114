@@ -145,7 +145,7 @@ case 42:
  $$[$0-4].push({col: $$[$0-2], val: $$[$0]}); this.$ = $$[$0-4]; 
 break;
 case 43:
- this.$ = [{col: $$[$0-2], val: $$[$0-1]}]; 
+ this.$ = [{col: $$[$0-2], val: $$[$0]}]; 
 break;
 case 44: case 46:
  $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; 

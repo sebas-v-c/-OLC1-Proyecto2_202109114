@@ -34,7 +34,6 @@ export class Logical implements WhereExp {
                 leftArr = (this.leftExp as WhereExp).getIndexValue(tree, table, dbTable);
             }catch(err){
                 let exc = new Exception("Semantic", `Not valid expression at line: ${this.leftExp.line} and column: ${this.leftExp.column}`, this.line, this.column);
-                console.log(this.leftExp);
                 tree.errors.push(exc as Exception);
                 throw exc;
             }

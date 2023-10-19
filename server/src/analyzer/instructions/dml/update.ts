@@ -34,11 +34,29 @@ export class Update implements Statement {
         } catch(err){
             tree.errors.push(err as Exception); throw err;
         }
+
         let arr: Array<number> = [];
         try {
             arr = this.cond.getColumnIndexes(tree, table, dbTable);
         } catch(err){
             tree.errors.push(err as Exception); throw err;
+        }
+
+        for (let colvalue of this.colVal){
+            try{
+                for (let index of arr){
+                    const col = dbTable.getColumn(colvalue.col);
+                    let res = colvalue.val.getValue(tree, table);
+                    if (!col.isValidData(res)){
+                        throw new Exception("Type Error", `Variable of type '${res.type}' cannot be assigned to column of type '${col.type}'`, 0, 0);
+                    }
+                    col.data[index] = colvalue.val.getValue(tree, table);
+                    dbTable.updateColumn(col);
+                }
+            } catch(err){
+                tree.errors.push(err as Exception); throw err;
+            }
+
         }
     }
 

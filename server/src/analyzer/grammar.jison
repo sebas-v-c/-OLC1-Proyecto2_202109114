@@ -292,7 +292,7 @@ select_arguments:
 // TODO make this save the specified value
 set_arguments:
     set_arguments TK_COMA TK_ID TK_EQ expression { $1.push({col: $3, val: $5}); $$ = $1; }
-|   TK_ID TK_EQ expression                       { $$ = [{col: $1, val: $2}]; }
+|   TK_ID TK_EQ expression                       { $$ = [{col: $1, val: $3}]; }
 ;
 
 value_arguments:

@@ -147,6 +147,7 @@ describe("Testing Interpreter DML and DDL", function() {
         }
         printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
+        /*ISERTING VALUES*/
         let env = globalEnv.db.get("clientes");
         if (env instanceof Table){
             let col = env.columns.get("id_cliente");
@@ -162,7 +163,7 @@ describe("Testing Interpreter DML and DDL", function() {
                 expect(col.data[0].value).toBe("juan@example.com");
             }
         }
-        let val: Column | Exception | undefined = globalEnv.db.get("clientes")?.getColumn("nombre");
+        let val: Column | undefined = globalEnv.db.get("clientes")?.getColumn("nombre");
         if (val instanceof Column){
             expect(val.data[0].value).toBe("Juan Perez");
         } else { throw new Exception("test", "Column doesnt exist", 0, 0); }
@@ -171,8 +172,25 @@ describe("Testing Interpreter DML and DDL", function() {
         if (val instanceof Column){
             expect(val.data[0].value).toBe("juan@example.com");
         } else { throw new Exception("test", "Column doesnt exist", 0, 0); }
+        /*UPDATING VALUES*/
+        env = globalEnv.db.get("clientes2");
+        if (env instanceof Table){
+            let col = env.columns.get("id_cliente");
+            if (col instanceof Column){
+                expect(col.data[1].value).toBe(1987344);
+            }
+            col = env.columns.get("nombre");
+            if (col instanceof Column){
+                expect(col.data[1].value).toBe("Aquiles Castro");
+            }
+            col = env.columns.get("correoelectronico");
+            if (col instanceof Column){
+                expect(col.data[0].value).toBe("correodiferente@maje.com");
 
 
+            }
+
+        }
 
         /*
         let tempSym: Symbol | Exception = new Symbol("@var", Primitive.NULL, null,0, 0, globalEnv);
