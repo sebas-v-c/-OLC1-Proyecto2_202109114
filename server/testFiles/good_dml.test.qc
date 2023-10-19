@@ -46,6 +46,24 @@ WHERE Nombre = "Juan Perez";
 
 -- TESTING SELECT
 -- TESTING DELETE
+CREATE TABLE Clientes3
+(
+    ID_Cliente INT,
+    Nombre VARCHAR,
+    CorreoElectronico VARCHAR
+);
+
+INSERT INTO Clientes3 (Nombre, CorreoElectronico)
+VALUES ("Juan Perez", "juan@example.com");
+
+INSERT INTO Clientes3 (Nombre, ID_Cliente)
+VALUES ("Zibas Cbas+", 230948123);
+
+INSERT INTO Clientes3 (Nombre, CorreoElectronico, ID_Cliente)
+VALUES ("Pancho Sanchez", "panxito@example.com", 111111111);
+
+DELETE FROM Clientes3
+WHERE Nombre = "Zibas Cbas+";
 
 /*
 UPDATE Clientes

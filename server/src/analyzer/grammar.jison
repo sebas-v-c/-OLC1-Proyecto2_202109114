@@ -164,6 +164,7 @@
     const { Truncate } = require("./instructions/dml/truncate");
     const { Update } = require("./instructions/dml/update");
     const { WherePredicate } = require("./instructions/dml/wherePredicate");
+    const { Delete } = require("./instructions/dml/delete");
 
     const { Primitive, RelationalOperator, ArithmeticOperator, LogicalOperator } = require("./tools/types");
     const { PrimitiveVar } = require("./expressions/primitive");
@@ -249,7 +250,7 @@ dml:
 |   select_stmt                                                                                 { $$ = $1; }    
 |   RW_UPDATE TK_ID RW_SET set_arguments RW_WHERE where_cond                                    { $$ = new Update($2, $4, $6 ,@1.first_line, @1.first_column); }
 |   RW_TRUNCATE RW_TABLE TK_ID                                                                  { $$ = new Truncate($3, @1.first_line, @1.first_column); }
-|   RW_DELETE RW_FROM TK_ID RW_WHERE expression                                                 {  }
+|   RW_DELETE RW_FROM TK_ID RW_WHERE where_cond                                                 { $$ = new Delete($3, $5, @1.first_line, @1.first_column); }
 ;
 
 alter_actions:

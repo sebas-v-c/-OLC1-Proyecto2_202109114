@@ -186,10 +186,23 @@ describe("Testing Interpreter DML and DDL", function() {
             col = env.columns.get("correoelectronico");
             if (col instanceof Column){
                 expect(col.data[0].value).toBe("correodiferente@maje.com");
-
-
             }
-
+        }
+        /*DELETING VALUES*/
+        env = globalEnv.db.get("clientes3");
+        if (env instanceof Table){
+            let col = env.columns.get("id_cliente");
+            if (col instanceof Column){
+                expect(col.data.length).toBe(2);
+            }
+            col = env.columns.get("nombre");
+            if (col instanceof Column){
+                expect(col.data[1].value).toBe("Pancho Sanchez");
+            }
+            col = env.columns.get("correoelectronico");
+            if (col instanceof Column){
+                expect(col.data[1].value).toBe("panxito@example.com");
+            }
         }
 
         /*
