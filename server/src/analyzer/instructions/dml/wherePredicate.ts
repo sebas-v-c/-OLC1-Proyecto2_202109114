@@ -15,7 +15,7 @@ export class WherePredicate {
 
     getColumnIndexes(tree: Tree, table: Environment, db: Table): Array<number> {
         if (!(this.condition instanceof Logical || this.condition instanceof Relational)){
-            throw new Exception("Semantic", `Condition of type '${typeof this.condition}' isn't of Type 'Locical' or 'Expression'`, this.line, this.column);
+            throw new Exception("Semantic", `Condition of type '${typeof this.condition}' isn't of Type 'Logical' or 'Expression'`, this.line, this.column);
         }
         let arr: Array<number>;
         arr = this.condition.getIndexValue(tree, table, db);

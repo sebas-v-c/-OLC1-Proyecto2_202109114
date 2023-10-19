@@ -34,42 +34,42 @@ export class Arithmetic implements Statement {
                 try {
                     return this._plusOperation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, null);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
             case ArithmeticOperator.MINUS: {
                 try {
                     return this._minusOperation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, err);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
             case ArithmeticOperator.MULT: {
                 try {
                     return this._multOperation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, err);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
             case ArithmeticOperator.DIV: {
                 try {
                     return this._divOperation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, err);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
             case ArithmeticOperator.MOD: {
                 try {
                     return this._modOperation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, err);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
             case ArithmeticOperator.UMINUS: {
                 try {
                     return this._uminusOperation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, err);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
         }
