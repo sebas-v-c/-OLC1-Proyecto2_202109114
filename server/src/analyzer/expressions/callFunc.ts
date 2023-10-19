@@ -30,17 +30,19 @@ export class CallFunc implements Statement {
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {
-        let symbol: Exception | Symbol;
-        symbol = table.getSymbol(new Symbol(this.id, Primitive.NULL, null, this.line, this.column, table));
-
-        if (symbol instanceof Exception){
-            return new ReturnType(Primitive.NULL, symbol);
+        let symbol: Symbol;
+        try{
+            symbol = table.getSymbol(new Symbol(this.id, Primitive.NULL, null, this.line, this.column, table));
+        } catch(err){
+            throw err;
         }
 
         const calledFunc: Func = symbol.value;
 
         if (this.argExpr.length !== calledFunc.args.length){
-            return new ReturnType(Primitive.NULL, new Exception('Sementic', `${this.id} expected ${calledFunc.args.length} parameters, ${this.argExpr.length} given`, this.line, this.column, table.name));
+            let err = new Exception('Sementic', `${this.id} expected ${calledFunc.args.length} parameters, ${this.argExpr.length} given`, this.line, this.column, table.name);
+            tree.errors.push(err);
+            throw  err;
         }
 
         const funcEnv: Environment = new Environment(table, "func_env");
@@ -50,28 +52,36 @@ export class CallFunc implements Statement {
             const toSaveSym = new Symbol(calledFunc.args[i].id.toLowerCase(), calledFunc.args[i].type, null, this.line, this.column, funcEnv);
             const receivedSym = this.argExpr[i].getValue(tree, funcEnv);
             if (toSaveSym.type !== receivedSym.type){
-                return new ReturnType(Primitive.NULL, new Exception("Type Error", `Variable of type '${receivedSym.type}' is not assignable to type '${toSaveSym.type}'`, this.line, this.column, funcEnv.name));
+                let err =new Exception("Type Error", `Variable of type '${receivedSym.type}' is not assignable to type '${toSaveSym.type}'`, this.line, this.column, funcEnv.name);
+                tree.errors.push(err);
+                throw err;
             }
             toSaveSym.value = receivedSym.value;
             funcEnv.setSymbol(toSaveSym);
         }
 
-        let ret: ReturnType | Exception | undefined = calledFunc.block.interpret(tree, funcEnv);
+        let ret: ReturnType | void;
+        try {
+            ret = calledFunc.block.interpret(tree, funcEnv);
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
+        }
         // a native function always returns a value too
         if (symbol.type === Functions.FUNC || symbol.type === Functions.NATIVE_FN){
             if (ret instanceof ReturnType){
                 if (ret.type === calledFunc.retType){
                     return ret;
                 } else {
-                    return new ReturnType(Primitive.NULL, new Exception("Type Error", `Variable of type '${ret.type}' can't return a '${calledFunc.retType}'`, this.line, this.column, funcEnv.name));
+                    let err = new Exception("Type Error", `Variable of type '${ret.type}' can't return a '${calledFunc.retType}'`, this.line, this.column, funcEnv.name);
+                    tree.errors.push(err);
+                    throw err;
                 }
-            }
-            if (ret instanceof Exception){
-                return new ReturnType(Primitive.NULL, ret);
             }
             if (ret === undefined){
                 // here i return a type error because the function return indefined
-                return new ReturnType(Primitive.NULL, new Exception("Type Errror", `Variable of type '${"undefined"}' is can't return a '${calledFunc.retType}'`, this.line, this.column, funcEnv.name));
+                    let err = new Exception("Type Error", `Variable of type 'undefined' can't return a '${calledFunc.retType}'`, this.line, this.column, funcEnv.name);
+                    tree.errors.push(err);
+                    throw err;
             }
         }
 
@@ -81,11 +91,12 @@ export class CallFunc implements Statement {
             }
             if (ret instanceof ReturnType){
                 if (ret.value !== null){
-                    return new ReturnType(Primitive.NULL, new Exception("Semantic", `A METHOD can't return a value`, this.line, this.column, funcEnv.name));
+                    let err = new Exception("Semantic", `A METHOD can't return a value`, this.line, this.column, funcEnv.name);
+                    tree.errors.push(err);
+                    throw err;
                 }
             }
         }
-
         // default to return this
         return new ReturnType(Primitive.NULL, null);
     }
