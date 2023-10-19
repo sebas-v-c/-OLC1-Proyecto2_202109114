@@ -44,32 +44,31 @@ export class Declaration implements Statement {
 
         if (this.expression === undefined) {
             for (const symbol of symbols){
-                result = table.setSymbol(symbol);
-                if (result instanceof Exception){
-                    return result;
+                try {
+                    result = table.setSymbol(symbol)
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
         } else {
-            value = this.expression.getValue(tree, table);
-
-            if (value.value instanceof Exception) {
-                return value.value;
+            try {
+                value = this.expression.getValue(tree, table);
+            }catch(err){
+                tree.errors.push(err as Exception); throw err;
             }
 
             if (symbols[0].type !== value.type){
-                return new Exception("Semantic", `Type: ${value.type} can't be assigned to variable of type: ${symbols[0].type}`, this.line, this.column, table.name);
+                let err = new Exception("Semantic", `Type: ${value.type} can't be assigned to variable of type: ${symbols[0].type}`, this.line, this.column, table.name);
+                tree.errors.push(err); throw err;
             }
 
             symbols[0].value = value.value;
-            result = table.setSymbol(symbols[0]);
-
+            try {
+                table.setSymbol(symbols[0]);
+            }catch(err){
+                tree.errors.push(err as Exception); throw err;
+            }
         }
-
-        if (result instanceof Exception){
-            return result;
-        }
-
-        return undefined;
     }
 
     getCST(): Node {
