@@ -36,7 +36,8 @@ export class While implements Statement {
         }
 
         if (flag.type !== Primitive.BOOLEAN){
-            throw new Exception('Semantic',`Invalid expression in WHILE condition`, this.line, this.column, table.name);
+            let err =new Exception('Semantic',`Invalid expression in WHILE condition`, this.line, this.column, table.name);
+            tree.errors.push(err); throw err;
         }
 
         const newWhileEnv: Environment = new Environment(table, "while_env");
