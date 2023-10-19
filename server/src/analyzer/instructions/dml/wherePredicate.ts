@@ -10,7 +10,7 @@ import Tree from "../../tools/tree";
 
 export class WherePredicate {
     constructor(public condition: WhereExp, public line: number, public column: number) {
-        console.log(JSON.stringify(condition, null, 4));
+        //console.log(JSON.stringify(condition, null, 4));
     }
 
     getColumnIndexes(tree: Tree, table: Environment, db: Table): Array<number> {

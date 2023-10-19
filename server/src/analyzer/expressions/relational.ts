@@ -36,54 +36,82 @@ export class Relational implements WhereExp {
     getValue(tree: Tree, table: Environment): ReturnType {
         switch(this.operator){
             case RelationalOperator.EQ: {
-                let leftResult: ReturnType = this.leftExp.getValue(tree, table);
-                if (leftResult.value instanceof Exception) {return leftResult}
-                let rightResult: ReturnType = this.rightExp.getValue(tree, table);
-                if (rightResult.value instanceof Exception) {return rightResult}
-                return new ReturnType(Primitive.BOOLEAN,
-                                      (this.leftExp.getValue(tree, table).value === this.rightExp.getValue(tree, table).value) &&
-                    (this.leftExp.getValue(tree, table).type === this.rightExp.getValue(tree, table).type)
-                                     );
+                try {
+                    return this._equal_operation(table, tree);
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
+                }
             }
             case RelationalOperator.GREATER: {
                 try {
                     return this._greater_operation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, err);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
             case RelationalOperator.GEQ: {
                 try {
                     return this._geq_operation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, err);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
             case RelationalOperator.LESS: {
                 try {
                     return this._less_operation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, err);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
             case RelationalOperator.LEQ: {
                 try {
                     return this._leq_operation(table, tree);
                 } catch(err){
-                    return new ReturnType(Primitive.NULL, err);
+                    tree.errors.push(err as Exception); throw err;
                 }
             }
             case RelationalOperator.NEQ: {
-                let leftResult: ReturnType = this.leftExp.getValue(tree, table);
-                if (leftResult.value instanceof Exception) {return leftResult}
-                let rightResult: ReturnType = this.rightExp.getValue(tree, table);
-                if (rightResult.value instanceof Exception) {return rightResult}
-                return new ReturnType(Primitive.BOOLEAN,
-                                      (this.leftExp.getValue(tree, table).value !== this.rightExp.getValue(tree, table).value) &&
-                    (this.leftExp.getValue(tree, table).type !== this.rightExp.getValue(tree, table).type)
-                                     );
+                try {
+                    return this._neq_operation(table, tree);
+                } catch(err){
+                    tree.errors.push(err as Exception); throw err;
+                }
             }
         }
+    }
+    _neq_operation(table:Environment, tree: Tree): ReturnType {
+        let leftResult: ReturnType;
+        let rightResult: ReturnType;
+        try {
+            leftResult = this.leftExp.getValue(tree, table);
+            rightResult = this.rightExp.getValue(tree, table);
+        } catch (err){
+            tree.errors.push(err as Exception); throw err;
+        }
+
+        return new ReturnType(
+            Primitive.BOOLEAN,
+            (leftResult.value !== rightResult.value) &&
+                (leftResult.type !== rightResult.type)
+        );
+    }
+
+
+    _equal_operation(table: Environment, tree: Tree): ReturnType {
+        let leftResult: ReturnType;
+        let rightResult: ReturnType;
+        try {
+            leftResult = this.leftExp.getValue(tree, table);
+            rightResult = this.rightExp.getValue(tree, table);
+        } catch (err){
+            tree.errors.push(err as Exception); throw err;
+        }
+
+        return new ReturnType(
+            Primitive.BOOLEAN,
+            (leftResult.value === rightResult.value) &&
+                (leftResult.type === rightResult.type)
+        );
     }
 
     _greater_operation(table: Environment, tree: Tree): ReturnType {
@@ -185,13 +213,13 @@ export class Relational implements WhereExp {
     }
 
     _testOperators(table: Environment, tree: Tree): Ret {
-        let leftResult: ReturnType = this.leftExp.getValue(tree, table);
-        if (leftResult.value instanceof Exception) {
-            throw new Exception(leftResult.value.type, leftResult.value.description, this.line, leftResult.value.column, table.name);
-        }
-        let rightResult: ReturnType = this.rightExp.getValue(tree, table);
-        if (rightResult.value instanceof Exception) {
-            throw new Exception(rightResult.value.type, rightResult.value.description, this.line, rightResult.value.column, table.name);
+        let leftResult: ReturnType;
+        let rightResult: ReturnType;
+        try {
+            leftResult = this.leftExp.getValue(tree, table);
+            rightResult = this.rightExp.getValue(tree, table);
+        } catch (err){
+            throw err;
         }
 
         return { left: leftResult, right: rightResult };

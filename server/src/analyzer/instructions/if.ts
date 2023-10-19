@@ -50,7 +50,7 @@ export class If implements Statement {
                 }
             } else if(this.elseBlock instanceof CodeBlock){
                 try{
-                    return this.block.interpret(tree, ifEnv);
+                    return this.elseBlock.interpret(tree, ifEnv);
                 } catch(err){
                     tree.errors.push(err as Exception); throw err;
                 }
