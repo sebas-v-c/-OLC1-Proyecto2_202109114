@@ -18,8 +18,8 @@ VALUES ("Pancho Sanchez", "panxito@example.com", 111111111);
 
 UPDATE Clientes
 SET Nombre = "Aquiles Castro", ID_Cliente = 1987344
-WHERE Nombre = "Zibas Cbas+" OR ID_Cliente = 111111111
-OR CorreoElectronico = "juan@example.com";
+WHERE Nombre = "Zibas Cbas+" OR NOT ID_Cliente = 111111111
+/*OR CorreoElectronico = "juan@example.com"*/;
 
 
 /*

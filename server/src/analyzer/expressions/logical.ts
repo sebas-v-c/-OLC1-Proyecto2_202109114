@@ -25,19 +25,20 @@ export class Logical implements WhereExp {
         this.line = line;
         this.column = column;
     }
-    // TODO
+
     getIndexValue(tree: Tree, table: Environment, dbTable: Table): number[] {
-        //throw new Error("Method not implemented.");
         let leftArr: Array<number>;
         let rightArr: Array<number>;
-        try {
-            leftArr = (this.leftExp as WhereExp).getIndexValue(tree, table, dbTable);
-        }catch(err){
-            let exc = new Exception("Semantic", `Not valid expression at line: ${this.leftExp.line} and column: ${this.leftExp.column}`, this.line, this.column);
-            if (this.leftExp !== undefined){
+        if (this.leftExp !== undefined){
+            try {
+                leftArr = (this.leftExp as WhereExp).getIndexValue(tree, table, dbTable);
+            }catch(err){
+                let exc = new Exception("Semantic", `Not valid expression at line: ${this.leftExp.line} and column: ${this.leftExp.column}`, this.line, this.column);
+                console.log(this.leftExp);
                 tree.errors.push(exc as Exception);
                 throw exc;
             }
+        } else {
             // make this so type script doesnt cry about it
             leftArr = [0];
         }
