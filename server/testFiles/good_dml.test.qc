@@ -19,6 +19,11 @@ VALUES ("Pancho Sanchez", "panxito@example.com", 111111111);
 SELECT * FROM Clientes WHERE Nombre = "Zibas Cbas+";
 SELECT * FROM Clientes;
 
+DECLARE @chi VARCHAR DEFAULT "1234";
+
+SELECT CAST(@chi AS INT);
+SELECT CAST(@chi AS INT) AS NuevoEncabezado;
+
 SELECT ID_Cliente
 FROM Clientes
 WHERE Nombre = "Zibas Cbas+";

@@ -224,21 +224,18 @@ describe("Testing Interpreter DML and DDL", function() {
     it("Testing good DDL and DML Input", function() {
         var testPath = path.join(__dirname, '..', '..', 'testFiles', 'good_ddl_dml.test.qc');
         const data = readFileSync(testPath, 'utf8');
-
         /*------------------------------INSTRUCTIONS TESTING------------------------------*/
         let tree: Tree | null;
         let globalEnv: Environment | null;
-
         let instructions: Array<Statement>
 
         const parser = new QCrypterParser()
+
         instructions = parser.parse(data);
 
         tree = new Tree(instructions);
-
         globalEnv = createGlobalEnv();
         tree.globalTable = globalEnv;
-
 
         for (let instruction of tree.instructions) {
             let value;
