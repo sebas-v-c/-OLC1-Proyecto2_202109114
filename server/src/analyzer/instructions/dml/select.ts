@@ -104,9 +104,9 @@ export class SelectTable implements Statement {
         }
         if (this.toPrint){
             if (resArr[0] !== "*"){
-                printTable(tableRows, colNames.filter((item) => resArr.includes(item)), tree);
+                printTable(tableRows, colNames.filter((item) => resArr.includes(item)), this.id,tree);
             } else {
-                printTable(tableRows, colNames, tree);
+                printTable(tableRows, colNames, this.id, tree);
             }
         } else {
             // TODO changes this as needed
@@ -114,7 +114,6 @@ export class SelectTable implements Statement {
             return tableRows[0][0];
         }
     }
-
 
     getCST(): Node {
         return new Node("Node");
@@ -159,7 +158,7 @@ export class SelectExpr implements Statement {
         }
 
         if (this.toPrint){
-            printTable([[res]], [this.colName], tree)
+            printTable([[res]], [this.colName], "" ,tree)
             return undefined;
         } else {
             return res;
@@ -177,7 +176,7 @@ export class SelectExpr implements Statement {
 }
 
 
-function printTable(tableRows: Array<Array<ReturnType>>, columns: Array<string>, tree: Tree): void {
+function printTable(tableRows: Array<Array<ReturnType>>, columns: Array<string>, tableName: string, tree: Tree): void {
         const tbRows = tableRows.map(rowData => {
             const cells = rowData.map(cellData => `<td>${cellData.value}</td>`).join('');
             return `<tr>${cells}</tr>`;
@@ -185,6 +184,7 @@ function printTable(tableRows: Array<Array<ReturnType>>, columns: Array<string>,
 
         const table =`
     <table>
+        <caption>${tableName}</caption>
       <thead>
         <tr>
           ${columns.map(columnName => `<th>${columnName}</th>`).join('')}

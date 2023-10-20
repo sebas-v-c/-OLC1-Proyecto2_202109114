@@ -30,7 +30,7 @@ export default class Tree {
     }
 
     public updateStdout(input: string){
-        this.stdOut += `${input}\n`;
+        this.stdOut += `<div>${input}</div>`;
     }
 
     public updateConsole(input: string){

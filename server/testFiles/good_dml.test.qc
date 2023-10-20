@@ -96,6 +96,9 @@ VALUES ("Pancho Sanchez", "panxito@example.com", 111111111);
 
 TRUNCATE TABLE Clientes4;
 
+SELECT ID_Cliente
+FROM Clientes3
+WHERE Nombre = "Zibas Cbas+";
 
 /*
 UPDATE Clientes
