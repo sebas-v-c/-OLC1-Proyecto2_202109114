@@ -8,11 +8,11 @@
 %}
 
 %{
-    let ast = [];
-    let errors = [];
-    let lexErrors = [];
-    let synErrors = [];
-    const clean_errors = () => {
+    export let ast = [];
+    export let errors = [];
+    export let lexErrors = [];
+    export let synErrors = [];
+    export const clean_errors = () => {
         errors = [];
     }
     let controlString = "";
@@ -131,7 +131,7 @@
 "="                             return "TK_EQ";
 
 <<EOF>>                           return 'EOF';
-.                               { lexErrors.push(new LexError(yylloc.first_line, yylloc.first_column, yytext)); return "INVALID"; }
+.                               { console.log(`Lexical error ${yytext} in [${yylloc.first_line}, ${yylloc.first_column}]`); ;return "INVALID"; }
 
 /lex
 
@@ -209,6 +209,7 @@ ini:
 instructions:
     instructions instruction TK_SCOLON  { $1.push($2); $$ = $1; }
 |   instruction TK_SCOLON               { $$ = [$1]; }
+|   error TK_SCOLON                     { console.log(`Lexical error ${yytext} in [${$$.first_line}, ${$$.first_column}]`); ;return "INVALID"; }
 ;
 
 instruction:
@@ -237,7 +238,6 @@ instruction:
 /*-------------------------------UTILITY-------------------------------*/
 |   cast                    { $$ = $1; }        
 |   print                   { $$ = $1; }
-//|   error               { synErrors.push(new SynError(this._$.first_line, this._$.first_column, "Algo salio mal al chile no c")); $$ = null; }
 ;
 
 /*-------------------------------SQL LANGUAGE GRAMMARS-------------------------------*/

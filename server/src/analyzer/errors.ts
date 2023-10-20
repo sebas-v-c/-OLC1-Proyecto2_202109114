@@ -20,13 +20,11 @@ export class LexError implements Error {
 export class SynError implements Error {
     public line;
     public column;
-    public token?: any;
+    public token: any;
     public type: string;
-    constructor(line: number, column: number, type: string, /*TODO change this type*/token: any);
-    constructor(line: number, column: number, type: string, /*TODO change this type*/token?: any){
+    constructor(line: number, column: number, type: string){
         this.line = line;
         this.column = column;
-        this.token = token;
         this.type = type;
     }
 

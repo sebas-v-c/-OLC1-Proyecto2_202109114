@@ -35,6 +35,7 @@ export class Update implements Statement {
             tree.errors.push(err as Exception); throw err;
         }
 
+
         let arr: Array<number> = [];
         try {
             arr = this.cond.getColumnIndexes(tree, table, dbTable);

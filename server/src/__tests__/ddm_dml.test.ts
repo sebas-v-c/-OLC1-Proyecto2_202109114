@@ -28,6 +28,7 @@ describe("Testing Interpreter DML and DDL", function() {
 
         tree = new Tree(instructions);
 
+
         globalEnv = createGlobalEnv();
         tree.globalTable = globalEnv;
 
@@ -173,7 +174,7 @@ describe("Testing Interpreter DML and DDL", function() {
             expect(val.data[0].value).toBe("juan@example.com");
         } else { throw new Exception("test", "Column doesnt exist", 0, 0); }
         /*SELECTING VALUES*/
-        printConsole(tree.console);
+        //printConsole(tree.console);
 
         /*UPDATING VALUES*/
         env = globalEnv.db.get("clientes2");

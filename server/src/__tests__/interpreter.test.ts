@@ -30,14 +30,14 @@ describe("Testing Interpreter Logics", function() {
 
         while (!any.done){
             let token = any.next();
-            if (token !== false ){
+            if (typeof token === "string"){
                 tokens.push(token)
             }
         }
+        //console.log(tokens);
 
         const parser = new QCrypterParser()
         instructions = parser.parse(data);
-
 
         tree = new Tree(instructions);
 
