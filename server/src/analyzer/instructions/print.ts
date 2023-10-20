@@ -33,9 +33,14 @@ export class Print implements Statement {
         // TODO change this to be stdout
         if (val.type === Primitive.DATE){
             val.value = val.value.toISOString();
-
         }
-        tree.updateConsole(val.value);
+        val.value = String(val.value);
+        val.value = (val.value as string).replace(/\n/g, "</br></br>");
+        val.value = (val.value as string).replace(/\"/g, '"');
+        val.value = (val.value as string).replace(/\'/g, "'");
+        val.value = (val.value as string).replace(/\t/g, "    ");
+        val.value = (val.value as string).replace(/\\/g, "    ");
+        tree.updateConsole(`<p>${val.value}</p>`);
     }
 
     getCST(): Node {
