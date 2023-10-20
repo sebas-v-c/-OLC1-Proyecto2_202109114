@@ -14,11 +14,12 @@ VALUES ("Zibas Cbas+", 230948123);
 
 INSERT INTO Clientes (Nombre, CorreoElectronico, ID_Cliente)
 VALUES ("Pancho Sanchez", "panxito@example.com", 111111111);
+
 -- TESTING SELECT
 SELECT * FROM Clientes WHERE Nombre = "Zibas Cbas+";
 SELECT * FROM Clientes;
 
-SELECT Nombre, ID_Cliente, CorreoElectronico
+SELECT ID_Cliente
 FROM Clientes
 WHERE Nombre = "Zibas Cbas+";
 

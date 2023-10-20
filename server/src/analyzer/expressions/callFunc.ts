@@ -22,11 +22,11 @@ export class CallFunc implements Statement {
     }
 
     interpret(tree: Tree, table: Environment) {
-        const ret: ReturnType =  this.getValue(tree, table)
-        if (ret.value instanceof Exception){
-            return ret.value;
+        try {
+            return this.getValue(tree, table)
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
         }
-        return undefined;
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {

@@ -96,7 +96,7 @@ describe("Testing Interpreter DML and DDL", function() {
                 expect(err).toBeFalsy();
             }
         }
-        printConsole(tree.console);
+        //printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         const db = globalEnv.db;
         expect(db.has("personas")).toBe(true);
@@ -145,7 +145,7 @@ describe("Testing Interpreter DML and DDL", function() {
                 expect(err).toBeFalsy();
             }
         }
-        printConsole(tree.console);
+        //printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         /*ISERTING VALUES*/
         let env = globalEnv.db.get("clientes");
@@ -172,6 +172,9 @@ describe("Testing Interpreter DML and DDL", function() {
         if (val instanceof Column){
             expect(val.data[0].value).toBe("juan@example.com");
         } else { throw new Exception("test", "Column doesnt exist", 0, 0); }
+        /*SELECTING VALUES*/
+        printConsole(tree.console);
+
         /*UPDATING VALUES*/
         env = globalEnv.db.get("clientes2");
         if (env instanceof Table){
@@ -253,7 +256,7 @@ describe("Testing Interpreter DML and DDL", function() {
                 expect(err).toBeFalsy();
             }
         }
-        printConsole(tree.console);
+        //printConsole(tree.console);
         /*------------------------------VARIABLE TESTING------------------------------*/
         let tempSym: Symbol | Exception = new Symbol("@var", Primitive.NULL, null,0, 0, globalEnv);
         tempSym = globalEnv.getSymbol(tempSym);

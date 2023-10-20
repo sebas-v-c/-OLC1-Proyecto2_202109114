@@ -130,17 +130,40 @@ export class SelectTable implements Statement {
 export class SelectExpr implements Statement {
     public expr: Statement;
     public colName: string;
+    public toPrint: boolean;
     constructor(expr: Statement, colName: string, public line: number, public column: number){
         this.expr = expr;
         this.colName = colName;
+        this.toPrint = true;
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {
-        return new ReturnType(Primitive.NULL, undefined);
+        this.toPrint = false;
+        let res: any;
+        res = this.interpret(tree, table)
+        if (res instanceof ReturnType){
+            return res;
+        }
+        throw new Exception("Semantic", `Incorrect use of Select at line: ${this.line}, column: ${this.column}`, this.line,this.column);
     }
 
-
     interpret(tree: Tree, table: Environment) {
+        let res: ReturnType = new ReturnType(Primitive.NULL, undefined);
+        try {
+            res = this.expr.getValue(tree, table);
+            if (this.colName === undefined){
+                this.toPrint = false;
+            }
+        } catch(err){
+            tree.errors.push(err as Exception); throw err;
+        }
+
+        if (this.toPrint){
+            printTable([[res]], [this.colName], tree)
+            return undefined;
+        } else {
+            return res;
+        }
     }
 
 
