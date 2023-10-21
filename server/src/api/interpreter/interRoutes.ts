@@ -77,6 +77,7 @@ router.post('/interpret', /*async*/ (req, res) => {
     }
 
     /*------------------------------AST------------------------------*/
+    /*
     let rootCst: Node = new Node("Root");
     let nodeValue: Node = new Node("Statements");
 
@@ -87,15 +88,16 @@ router.post('/interpret', /*async*/ (req, res) => {
     rootCst.addChildsNode(nodeValue);
 
     let graph = tree.getDot(rootCst);
+    */
 
-    let rootAst: Node = new Node("Root");
-    let val: Node = new Node("Instructions");
+    let rootAst: Node = new Node("ROOT");
+    let val: Node = new Node("INSTRUCTIONS");
 
     for (let i = 0; i < len; i++){
         val.addChildsNode(tree.instructions[i].getAST());
     }
 
-    rootAst.addChildsNode(value);
+    rootAst.addChildsNode(val);
 
 
     let ast: string;

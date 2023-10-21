@@ -61,6 +61,10 @@ export class CodeBlock implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node: Node = new Node("BLOCK")
+        for (let inst of this.instructions){
+            node.addChildsNode(inst.getAST());
+        }
+        return node;
     }
 }

@@ -52,12 +52,13 @@ export class PrimitiveVar implements Statement {
     }
 
     getCST(): Node {
-        return new Node("Node");
+        let node: Node = new Node("Primitive");
+        node.addChild(this.value);
+        return node;
     }
 
     getAST(): Node {
-        return new Node('Node');
+        let node: Node = new Node(this.value);
+        return node;
     }
-
-
 }

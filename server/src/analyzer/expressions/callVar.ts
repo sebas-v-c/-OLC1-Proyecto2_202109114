@@ -35,11 +35,13 @@ export class CallVar implements Statement {
     }
 
     getCST(): Node {
-        return new Node("Node");
+        let node: Node = new Node("CallVar");
+        node.addChild(this.id);
+        return node;
     }
 
     getAST(): Node {
-        return new Node('Node');
+        return new Node(this.id);
     }
 
 

@@ -72,12 +72,21 @@ export class Declaration implements Statement {
     }
 
     getCST(): Node {
+        let node: Node = new Node("Declaration");
 
         return new Node("Node");
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node: Node = new Node("DECLARE")
+        for (let variable of this.vars){
+            node.addChild(variable.id);
+            node.addChild(variable.type.toUpperCase());
+            if (this.expression !== undefined){
+                node.addChildsNode(this.expression.getAST());
+            }
+        }
+        return node;
     }
 
 
