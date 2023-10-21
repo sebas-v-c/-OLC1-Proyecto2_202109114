@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
 import "../../../scss/Image.scss"
-import image from "../../../assets/react.svg";
+import GraphvizRenderer from "@yozora/react-code-renderer-graphviz";
+
 
 type Props = {
-    content: string;
+    dotCode: string;
 }
 
-export default function OutputImage({ content }: Props){
+export default function OutputImage({ dotCode }: Props){
     const [height, setHeight] = useState(0);
     const [width, setWidht] = useState(0);
     const ref = useRef(null);
@@ -16,7 +17,20 @@ export default function OutputImage({ content }: Props){
         setWidht(ref.current.clientWidth);
         setHeight(ref.current.clientHeight);
     });
+    const [error, setError] = React.useState<any>(null)
 
+    let content: any;
+    try {
+        content = <GraphvizRenderer code={dotCode} options={{"width": width-20, "height": height-50, "zoom": false}}/>
+    } catch(err){
+        content = <div>Error generating the AST</div>
+    }
+
+
+    console.log(dotCode);
+    console.log("---aaa----");
+
+    //<Graphviz dot={`graph {grandparent -- "parent A"; child; "parent B" -- child; grandparent -- "parent B"}`} options={{"width": width-20, "height": height-50, "zoom": false}}/>
     // TODO change src of image
     return(
         <div className="div-container" ref={ref}>
@@ -33,7 +47,8 @@ export default function OutputImage({ content }: Props){
                             <button className={"image-button right-image-button"} onClick={() => resetTransform()}>RESET</button>
                         </div>
                         <TransformComponent>
-                            <img src={image} alt="AST" width={width - 20} height={height -50} />
+                            {content}
+                            <pre>{error}</pre>
                         </TransformComponent>
                     </React.Fragment>
                 )}

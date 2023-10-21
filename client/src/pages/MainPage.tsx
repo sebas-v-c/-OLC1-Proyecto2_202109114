@@ -26,6 +26,7 @@ export default function MainPage(){
     const [processing, setProcessing] = useState<boolean>(false);
     const [outMode, setOutMode] = useState<OutModes>(OutModes.Text);
     const [currentTab, setCurrentTab] = useState<number>(0);
+    const [responseData, setResponseData] = useState({});
     const fileInputRef = useRef(null);
     const divRef = useRef(null);
 
@@ -44,7 +45,7 @@ export default function MainPage(){
         const formData = {
             // TODO
             name: codeFiles[currentTab].fileName ? codeFiles[currentTab].fileName : "deft",
-            content: btoa(codeFiles[currentTab].code ? codeFiles[currentTab].code : ""),
+            content: codeFiles[currentTab].code ? codeFiles[currentTab].code : "",
         };
 
         const options = {
@@ -62,14 +63,15 @@ export default function MainPage(){
         axios.request(options).then((response) =>{
             const res = response;
             console.log(res.data);
+            setResponseData(res.data);
             // TODO do something with the response
-            setProcessing(false);
+            //setProcessing(false);
             showSuccessToast()
         }).catch(error => {
             setProcessing(false);
             // TODO do something with the response
             console.log(error);
-            showErrorToast()
+            //showErrorToast()
         });};
 
     const showSuccessToast = (msg?: string) => {
@@ -252,7 +254,7 @@ export default function MainPage(){
                         />
                         <OutputWindow
                             outMode={outMode}
-                            outputDetails={"simon"}
+                            outputDetails={responseData}
                         />
                 </div>
 

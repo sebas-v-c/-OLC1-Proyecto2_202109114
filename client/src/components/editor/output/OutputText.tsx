@@ -1,12 +1,19 @@
 import { useEffect, useRef } from "react";
 import "../../../scss/Terminal.scss"
 
-type Props = {
-    content: string;
+
+type Errors = {
+    lex: Array<any>,
+    sem: Array<any>,
+    syn: Array<any>
 }
 
+type Props = {
+    errors: Errors;
+    stdOut: string;
+}
 
-export default function OutputText({ content }: Props){
+export default function OutputText({ errors, stdOut }: Props){
     const terminalRef = useRef(null);
 
     useEffect(() => {
@@ -15,13 +22,15 @@ export default function OutputText({ content }: Props){
         }
     })
 
-    const lines: string[] = content.split('\n');
+    //const lines: string[] = content.split('\n');
+    //console.log(content === null);
+    //console.log(content? "pene" : "chingadamadre");
 
+
+    //<div dangerouslySetInnerHTML={{__html: content}}>{content ? content : "<div></div>"}</div>
     return(
         <div className="terminal" ref={terminalRef}>
-            {lines.map((line, index) => (
-                <div key={index}>{line}</div>
-            ))}
+            <div dangerouslySetInnerHTML={{__html: stdOut}}></div>
         </div>
     );
 }

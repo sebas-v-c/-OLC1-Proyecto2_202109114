@@ -44,10 +44,15 @@ router.post('/interpret', /*async*/ (req, res) => {
     let globalEnv: Environment = createGlobalEnv();
     let tree: Tree = new Tree(instructions, globalEnv);
 
-    for (let instruction of tree.instructions) {
+    let len = 0;
+    try {
+        len = tree.instructions.length;
+    } catch(err){}
+
+    for (let i = 0; i < len; i++){
         let resValue: any;
         try{
-            resValue = instruction.interpret(tree, globalEnv)
+            resValue = tree.instructions[i].interpret(tree, globalEnv);
         } catch(err){
             // TODO
             console.log("------------------------------------SEMANTIC ERROR------------------------------------")
@@ -60,8 +65,8 @@ router.post('/interpret', /*async*/ (req, res) => {
     let rootCst: Node = new Node("Root");
     let nodeValue: Node = new Node("Statements");
 
-    for (let item of tree.instructions) {
-        nodeValue.addChildsNode(item.getCST());
+    for (let i = 0; i < len; i++){
+        nodeValue.addChildsNode(tree.instructions[i].getCST());
     }
 
     rootCst.addChildsNode(nodeValue);
@@ -71,9 +76,10 @@ router.post('/interpret', /*async*/ (req, res) => {
     let rootAst: Node = new Node("Root");
     let val: Node = new Node("Instructions");
 
-    for (let item of tree.instructions){
-        val.addChildsNode(item.getAST());
+    for (let i = 0; i < len; i++){
+        val.addChildsNode(tree.instructions[i].getAST());
     }
+
     rootAst.addChildsNode(value);
 
 

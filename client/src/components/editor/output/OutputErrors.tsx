@@ -31,16 +31,21 @@ type ResObj = {
     symTable: Symbol[];
 }
 
-type Props = {
-    content: string;
+type Errors = {
+    lex: Array<any>,
+    sem: Array<any>,
+    syn: Array<any>
 }
 
-export default function OutputErrors({ content }: Props){
+type Props = {
+    errors: Errors;
+    symTable: Array<any>;
+}
+
+export default function OutputErrors({ errors, symTable }: Props){
 
     return(
         <div className="terminal">
-            <h1>Tokens</h1>
-            <h1>Errors</h1>
             <h2>Lexical Errors</h2>
             <h2>Syntax Errors</h2>
             <h1>Symbols Table</h1>
