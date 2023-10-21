@@ -45,6 +45,14 @@ export class Create implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node: Node = new Node("CREATE");
+        node.addChild(this.id);
+        let colNode = new Node("COLUMNS");
+        for (let arg of this.args){
+            colNode.addChild(arg.id);
+            colNode.addChild(arg.type.toUpperCase());
+        }
+        node.addChildsNode(colNode);
+        return node;
     }
 }

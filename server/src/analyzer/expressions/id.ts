@@ -32,7 +32,8 @@ export class IdVar implements Statement {
     }
 
     getAST(): Node {
-        return new Node('Node');
+        let node: Node = new Node(this.value);
+        return node;
     }
 
 

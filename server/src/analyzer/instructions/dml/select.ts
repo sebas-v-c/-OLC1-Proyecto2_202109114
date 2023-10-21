@@ -120,7 +120,22 @@ export class SelectTable implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node = new Node("SELECT");
+        let colNode = new Node("COLUMNS");
+        for (let arg of this.cols){
+            colNode.addChildsNode(arg.getAST());
+        }
+        node.addChildsNode(colNode);
+        let tbNode = new Node("FROM");
+        tbNode.addChild(this.id.toUpperCase());
+
+        if (this.cond !== undefined){
+            let whereNode = new Node("WHERE");
+            whereNode.addChildsNode(this.cond.condition.getAST());
+            node.addChildsNode(whereNode);
+        }
+
+        return node;
     }
 }
 
@@ -171,7 +186,15 @@ export class SelectExpr implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node = new Node("SELECT");
+        node.addChildsNode(this.expr.getAST());
+        if (this.colName !== undefined){
+            let asNode = new Node("AS");
+            asNode.addChild(this.colName)
+            node.addChildsNode(asNode);
+        }
+
+        return node;
     }
 }
 

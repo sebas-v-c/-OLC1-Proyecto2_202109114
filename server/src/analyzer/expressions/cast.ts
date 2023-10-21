@@ -82,6 +82,10 @@ export class Cast implements Statement {
     }
 
     getAST(): Node {
-        return new Node('Node');
+        let node: Node = new Node("CAST");
+        node.addChildsNode(this.expr.getAST());
+        node.addChild("TO");
+        node.addChild(this.toType.toUpperCase());
+        return node;
     }
 }

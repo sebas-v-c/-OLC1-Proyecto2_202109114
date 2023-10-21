@@ -89,6 +89,20 @@ export class Insert implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node: Node = new Node("INSERT");
+        node.addChild(this.id);
+        let colNode = new Node("COLUMNS");
+        for (let arg of this.cols){
+            colNode.addChild(arg);
+        }
+        node.addChildsNode(colNode);
+
+        let valsNode = new Node("VALUES");
+        for (let val of this.vals){
+            valsNode.addChildsNode(val.getAST())
+        }
+        node.addChildsNode(valsNode);
+
+        return node;
     }
 }
