@@ -27,9 +27,6 @@ export default function OutputImage({ dotCode }: Props){
     }
 
 
-    console.log(dotCode);
-    console.log("---aaa----");
-
     //<Graphviz dot={`graph {grandparent -- "parent A"; child; "parent B" -- child; grandparent -- "parent B"}`} options={{"width": width-20, "height": height-50, "zoom": false}}/>
     // TODO change src of image
     return(
