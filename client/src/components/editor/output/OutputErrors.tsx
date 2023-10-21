@@ -23,14 +23,6 @@ interface Symbol {
     value: any;
 }
 
-
-type ResObj = {
-    tokens: Token[];
-    lexErr: LexError[];
-    synErr: SynError[];
-    symTable: Symbol[];
-}
-
 type Errors = {
     lex: Array<any>,
     sem: Array<any>,
@@ -40,15 +32,103 @@ type Errors = {
 type Props = {
     errors: Errors;
     symTable: Array<any>;
+    tokens: Array<any>;
 }
 
-export default function OutputErrors({ errors, symTable }: Props){
+export default function OutputErrors({ errors, symTable, tokens }: Props){
+
+  const chunkedData = [];
+  for (let i = 0; i < tokens.length; i += 6) {
+    chunkedData.push(tokens.slice(i, i + 6));
+  }
+
 
     return(
         <div className="terminal">
-            <h2>Lexical Errors</h2>
-            <h2>Syntax Errors</h2>
-            <h1>Symbols Table</h1>
+            <h2 className="table-title" style={{"margin": "15px"}}>Tokens Table</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Col1</th>
+          <th>Col2</th>
+          <th>Col3</th>
+          <th>Col4</th>
+          <th>Col5</th>
+          <th>Col6</th>
+        </tr>
+      </thead>
+      <tbody>
+        {chunkedData.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {row.map((item: any, columnIndex: any) => (
+              <td key={columnIndex}>{item}</td>
+            ))}
+          </tr>
+        ))}
+        </tbody>
+    </table>
+
+
+            <h2 className="table-title" style={{"margin": "15px"}}>Lexical Errors</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Character</th>
+          <th>Line</th>
+          <th>Column</th>
+        </tr>
+      </thead>
+      <tbody>
+        {errors.lex.map((item, index) => (
+          <tr key={index}>
+            <td>{item.character}</td>
+            <td>{item.line}</td>
+            <td>{item.column}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+            <h2 className="table-title" style={{"margin": "15px"}}>Syntax Errors</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Line</th>
+          <th>Column</th>
+        </tr>
+      </thead>
+      <tbody>
+        {errors.syn.map((item, index) => (
+          <tr key={index}>
+            <td>{`Unexpected Token '${item.token}'`}</td>
+            <td>{item.line}</td>
+            <td>{item.column}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+            <h1 style={{"margin": "10px", "color": "#b4befe"}}>Symbols Table</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Type</th>
+          <th>Line</th>
+          <th>Column</th>
+        </tr>
+      </thead>
+      <tbody>
+        {symTable.map((item, index) => (
+          <tr key={index}>
+            <td>{item[0]}</td>
+            <td>{item[1].type}</td>
+            <td>{item[1].row}</td>
+            <td>{item[1].column}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
         </div>
     );
 }

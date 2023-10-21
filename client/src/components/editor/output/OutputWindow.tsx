@@ -26,6 +26,7 @@ type Res = {
     name: string;
     status: number;
     symtable: Array<any>;
+    tokens: Array<any>;
 }
 
 
@@ -48,7 +49,8 @@ export default function OutputWindow({ outputDetails, outMode }: Props) {
             },
             name: "",
             status: 0,
-            symtable: []
+            symtable: [],
+            tokens: []
         }
     } else{
         filteredObj = outputDetails as Res;
@@ -57,7 +59,7 @@ export default function OutputWindow({ outputDetails, outMode }: Props) {
 
     switch(outMode){
         case OutModes.Errors: {
-            content = <OutputErrors errors={filteredObj.err} symTable={filteredObj.symtable} />
+            content = <OutputErrors errors={filteredObj.err} symTable={filteredObj.symtable} tokens={filteredObj.tokens}/>
             break;
         }
         case OutModes.Image: {

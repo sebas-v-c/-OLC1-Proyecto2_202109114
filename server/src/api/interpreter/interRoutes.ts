@@ -31,6 +31,20 @@ router.post('/interpret', /*async*/ (req, res) => {
     const qcObj = value as QCObject;
     const data: string = qcObj.content;
 
+    const lexer = new QCrypterLexer();
+    let any = lexer.setInput(data, {})
+        // TODO create a token list
+    let tokens: Array<any> = [];
+
+    while (!any.done){
+        let token = any.next();
+        if (typeof token === "string"){
+            tokens.push(token)
+        }
+    }
+
+
+
     let instructions: Array<Statement> = [];
     clean_errors();
 
@@ -57,6 +71,7 @@ router.post('/interpret', /*async*/ (req, res) => {
             // TODO
             console.log("------------------------------------SEMANTIC ERROR------------------------------------")
             console.log(err);
+            len = 0;
             tree.instructions = [];
         }
     }
@@ -114,7 +129,8 @@ router.post('/interpret', /*async*/ (req, res) => {
         symtable: tree.getSymbols(),
         ast: ast,
         name: qcObj.name,
-        err: errors
+        err: errors,
+        tokens: tokens
     }
     // TODO add return logic here
     /*

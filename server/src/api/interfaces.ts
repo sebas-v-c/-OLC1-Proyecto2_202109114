@@ -22,4 +22,5 @@ export interface QCResponseObject extends QCObject {
     ast: string;
     status: number;
     err: Errors;
+    tokens: Array<any>;
 }
