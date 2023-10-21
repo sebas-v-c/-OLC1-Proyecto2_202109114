@@ -22,6 +22,24 @@ export default function OutputText({ errors, stdOut }: Props){
         }
     })
 
+    let errContent;
+    if (errors.lex.length > 0){
+        errContent = errors.lex.map((item:any, index:any) => {
+            return <div id={index}><pre style={{"color": "#f38ba8"}}>{`Lexical Error: Character '${item.character}' at line: ${item.line} column: ${item.column} not recognized in the language`}</pre></div>
+        })
+    } else if (errors.syn.length > 0){
+        errContent = errors.syn.map((item:any, index:any) => {
+            if (index > 2){
+                return
+            }
+            return <div id={index}><pre style={{"color": "#f38ba8"}}>{`Syntax Error: Unexpected Token '${item.token}' at line: ${item.line} column: ${item.column}`}</pre></div>
+        })
+    } else if (errors.sem.length > 0){
+        errContent = errors.sem.map((item:any, index:any) => {
+            return <div id={index}><pre style={{"color": "#f38ba8"}}>{`type: ${item.type}\n"${item.description}"\nline: ${item.line} column: ${item.column}  Environment: ${item.environment}`}</pre></div>
+        })
+    }
+
     //const lines: string[] = content.split('\n');
     //console.log(content === null);
     //console.log(content? "pene" : "chingadamadre");
@@ -31,6 +49,7 @@ export default function OutputText({ errors, stdOut }: Props){
     return(
         <div className="terminal" ref={terminalRef}>
             <div dangerouslySetInnerHTML={{__html: stdOut}}></div>
+            {errContent}
         </div>
     );
 }
