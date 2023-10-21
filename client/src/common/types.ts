@@ -15,7 +15,7 @@ export interface SymTable {
 
 
 export interface QCResponseObject extends QCObject {
-    out?: string;
+    out: string;
     tokens: string[];
     errors: Errors;
     symtable: SymTable;
@@ -24,7 +24,7 @@ export interface QCResponseObject extends QCObject {
 }
 
 export interface QCResponseObject extends QCObject {
-    out?: string;
+    out: string;
     tokens: string[];
     errors: Errors;
     symtable: SymTable;

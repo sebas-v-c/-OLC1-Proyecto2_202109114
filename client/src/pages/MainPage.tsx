@@ -2,15 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import CodeEditor from "../components/editor/CodeEditor";
 import useKeyPress from "../hooks/useKeyPress";
-import { QCResponseObject } from "../common/types";
+//import { QCResponseObject } from "../common/types";
 
-import { ToastContainer, toast } from 'react-toastify';
+import { /*ToastContainer,*/ toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../scss/CustomContainer.scss'
-
+/// <reference types="vite/client" />
 import OutputWindow, { OutModes } from '../components/editor/output/OutputWindow';
 import OutTabs from "../components/editor/output/OutTabs";
-import { Container, Row, Col, Button } from "react-bootstrap";
+//import { Container, Row, Col, Button } from "react-bootstrap";
 import "../scss/MainPage.scss";
 import "../scss/RunButton.scss"
 import Tabs from "../components/editor/Tabs";
@@ -22,7 +22,7 @@ type Code = {
 }
 
 export default function MainPage(){
-    const [codeFiles, setCodeFiles] = useState<Code[]>([{fileName: "Main.qc", code:"// SOME CODE HERE"}]);
+    const [codeFiles, setCodeFiles] = useState<Code[]>([{fileName: "Main.qc", code:"-- SOME CODE HERE"}]);
     const [processing, setProcessing] = useState<boolean>(false);
     const [outMode, setOutMode] = useState<OutModes>(OutModes.Text);
     const [currentTab, setCurrentTab] = useState<number>(0);
@@ -49,8 +49,9 @@ export default function MainPage(){
 
         const options = {
             method: "POST",
-            url: process.env.REACT_APP_QC_URL,
-            params: { base64_encoded: "true", fields: "*" },
+            url: import.meta.env.VITE_QC_API_URL,
+            //url: VITE_QC_API_URL + "interpreter/interpret",
+            //params: { base64_encoded: "true", fields: "*" },
             headers: {
                 "content-type": "application/json",
                 "Content-Type": "application/json",
@@ -59,7 +60,8 @@ export default function MainPage(){
         };
 
         axios.request(options).then((response) =>{
-            const res: QCResponseObject = response;
+            const res = response;
+            console.log(res.data);
             // TODO do something with the response
             setProcessing(false);
             showSuccessToast()
@@ -136,7 +138,7 @@ export default function MainPage(){
 
         const newFile: Code = {
             fileName: newFileName,
-            code: `// New Code for ${newFileName}`
+            code: `-- New Code for ${newFileName}`
         };
 
         setCodeFiles([...codeFiles, newFile]);
@@ -226,7 +228,7 @@ export default function MainPage(){
                             currentTab={currentTab}
                         />
                         <CodeEditor
-                            code={codeFiles[currentTab] ? codeFiles[currentTab].code : ""}
+                            code={codeFiles[currentTab] ? codeFiles[currentTab].code : "."}
                             onChange={handleEditorChange}
                         />
 
