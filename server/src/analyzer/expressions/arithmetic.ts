@@ -232,11 +232,18 @@ export class Arithmetic implements Statement {
     }
 
     getCST(): Node {
-        return new Node("Node");
+        let node: Node = new Node("Arithmetic Expression");
+        node.addChildsNode(this.leftExp.getCST());
+        node.addChild(this.operator.toString());
+        node.addChildsNode(this.rightExp.getCST());
+        return node;
     }
 
     getAST(): Node {
-        return new Node('Node');
+        let node: Node = new Node(this.operator.toString());
+        node.addChildsNode(this.leftExp.getAST());
+        node.addChildsNode(this.rightExp.getAST());
+        return node;
     }
 
 
