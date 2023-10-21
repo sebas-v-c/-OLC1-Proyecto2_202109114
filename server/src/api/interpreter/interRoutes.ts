@@ -1,14 +1,14 @@
 import express from "express";
-import { QCObject, QCResponseObject } from "../interfaces";
+import { Errors, QCObject, QCResponseObject } from "../interfaces";
 import { QCObjectSchema } from "../schema";
 import { analyze } from "./interpreter.controller.js";
 import Tree from "../../analyzer/tools/tree";
 import Environment, { createGlobalEnv } from "../../analyzer/tools/environments";
 import { Node, Statement } from "../../analyzer/abastract/ast";
-import { QCrypterLexer, QCrypterParser } from "../../analyzer/grammar";
+import { QCrypterLexer, QCrypterParser, clean_errors, errors, lexErrors, synErrors } from "../../analyzer/grammar";
 import { readFileSync } from "fs";
 import path from "path";
-import Joi from "joi";
+import Joi, { object } from "joi";
 
 // TODO import interpeter files
 const router = express.Router();
@@ -29,62 +29,85 @@ router.post('/interpret', /*async*/ (req, res) => {
     }
 
     const qcObj = value as QCObject;
-
     const data: string = qcObj.content;
 
-    let tree: Tree | null;
-    let globalEnv: Environment | null;
-
-    let instructions: Array<Statement>
+    let instructions: Array<Statement> = [];
+    clean_errors();
 
     const parser = new QCrypterParser()
-    instructions = parser.parse(data);
+    try {
+        instructions = parser.parse(data);
+    } catch(err){
+        instructions = [];
+    }
 
-
-    tree = new Tree(instructions);
-
-    globalEnv = createGlobalEnv();
-    tree.globalTable = globalEnv;
+    let globalEnv: Environment = createGlobalEnv();
+    let tree: Tree = new Tree(instructions, globalEnv);
 
     for (let instruction of tree.instructions) {
-        let value;
+        let resValue: any;
         try{
-            value = instruction.interpret(tree, globalEnv)
+            resValue = instruction.interpret(tree, globalEnv)
         } catch(err){
             // TODO
+            console.log("------------------------------------SEMANTIC ERROR------------------------------------")
+            console.log(err);
+            tree.instructions = [];
         }
     }
 
     /*------------------------------AST------------------------------*/
     let rootCst: Node = new Node("Root");
-    let instruction: Node = new Node("Statements");
+    let nodeValue: Node = new Node("Statements");
 
     for (let item of tree.instructions) {
-        instruction.addChildsNode(item.getCST());
+        nodeValue.addChildsNode(item.getCST());
     }
-    rootCst.addChildsNode(instruction);
+
+    rootCst.addChildsNode(nodeValue);
 
     let graph = tree.getDot(rootCst);
 
     let rootAst: Node = new Node("Root");
     let val: Node = new Node("Instructions");
 
-    for (let item of tree.instructions) {
-        value.addChildsNode(item.getAST());
+    for (let item of tree.instructions){
+        val.addChildsNode(item.getAST());
     }
-
     rootAst.addChildsNode(value);
 
-    let ast = tree.getDot(rootAst, false);
+
+    let ast: string;
+    try{
+        ast = tree.getDot(rootAst, false);
+    } catch(err){
+        ast = "";
+        console.log("------------------------------------ERROR PARSING AST------------------------------------")
+        console.log(err);
+    }
 
 
+    const errors: Errors = {
+        lex: lexErrors,
+        syn: synErrors,
+        sem: tree.errors
+    }
+
+    const response: QCResponseObject = {
+        content: tree.stdOut,
+        symtable: tree.getSymbols(),
+        ast: ast,
+        status: /*TODO*/ 0,
+        name: qcObj.name,
+        err: errors
+    }
     // TODO add return logic here
     /*
      * const response: QCResponseObject = await parseFile(qcObj)
      */
 
-
-    res.status(200).json({message: "accepted"})
+    //res.status(200).json(JSON.stringify(response));
+    res.status(200).json(response);
 });
 
 

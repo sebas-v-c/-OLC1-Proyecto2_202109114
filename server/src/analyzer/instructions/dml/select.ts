@@ -195,5 +195,5 @@ function printTable(tableRows: Array<Array<ReturnType>>, columns: Array<string>,
       </tbody>
     </table>
 `;
-        tree.updateConsole(table);
+        tree.updateStdout(table);
     }

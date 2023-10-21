@@ -4,15 +4,18 @@
     import { LexError, SynError } from "./errors.js" 
     */
     // use this import while testing
-    const { LexError, SynError } = require("./errors");
+    //const { LexError, SynError } = require("./errors");
+    import {LexError, SynError } from "./errors";
 %}
 
 %{
-    export let ast = [];
+    export const ast = [];
     export let errors = [];
-    export let lexErrors = [];
-    export let synErrors = [];
+    export let lexErrors: Array<LexError> = [];
+    export let synErrors: Array<SynError> = [];
     export const clean_errors = () => {
+        lexErrors = [];
+        synErrors = [];
         errors = [];
     }
     let controlString = "";
@@ -131,7 +134,13 @@
 "="                             return "TK_EQ";
 
 <<EOF>>                           return 'EOF';
-.                               { console.log(`Lexical error ${yytext} in [${yylloc.first_line}, ${yylloc.first_column}]`); ;return "INVALID"; }
+.                               
+    { 
+        const err = new LexError(yylloc.first_line, yylloc.first_column, yytext);
+        lexErrors.push(err);
+        err.print();
+        return "INVALID";
+    }
 
 /lex
 
@@ -209,7 +218,6 @@ ini:
 instructions:
     instructions instruction TK_SCOLON  { $1.push($2); $$ = $1; }
 |   instruction TK_SCOLON               { $$ = [$1]; }
-|   error TK_SCOLON                     { console.log(`Lexical error ${yytext} in [${$$.first_line}, ${$$.first_column}]`); ;return "INVALID"; }
 ;
 
 instruction:
@@ -238,6 +246,11 @@ instruction:
 /*-------------------------------UTILITY-------------------------------*/
 |   cast                    { $$ = $1; }        
 |   print                   { $$ = $1; }
+|   error                   { 
+        let err = new SynError(@1.first_line, @1.first_column, "Syntax", $1)
+        synErrors.push(err);
+        err.print();
+    }
 ;
 
 /*-------------------------------SQL LANGUAGE GRAMMARS-------------------------------*/

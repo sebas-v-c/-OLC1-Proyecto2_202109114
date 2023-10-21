@@ -1,13 +1,14 @@
+import { Exception, LexError, SynError } from "../analyzer/errors";
+
 export interface QCObject{
     name: string;
     content: string;
 }
 
-// TODO change the error type
-export interface Errors {
-    lex: string[];
-    syn: string[];
-    sem: string[]
+export type Errors = {
+    lex: LexError[];
+    syn: SynError[];
+    sem: Exception[];
 }
 
 export interface SymTable {
@@ -17,11 +18,8 @@ export interface SymTable {
 
 
 export interface QCResponseObject extends QCObject {
-    out?: string;
-    tokens: string[];
-    errors: Errors;
-    symtable: SymTable;
+    symtable: {};
     ast: string;
     status: number;
-    error: number;
+    err: Errors;
 }

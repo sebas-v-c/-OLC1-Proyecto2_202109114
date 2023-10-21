@@ -22,15 +22,16 @@ export class SynError implements Error {
     public column;
     public token: any;
     public type: string;
-    constructor(line: number, column: number, type: string){
+    constructor(line: number, column: number, type: string, token: string){
         this.line = line;
         this.column = column;
+        this.token = token;
         this.type = type;
     }
 
     public print(): void {
         console.log(`Syntax Error ${this.token? "at Line " + this.line + " Column " + this.column : ""}`
-            + ". This Component was no expected: " + `${this.token? this.type + " = " + this.token : "EOF"}` + ".");
+            + ". This Component was no expected: " + `${this.token? " = " + this.token : "EOF"}` + ".");
     }
 }
 
@@ -45,7 +46,7 @@ export class Exception implements Error {
     ) {}
 
     public print(): void {
-        console.log(this.toString());
+        console.error(this.toString());
     }
 
     public toString(): string {

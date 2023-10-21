@@ -16,7 +16,7 @@ describe("Api Test QueryCrypter", function() {
     it("POST to API under /api/interpreter/interpret", async function() {
         const res = await request.post('/api/interpreter/interpret').send({
             name: "Main.qc",
-            content: "SELECT * FROM table1 WHERE `name` = \"HOLA\""
+            content: "SELECT * FROM table1 WHERE name = \"HOLA\""
         });
 
         expect(res.body.message).toBe("accepted");

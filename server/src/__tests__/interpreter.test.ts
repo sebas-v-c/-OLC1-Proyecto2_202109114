@@ -39,10 +39,8 @@ describe("Testing Interpreter Logics", function() {
         const parser = new QCrypterParser()
         instructions = parser.parse(data);
 
-        tree = new Tree(instructions);
-
         globalEnv = createGlobalEnv();
-        tree.globalTable = globalEnv;
+        tree = new Tree(instructions, globalEnv);
 
         for (let instruction of tree.instructions) {
             let value;
@@ -144,10 +142,8 @@ describe("Testing Interpreter Logics", function() {
         const parser = new QCrypterParser()
         instructions = parser.parse(data);
 
-        tree = new Tree(instructions);
-
         globalEnv = createGlobalEnv();
-        tree.globalTable = globalEnv;
+        tree = new Tree(instructions, globalEnv);
 
 
         for (let instruction of tree.instructions) {
@@ -190,10 +186,8 @@ describe("Testing Interpreter Logics", function() {
         const parser = new QCrypterParser()
         instructions = parser.parse(data);
 
-        tree = new Tree(instructions);
-
         globalEnv = createGlobalEnv();
-        tree.globalTable = globalEnv;
+        tree = new Tree(instructions, globalEnv);
 
 
         for (let instruction of tree.instructions) {
@@ -241,10 +235,8 @@ describe("Testing Interpreter Logics", function() {
 
         const parser = new QCrypterParser()
         instructions = parser.parse(data);
-        tree = new Tree(instructions);
-
         globalEnv = createGlobalEnv();
-        tree.globalTable = globalEnv;
+        tree = new Tree(instructions, globalEnv);
 
 
         for (let instruction of tree.instructions) {
@@ -298,10 +290,8 @@ describe("Testing Interpreter Logics", function() {
 
         const parser = new QCrypterParser()
         instructions = parser.parse(data);
-        tree = new Tree(instructions);
-
         globalEnv = createGlobalEnv();
-        tree.globalTable = globalEnv;
+        tree = new Tree(instructions, globalEnv);
 
         for (let instruction of tree.instructions) {
             let value;
@@ -343,10 +333,8 @@ describe("Testing Interpreter Logics", function() {
 
         const parser = new QCrypterParser()
         instructions = parser.parse(data);
-        tree = new Tree(instructions);
-
         globalEnv = createGlobalEnv();
-        tree.globalTable = globalEnv;
+        tree = new Tree(instructions, globalEnv);
 
         for (let instruction of tree.instructions) {
             let value;
@@ -380,10 +368,8 @@ describe("Testing Interpreter Logics", function() {
 
         const parser = new QCrypterParser()
         instructions = parser.parse(data);
-        tree = new Tree(instructions);
-
         globalEnv = createGlobalEnv();
-        tree.globalTable = globalEnv;
+        tree = new Tree(instructions, globalEnv);
 
         for (let instruction of tree.instructions) {
             let value;
@@ -424,10 +410,8 @@ describe("Testing Interpreter Logics", function() {
 
         const parser = new QCrypterParser()
         instructions = parser.parse(data);
-        tree = new Tree(instructions);
-
         globalEnv = createGlobalEnv();
-        tree.globalTable = globalEnv;
+        tree = new Tree(instructions, globalEnv);
 
         for (let instruction of tree.instructions) {
             let value;

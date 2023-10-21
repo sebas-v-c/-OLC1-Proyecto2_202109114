@@ -9,6 +9,8 @@
 import { Exception } from "../errors";
 import Environment from "./environments";
 import { Node, Statement } from "../abastract/ast";
+import ReturnType from "./returnType";
+import Symbol from "./symbol";
 
 
 export default class Tree {
@@ -16,12 +18,13 @@ export default class Tree {
     public errors: Array<Exception>
     public console: string;
     public stdOut: string;
-    public globalTable?: Environment;
+    public globalTable: Environment;
     public dot: string;
     private count: number;
 
-    constructor(instructions: Array<Statement>){
+    constructor(instructions: Array<Statement>, globalTable: Environment){
         this.instructions = instructions;
+        this.globalTable = globalTable;
         this.console = "";
         this.errors = [];
         this.dot = '';
@@ -55,5 +58,18 @@ export default class Tree {
             this.count++;
             this.travelCst(name_child, item);
         }
+    }
+
+    public getSymbols() {
+        const arr: [string, Symbol][] = Array.from(this.globalTable.table);
+        /*
+        let object: {} = {};
+
+        object = arr.forEach(([key, val]: any) =>{
+            object[key] = val;
+        })
+
+        */
+        return arr;
     }
 }
