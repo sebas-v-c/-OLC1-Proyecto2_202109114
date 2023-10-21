@@ -43,8 +43,6 @@ router.post('/interpret', /*async*/ (req, res) => {
         }
     }
 
-
-
     let instructions: Array<Statement> = [];
     clean_errors();
 

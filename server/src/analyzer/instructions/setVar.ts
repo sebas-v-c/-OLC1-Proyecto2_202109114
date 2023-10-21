@@ -57,7 +57,10 @@ export class SetVar implements Statement {
     }
 
     getAST(): Node{
-        return new Node("node");
+        let node: Node = new Node("SET");
+        node.addChild(this.id);
+        node.addChildsNode(this.expression.getAST());
+        return node;
     }
 
     getCST(): Node {

@@ -80,7 +80,17 @@ export class While implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node: Node = new Node("WHILE");
+
+        node.addChildsNode(this.condition.getAST());
+
+        // doing this to not add the BLOCK node
+        for (let item of this.block.instructions){
+            node.addChildsNode(item.getAST());
+        }
+        //insTrue.addChildsNode(this.block.getAST());
+
+        return node;
     }
 
 

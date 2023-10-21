@@ -58,7 +58,7 @@ export class PrimitiveVar implements Statement {
     }
 
     getAST(): Node {
-        let node: Node = new Node(this.value);
+        let node: Node = new Node(`${this.value}`);
         return node;
     }
 }

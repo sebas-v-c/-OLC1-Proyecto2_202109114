@@ -64,7 +64,29 @@ export class If implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node: Node = new Node("IF");
+        if (this.condition !== undefined){
+            node.addChildsNode(this.condition.getAST());
+        }
+
+        let insTrue: Node = new Node("TRUE");
+        // doing this to not add the BLOCK node
+        for (let item of this.block.instructions){
+            insTrue.addChildsNode(item.getAST());
+        }
+        //insTrue.addChildsNode(this.block.getAST());
+        node.addChildsNode(insTrue);
+
+        if (this.elseBlock !== undefined){
+            let insFalse: Node = new Node("FALSE");
+            for (let item of this.elseBlock.instructions){
+                insFalse.addChildsNode(item.getAST());
+            }
+            //insFalse.addChildsNode(this.elseBlock.getAST());
+
+            node.addChildsNode(insFalse);
+        }
+        return node;
     }
 
 

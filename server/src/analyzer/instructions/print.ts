@@ -49,7 +49,9 @@ export class Print implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node: Node = new Node("PRINT")
+        node.addChildsNode(this.args.getAST());
+        return node;
     }
 
 
