@@ -183,7 +183,7 @@ function printTable(tableRows: Array<Array<ReturnType>>, columns: Array<string>,
         });
 
         const table =`
-    <table>
+    <table border="1" cellspacing="1" cellpadding-"10">
         <caption>${tableName}</caption>
       <thead>
         <tr>

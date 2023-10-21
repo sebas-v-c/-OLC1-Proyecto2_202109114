@@ -14,3 +14,44 @@
 h1 {
     text-align: center;
 }
+
+$primary-color: #313244;
+$background-color: #1e1e2e;
+$even-row-color: #6c7086;
+
+/* Styles for the entire table */
+table {
+  width: 95%;
+  border-collapse: collapse;
+  margin: 20px;
+  background-color: $background-color;
+}
+
+/* Header row styles */
+th {
+  background-color: $primary-color;
+  color: #fff;
+  padding: 10px;
+  text-align: left;
+}
+
+/* Odd and even row styles */
+tr:nth-child(even) {
+  background-color: $even-row-color;
+}
+
+/* Cell styles */
+td, th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/* Hover effect for rows */
+tr:hover {
+  background-color: #7f849c;
+}
+
+/* Add some shadow for a 3D effect */
+table {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
