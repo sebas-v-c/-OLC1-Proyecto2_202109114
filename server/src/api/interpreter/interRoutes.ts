@@ -93,11 +93,20 @@ router.post('/interpret', /*async*/ (req, res) => {
         sem: tree.errors
     }
 
+    let statusCode = 0;
+    if (lexErrors.length > 0 || synErrors.length > 0){
+        statusCode = 1;
+    } else if (synErrors.length > 0){
+        statusCode = 2
+    } else if(tree.errors.length > 0) {
+        statusCode = 3;
+    }
+
     const response: QCResponseObject = {
+        status: statusCode,
         content: tree.stdOut,
         symtable: tree.getSymbols(),
         ast: ast,
-        status: /*TODO*/ 0,
         name: qcObj.name,
         err: errors
     }
