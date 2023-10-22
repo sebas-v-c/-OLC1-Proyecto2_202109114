@@ -1,0 +1,110 @@
+.tab-container {
+    max-width: 100%;
+    overflow-x: scroll;
+}
+
+
+.tab-button {
+    white-space: nowrap;
+    display: flex;
+    padding: 5px;
+    margin-right: 5px;
+    border: none;
+    outline: none;
+    border-radius: 9px 9px 0 0;
+
+    &.active-tab-button {
+      background-color: #94e2d5;
+      color: #181825;
+    }
+
+    &.hidden-tab-button {
+      background-color: #313244;
+      color: #cdd6f4;
+    }
+}
+
+.tab-button:hover {
+    background-color: #6c7086;
+    color: #cdd6f4;
+}
+
+.tab-buttons {
+    display: flex;
+    border: none;
+    outline: none;
+}
+
+.tab-buttons button {
+    white-space: nowrap;
+    display: flex;
+    padding: 5px;
+    margin-right: 1px;
+    border: none;
+    outline: none;
+    border-radius: 9px 9px 0 0;
+}
+
+.tab-buttons button.active {
+    background-color: #94e2d5;
+    color: #181825;
+}
+
+.tab-buttons button.hover {
+    background-color: #94e2d5;
+    color: #181825;
+}
+
+.add-tab {
+      background-color: #313244;
+      color: #cdd6f4;
+}
+
+.add-tab:hover{
+    background-color: #6c7086;
+    color: #cdd6f4;
+}
+
+.tab-buttons button.hidden {
+    background-color: #6c757d;
+    color: #d8d8d8;
+}
+
+.tab-buttons button .close {
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.tab-content div {
+    display: none;
+}
+
+.tab-content div.active {
+    display: block;
+}
+
+.parent-button {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  background-color: #6c757d;
+  color: #fff;
+  cursor: pointer;
+}
+
+.parent-button active {
+    background-color: #565e64;
+}
+
+.child-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 5px 10px;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}

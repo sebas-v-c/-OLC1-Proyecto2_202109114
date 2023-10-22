@@ -1,0 +1,5 @@
+PRINT 23;
+
+PRINT "hol"+ "a";
+
+PRINT 2023-10-22;

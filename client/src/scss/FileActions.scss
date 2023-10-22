@@ -1,0 +1,40 @@
+.button-container {
+    display: flex;
+    padding: 0;
+}
+
+.left-button {
+    border-radius: 9px 0 0 9px;
+}
+
+
+.right-button {
+    border-radius: 0 9px 9px 0;
+}
+
+.action-button {
+    background-color: #cba6f7;
+    color: #181825;
+    border: none;
+    padding: 5px;
+    align-content: center;
+    align-items: center;
+    border-radius: 15%;
+    &.left-action-button {
+        border-radius: 9px 0 0 9px;
+    }
+    &.right-action-button {
+        border-radius: 0 9px 9px 0;
+    }
+    &.active-action-button {
+        background: #af90d6;
+    }
+}
+
+.action-button:focus, .action-button:active {
+    outline: none;
+}
+
+.action-button:hover {
+    background-color: #af90d6;
+}
