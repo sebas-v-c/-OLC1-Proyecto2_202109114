@@ -26,7 +26,7 @@ export class Break implements Statement {
     }
 
     getAST(): Node{
-        return new Node("node");
+        return new Node("Break");
     }
 
     getCST(): Node {

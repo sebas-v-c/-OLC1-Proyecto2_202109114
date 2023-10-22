@@ -75,7 +75,27 @@ export class SimpleCase implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node = new Node("SIMPLE CASE");
+        node.addChildsNode(this.value.getAST());
+        for (let cs of this.stmts){
+            let caseNode = new Node("CASE");
+            let whenNode = new Node("WHEN");
+            whenNode.addChildsNode(cs.when.getAST());
+            let thenNode = new Node("THEN");
+            thenNode.addChildsNode(cs.then.getAST());
+            caseNode.addChildsNode(whenNode);
+            caseNode.addChildsNode(thenNode);
+            node.addChildsNode(caseNode);
+        }
+        let elseNode = new Node("ELSE");
+        elseNode.addChildsNode(this.elseVal.getAST());
+        node.addChildsNode(elseNode);
+        if (this.asVar !== undefined){
+            let asNode = new Node("AS");
+            asNode.addChild(this.asVar);
+            node.addChildsNode(asNode);
+        }
+        return node;
     }
 }
 
@@ -142,6 +162,25 @@ export class SearchedCase implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node = new Node("SEARCHED CASE");
+        for (let cs of this.stmts){
+            let caseNode = new Node("CASE");
+            let whenNode = new Node("WHEN");
+            whenNode.addChildsNode(cs.when.getAST());
+            let thenNode = new Node("THEN");
+            thenNode.addChildsNode(cs.then.getAST());
+            caseNode.addChildsNode(whenNode);
+            caseNode.addChildsNode(thenNode);
+            node.addChildsNode(caseNode);
+        }
+        let elseNode = new Node("ELSE");
+        elseNode.addChildsNode(this.elseVal.getAST());
+        node.addChildsNode(elseNode);
+        if (this.asVar !== undefined){
+            let asNode = new Node("AS");
+            asNode.addChild(this.asVar);
+            node.addChildsNode(asNode);
+        }
+        return node;
     }
 }

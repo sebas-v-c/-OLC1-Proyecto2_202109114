@@ -395,6 +395,7 @@ declare_function:
 
 declare_method:
     RW_CREATE RW_PROCEDURE TK_ID typed_var_arguments RW_AS RW_BEGIN env RW_END  { $$ = new Method($3, $4, $7, @1.first_line, @1.first_column); }
+|   RW_CREATE RW_PROCEDURE TK_ID RW_AS RW_BEGIN env RW_END  { $$ = new Method($3, undefined, $6, @1.first_line, @1.first_column); }
 ;
 
 /*-------------------------------DECLARATION-------------------------------*/
@@ -466,7 +467,8 @@ arithmetic:
 
     
 call_func_mth:
-    TK_ID TK_LPAR value_arguments TK_RPAR { $$ = new CallFunc($1, $3, @1.first_line, @1.first_column); }
+    TK_ID TK_LPAR value_arguments TK_RPAR   { $$ = new CallFunc($1, $3, @1.first_line, @1.first_column); }
+|   TK_ID TK_LPAR TK_RPAR                   { $$ = new CallFunc($1, undefined, @1.first_line, @1.first_column); }
 ;
 
 /*-------------------------------FUNCTIONS-------------------------------*/

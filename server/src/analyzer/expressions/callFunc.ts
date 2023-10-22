@@ -39,29 +39,45 @@ export class CallFunc implements Statement {
 
         const calledFunc: Func = symbol.value;
 
-        if (this.argExpr.length !== calledFunc.args.length){
-            let err = new Exception('Sementic', `${this.id} expected ${calledFunc.args.length} parameters, ${this.argExpr.length} given`, this.line, this.column, table.name);
-            tree.errors.push(err);
-            throw  err;
+        if (this.argExpr !== undefined && calledFunc.args !== undefined){
+            if (this.argExpr.length !== calledFunc.args.length) {
+                let err = new Exception('Sementic', `${this.id} expected ${calledFunc.args.length} parameters, ${this.argExpr.length} given`, this.line, this.column, table.name);
+                tree.errors.push(err);
+                throw err;
+            }
+        } else if (this.argExpr === undefined && calledFunc.args === undefined){
+
+        } else {
+            if (this.argExpr !== undefined){
+                let err = new Exception('Sementic', `${this.id} expected ${this.argExpr.length} parameters, ${0} given`, this.line, this.column, table.name);
+                tree.errors.push(err);
+                throw err;
+            } else {
+                let err = new Exception('Sementic', `${this.id} expected ${0} parameters, ${calledFunc.args.length} given`, this.line, this.column, table.name);
+                tree.errors.push(err);
+                throw err;
+            }
         }
 
         const funcEnv: Environment = new Environment(table, "func_env");
 
         // save variables and verify types
-        for (let i = 0; i < calledFunc.args.length; i++){
-            const toSaveSym = new Symbol(calledFunc.args[i].id.toLowerCase(), calledFunc.args[i].type, null, this.line, this.column, funcEnv);
-            const receivedSym = this.argExpr[i].getValue(tree, funcEnv);
-            if (toSaveSym.type !== receivedSym.type){
-                // if tosave symbol is of value any, then accept the symbol
-                if (toSaveSym.type !== Any.ANY){
-                    let err = new Exception("Type Error", `Variable of type '${receivedSym.type}' is not assignable to type '${toSaveSym.type}'`, this.line, this.column, funcEnv.name);
-                    tree.errors.push(err);
-                    throw err;
+        if (calledFunc.args !== undefined){
+            for (let i = 0; i < calledFunc.args.length; i++) {
+                const toSaveSym = new Symbol(calledFunc.args[i].id.toLowerCase(), calledFunc.args[i].type, null, this.line, this.column, funcEnv);
+                const receivedSym = this.argExpr[i].getValue(tree, funcEnv);
+                if (toSaveSym.type !== receivedSym.type) {
+                    // if tosave symbol is of value any, then accept the symbol
+                    if (toSaveSym.type !== Any.ANY) {
+                        let err = new Exception("Type Error", `Variable of type '${receivedSym.type}' is not assignable to type '${toSaveSym.type}'`, this.line, this.column, funcEnv.name);
+                        tree.errors.push(err);
+                        throw err;
+                    }
                 }
+                toSaveSym.value = receivedSym.value;
+                //symbol = receivedSym.type;
+                funcEnv.setSymbol(toSaveSym);
             }
-            toSaveSym.value = receivedSym.value;
-            //symbol = receivedSym.type;
-            funcEnv.setSymbol(toSaveSym);
         }
 
         let ret: ReturnType | void;
@@ -134,7 +150,16 @@ export class CallFunc implements Statement {
     }
 
     getAST(): Node {
-        return new Node('Node');
+        let node = new Node("CALL FUNCTION");
+        node.addChild(this.id);
+        if (this.argExpr !== undefined){
+            let argsNode = new Node("ARGUMENTS");
+            for (let arg of this.argExpr) {
+                argsNode.addChildsNode(arg.getAST());
+            }
+            node.addChildsNode(argsNode);
+        }
+        return node;
     }
 
 

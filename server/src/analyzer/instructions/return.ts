@@ -47,6 +47,11 @@ export class Return implements Statement {
     }
 
     getCST(): Node {
-        return new Node("Node");
+        if (this.expression !== undefined){
+            let node = new Node("Return");
+            node.addChildsNode(this.expression.getAST());
+            return node;
+        }
+        return new Node("Return");
     }
 }

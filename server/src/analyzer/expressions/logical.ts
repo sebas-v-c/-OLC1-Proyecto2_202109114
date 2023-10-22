@@ -158,7 +158,9 @@ export class Logical implements WhereExp {
 
     getAST(): Node {
         let node: Node = new Node(this.operator.toString());
-        node.addChildsNode(this.leftExp.getAST());
+        if (this.leftExp !== undefined){
+            node.addChildsNode(this.leftExp.getAST());
+        }
         node.addChildsNode(this.rightExp.getAST());
         return node;
     }

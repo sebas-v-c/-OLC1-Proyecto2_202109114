@@ -26,7 +26,7 @@ export class Continue implements Statement {
     }
 
     getAST(): Node{
-        return new Node("node");
+        return new Node("Continue");
     }
 
     getCST(): Node {

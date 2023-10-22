@@ -39,8 +39,6 @@ export class Function extends Func {
 
     interpret(tree: Tree, table: Environment) {
         let symbol: Symbol;
-
-
         symbol = new Symbol(
             this.id,
             Functions.FUNC,
@@ -62,7 +60,20 @@ export class Function extends Func {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node = new Node("FUNCTION");
+        let argsNode = new Node("ARGUMENTS")
+        node.addChild(this.id);
+        for (let arg of this.args){
+            argsNode.addChild(arg.id);
+        }
+        let returnNode = new Node("RETURNS");
+        if (this.retType !== undefined){
+            returnNode.addChild(this.retType.toUpperCase());
+        }
+        node.addChildsNode(argsNode);
+        node.addChildsNode(returnNode);
+        node.addChildsNode(this.block.getAST());
+        return node;
     }
 }
 
@@ -123,6 +134,16 @@ export class Method extends Func {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node = new Node("METHOD");
+        node.addChild(this.id);
+        if (this.args !== undefined){
+            let argsNode = new Node("ARGUMENTS")
+            for (let arg of this.args) {
+                argsNode.addChild(arg.id);
+            }
+            node.addChildsNode(argsNode);
+        }
+        node.addChildsNode(this.block.getAST());
+        return node;
     }
 }
