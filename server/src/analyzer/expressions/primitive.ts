@@ -58,7 +58,18 @@ export class PrimitiveVar implements Statement {
     }
 
     getAST(): Node {
-        let node: Node = new Node(`${this.value}`);
+        let node: Node;
+        if (this.type === Primitive.VARCHAR){
+            let val: string = this.value;
+            val = val.replace(/\n/g, "/n");
+            val= val.replace(/\"/g, '/');
+            val= val.replace(/\'/g, "/");
+            val= val.replace(/\t/g, "‎/t");
+            val= val.replace(/\\/g, "//");
+            node = new Node(val);
+        } else {
+            node = new Node(`${this.value}`);
+        }
         return node;
     }
 }

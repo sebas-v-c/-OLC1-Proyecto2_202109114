@@ -42,7 +42,7 @@ export default class Tree {
 
     public getDot(root: Node, flag: boolean = true){
         this.dot = "";
-        this.dot += `digraph {\nranksep="${flag ? 2 : 1}";\nbgcolor = "#090B10";\nedge[color="#56cdff"];\nnode [style="filled" fillcolor = "#0F111A" fontcolor = "white" color = "#007acc"];\n`;
+        this.dot += `digraph {\nranksep="${flag ? 2 : 1}";\nbgcolor = "#282a36";\nedge[color="#cba6f7"];\nnode [style="filled" fillcolor = "#cba6f7" fontcolor = "#1e1e2e" color = "#cba6f7"];\n`;
         this.dot += `n0[label="${root.value.replace("\"", "\\\"")}"];\n`;
         this.count = 1;
         this.travelCst("n0", root);

@@ -50,7 +50,6 @@ export class Create implements Statement {
         let colNode = new Node("COLUMNS");
         for (let arg of this.args){
             colNode.addChild(arg.id);
-            colNode.addChild(arg.type.toUpperCase());
         }
         node.addChildsNode(colNode);
         return node;

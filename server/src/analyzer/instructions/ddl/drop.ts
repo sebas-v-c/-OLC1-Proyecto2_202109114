@@ -35,6 +35,8 @@ export class Drop implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node: Node = new Node("DROP");
+        node.addChild(this.id);
+        return node;
     }
 }

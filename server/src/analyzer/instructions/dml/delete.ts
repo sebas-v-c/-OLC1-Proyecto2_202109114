@@ -56,6 +56,13 @@ export class Delete implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node: Node = new Node("DELETE");
+        node.addChild(this.id);
+
+        let whereNode: Node = new Node("WHERE");
+        whereNode.addChildsNode(this.cond.condition.getAST());
+        node.addChildsNode(whereNode);
+
+        return node;
     }
 }

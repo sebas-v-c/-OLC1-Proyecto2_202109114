@@ -35,6 +35,8 @@ export class Truncate implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node: Node = new Node("TRUNCATE");
+        node.addChild(this.id);
+        return node;
     }
 }

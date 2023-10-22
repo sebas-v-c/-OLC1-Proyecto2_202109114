@@ -130,6 +130,44 @@ export class Alter implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node = new Node("ALTER");
+
+        let opNode: Node;
+        switch(this.predicate.type){
+            case AlterActions.ADD: {
+                opNode = new Node("ADD");
+                node.addChild(this.id);
+                opNode.addChild((this.predicate as AddCol).col)
+                node.addChildsNode(opNode);
+                break;
+            }
+            case AlterActions.DROP: {
+                opNode = new Node("DROP");
+                node.addChild(this.id);
+                opNode.addChild((this.predicate as Drop).col)
+                node.addChildsNode(opNode);
+                break;
+            }
+            case AlterActions.RENAMECOL: {
+                opNode = new Node("RENAME COLUMN");
+                let toNode = new Node("TO");
+                node.addChild(this.id);
+                toNode.addChild((this.predicate as RenameCol).col);
+                toNode.addChild((this.predicate as RenameCol).newId);
+                opNode.addChildsNode(toNode);
+                node.addChildsNode(opNode);
+                break;
+            }
+            case AlterActions.RENAMETABLE: {
+                opNode = new Node("RENAME TABLE");
+                node.addChild(this.id);
+                let toNode = new Node("TO");
+                toNode.addChild((this.predicate as RenameTable).newId);
+                opNode.addChildsNode(toNode);
+                node.addChildsNode(opNode);
+                break;
+            }
+        }
+        return node;
     }
 }

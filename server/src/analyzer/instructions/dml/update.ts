@@ -67,6 +67,23 @@ export class Update implements Statement {
     }
 
     getAST(): Node {
-        return new Node('NOde');
+        let node: Node = new Node("UPDATE");
+        node.addChild(this.id);
+
+        let argsNode: Node = new Node("SET");
+        for (let arg of this.colVal){
+            let argNode = new Node("=");
+            argNode.addChild(arg.col);
+            argNode.addChildsNode(arg.val.getAST());
+            argsNode.addChildsNode(argNode);
+        }
+        node.addChildsNode(argsNode);
+
+
+        let whereNode: Node = new Node("WHERE");
+        whereNode.addChildsNode(this.cond.condition.getAST());
+        node.addChildsNode(whereNode);
+
+        return node;
     }
 }
