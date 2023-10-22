@@ -18,6 +18,7 @@ export default function OutputText({ errors, stdOut }: Props){
 
     useEffect(() => {
         if (terminalRef.current) {
+            // @ts-ignore
             terminalRef.current.scrollTop = terminalRef.current.scrollHeight;
         }
     })

@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import "../../scss/Tabs.scss";
 
 type Tab = {

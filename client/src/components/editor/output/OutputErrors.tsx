@@ -1,27 +1,5 @@
 import "../../../scss/Errors.scss"
 
-interface Table {
-    lex: string;
-    line: number;
-    column: number;
-}
-
-interface Token extends Table {
-    token: string;
-}
-
-interface LexError extends Table {
-    desc: string;
-}
-
-interface SynError extends LexError {
-}
-
-interface Symbol {
-    var: string;
-    type: string;
-    value: any;
-}
 
 type Errors = {
     lex: Array<any>,

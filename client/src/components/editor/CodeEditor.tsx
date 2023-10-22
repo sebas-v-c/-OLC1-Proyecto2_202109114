@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Editor, useMonaco } from "@monaco-editor/react";
 
 type Props = {
     onChange: (code: string, val: string) => void;
+    // @ts-ignore
     code: string;
     height?: string,
     width?: string
@@ -17,6 +18,7 @@ export default function CodeEditor({ onChange, code, height, width}: Props) {
         if (monaco) {
             import('monaco-themes/themes/Dracula.json')
                 .then(data => {
+                    // @ts-ignore
                     monaco.editor.defineTheme('dracula', data);
                 })
                 .then(_ => monaco.editor.setTheme('dracula'))

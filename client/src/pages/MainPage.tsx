@@ -18,12 +18,12 @@ import FileActions from "../components/editor/FileActions";
 
 type Code = {
     fileName: string;
-    code: string;
+    code: string | ArrayBuffer;
 }
 
 export default function MainPage(){
     const [codeFiles, setCodeFiles] = useState<Code[]>([{fileName: "Main.qc", code:"-- SOME CODE HERE"}]);
-    const [processing, setProcessing] = useState<boolean>(false);
+    const [, setProcessing] = useState<boolean>(false);
     const [outMode, setOutMode] = useState<OutModes>(OutModes.Text);
     const [currentTab, setCurrentTab] = useState<number>(0);
     const [responseData, setResponseData] = useState({});
@@ -83,18 +83,6 @@ export default function MainPage(){
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-        });
-    };
-
-    const showErrorToast = (msg?: string, timer?: number) => {
-        toast.error(msg || 'Something went wrong! Please try again', {
-            position: "bottom-right",
-            autoClose: timer ? timer : 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined
         });
     };
 
@@ -167,6 +155,7 @@ export default function MainPage(){
     }
 
     function handleSave() {
+        // @ts-ignore
         const blob = new Blob([codeFiles[currentTab].code], { type: "text/qc" });
         const url = URL.createObjectURL(blob);
 
@@ -180,10 +169,11 @@ export default function MainPage(){
     }
 
     function handleLoad() {
+        // @ts-ignore
         fileInputRef.current.click();
     }
 
-    function handleFileChange(event) {
+    function handleFileChange(event:any) {
         const selectedFile = event.target.files[0];
 
         if (selectedFile) {
@@ -230,7 +220,8 @@ export default function MainPage(){
                             currentTab={currentTab}
                         />
                         <CodeEditor
-                            code={codeFiles[currentTab] ? codeFiles[currentTab].code : "."}
+                            //@ts-ignore
+                            code={codeFiles[currentTab] ? codeFiles[currentTab].code : ""}
                             onChange={handleEditorChange}
                         />
 

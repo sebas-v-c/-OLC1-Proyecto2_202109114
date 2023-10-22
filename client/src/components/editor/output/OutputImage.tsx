@@ -14,9 +14,12 @@ export default function OutputImage({ dotCode }: Props){
     const ref = useRef(null);
 
     useEffect(() => {
+        // @ts-ignore
         setWidht(ref.current.clientWidth);
+        // @ts-ignore
         setHeight(ref.current.clientHeight);
     });
+    // @ts-ignore
     const [error, setError] = React.useState<any>(null)
 
     let content: any;
@@ -36,7 +39,7 @@ export default function OutputImage({ dotCode }: Props){
                 initialPositionX={0}
                 initialPositionY={0}
             >
-                {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                {({ zoomIn, zoomOut, resetTransform }) => (
                     <React.Fragment>
                         <div className="image-button-container">
                             <button className={"image-button left-image-button"} onClick={() => zoomIn()}>+</button>
