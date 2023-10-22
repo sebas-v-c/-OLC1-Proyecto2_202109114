@@ -35,6 +35,7 @@ export class For implements Statement {
     interpret(tree: Tree, table: Environment) {
         let symbol: Symbol;
         const newForEnv: Environment = new Environment(table, "for_env");
+        tree.envs.push(newForEnv);
         try {
             symbol = table.getSymbol(new Symbol(this.variableName, Primitive.NULL, null, 0, 0, table))
         } catch(err){

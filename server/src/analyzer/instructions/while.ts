@@ -41,6 +41,7 @@ export class While implements Statement {
         }
 
         const newWhileEnv: Environment = new Environment(table, "while_env");
+        tree.envs.push(newWhileEnv);
 
         let res: ReturnType | void = undefined;
         while(flag.value){

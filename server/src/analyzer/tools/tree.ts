@@ -19,6 +19,7 @@ export default class Tree {
     public console: string;
     public stdOut: string;
     public globalTable: Environment;
+    public envs: Array<Environment>;
     public dot: string;
     private count: number;
 
@@ -30,6 +31,8 @@ export default class Tree {
         this.dot = '';
         this.count = 0;
         this.stdOut = "";
+        this.envs = [];
+        this.envs.push(globalTable);
     }
 
     public updateStdout(input: string){
@@ -61,7 +64,14 @@ export default class Tree {
     }
 
     public getSymbols() {
+        let newArr: [string, Symbol][] = [];
+        for (let arr of this.envs){
+            newArr.push(...Array.from(arr.table));
+        }
+
         const arr: [string, Symbol][] = Array.from(this.globalTable.table);
+        arr.push(...newArr);
+
         /*
         let object: {} = {};
 

@@ -41,6 +41,7 @@ export class If implements Statement {
         }
 
         const ifEnv: Environment = new Environment(table, "if_env");
+        tree.envs.push(ifEnv);
         if (flag.type === Primitive.BOOLEAN){
             if (flag.value === true){
                 try{

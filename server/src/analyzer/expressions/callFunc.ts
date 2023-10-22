@@ -60,6 +60,7 @@ export class CallFunc implements Statement {
         }
 
         const funcEnv: Environment = new Environment(table, "func_env");
+        tree.envs.push(funcEnv);
 
         // save variables and verify types
         if (calledFunc.args !== undefined){
