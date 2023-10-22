@@ -116,6 +116,7 @@ export default function OutputErrors({ errors, symTable, tokens }: Props){
           <th>Type</th>
           <th>Line</th>
           <th>Column</th>
+          <th>Environment</th>
         </tr>
       </thead>
       <tbody>
@@ -125,6 +126,7 @@ export default function OutputErrors({ errors, symTable, tokens }: Props){
             <td>{item[1].type}</td>
             <td>{item[1].row}</td>
             <td>{item[1].column}</td>
+            <td>{item[1].environment.name}</td>
           </tr>
         ))}
       </tbody>
