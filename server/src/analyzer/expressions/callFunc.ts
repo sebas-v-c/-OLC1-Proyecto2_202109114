@@ -59,7 +59,7 @@ export class CallFunc implements Statement {
             }
         }
 
-        const funcEnv: Environment = new Environment(table, "func_env");
+        const funcEnv: Environment = new Environment(table, `func_env_${this.id}`);
         tree.envs.push(funcEnv);
 
         // save variables and verify types
