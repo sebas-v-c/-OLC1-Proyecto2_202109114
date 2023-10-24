@@ -99,11 +99,11 @@
 "RETURN"                        return "RW_RETURN";
 
 /*---------------------------Tokens---------------------------*/
-(\d{4})("-")(\d{1,2})("-")(\d{1,2})     return "TK_DATE";
-"@"(\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*      return "TK_VAR";
-[0-9]+("."[0-9]+)\b                     return "TK_DOUBLE";
-[0-9]+\b                                return "TK_INT";
-(\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*         return "TK_ID";
+['](\d{4})("-")(\d{1,2})("-")(\d{1,2})[']   { yytext = yytext.substr(1, yytext.length -2); return "TK_DATE";};
+"@"(\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*          return "TK_VAR";
+[0-9]+("."[0-9]+)\b                         return "TK_DOUBLE";
+[0-9]+\b                                    return "TK_INT";
+(\_)*[a-zA-ZñÑ][a-zA-Z0-9ñÑ\_]*             return "TK_ID";
 //                              if this doesnt work use this.begin() instead
 ["]                             {controlString=""; this.pushState("string");}
 <string>[^"\\]+                 {controlString+=yytext; }

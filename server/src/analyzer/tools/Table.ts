@@ -90,8 +90,16 @@ export default class Table {
 
     // DML actions
     deleteFromTable(){}
-    truncateTable(){
+
+    truncateTable(line: number, column: number){
+        let colsArr: Array<Column> = [];
+        for (let col of this.columns.values()){
+            colsArr.push(col);
+        }
         this.columns = new Map();
+        for (let col of colsArr){
+            this.addColumn(col.name, col.type, line, column);
+        }
     }
 }
 

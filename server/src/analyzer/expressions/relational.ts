@@ -69,7 +69,11 @@ export class Relational implements WhereExp {
                         // this will return an empty array, instead of throwing an error
                         return [];
                     }
-                    const cleanCols: any[] = col.data.map(obj => obj.value);
+                    let cleanCols: any[] = col.data.map(obj => obj.value);
+                    if (col.type === Primitive.DATE){
+                        cleanCols = cleanCols.map(obj => obj.getTime())
+                        return filterColumn(cleanCols, (element: number) => element === ret.value.getTime());
+                    }
                     return filterColumn(cleanCols, (element: number) => element === ret.value);
                 } catch(err){
                     tree.errors.push(err as Exception); throw err;

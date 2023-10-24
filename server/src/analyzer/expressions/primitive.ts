@@ -46,6 +46,7 @@ export class PrimitiveVar implements Statement {
             }
             case Primitive.DATE: {
                 this.value = new Date(this.value);
+                this.value.setDate(this.value.getDate());
             }
         }
         return new ReturnType(this.type, this.value);

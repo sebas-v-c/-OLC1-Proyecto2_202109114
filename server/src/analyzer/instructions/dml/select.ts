@@ -8,6 +8,7 @@ import { Node } from "../../abastract/ast";
 import { Exception } from "../../errors";
 import Table, { Column } from "../../tools/Table";
 import { WherePredicate } from "./wherePredicate";
+import { formatDate } from "../../utils/utils";
 
 
 
@@ -166,7 +167,8 @@ export class SelectExpr implements Statement {
         try {
             res = this.expr.getValue(tree, table);
             if (this.colName === undefined){
-                this.toPrint = false;
+                this.colName = "Default";
+                //this.toPrint = false;
             }
         } catch(err){
             tree.errors.push(err as Exception); throw err;
@@ -201,12 +203,12 @@ export class SelectExpr implements Statement {
 
 function printTable(tableRows: Array<Array<ReturnType>>, columns: Array<string>, tableName: string, tree: Tree): void {
         const tbRows = tableRows.map(rowData => {
-            const cells = rowData.map(cellData => `<td>${cellData.value}</td>`).join('');
+            const cells = rowData.map(cellData => `<td>${cellData.type === Primitive.DATE ? formatDate(cellData.value) : cellData.value}</td>`).join('');
             return `<tr>${cells}</tr>`;
         });
 
         const table =`
-    <h3 class="table-title">${tableName}</h3>
+    <h3 class="table-title">${tableName === undefined? "a" : tableName}</h3>
     <table border="1" cellspacing="1" cellpadding-"10">
       <thead>
         <tr>

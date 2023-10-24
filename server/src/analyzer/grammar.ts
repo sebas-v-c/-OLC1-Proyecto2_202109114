@@ -423,7 +423,7 @@ export class QCrypterLexer extends JisonLexer implements JisonLexerApi {
         /^(?:PROCEDURE\b)/i,
         /^(?:RETURNS\b)/i,
         /^(?:RETURN\b)/i,
-        /^(?:\d{4}-\d{1,2}-\d{1,2})/i,
+        /^(?:[']\d{4}-\d{1,2}-\d{1,2}['])/i,
         /^(?:@_*[a-zA-Z\xf1\xd1][a-zA-Z0-9\xf1\xd1\_]*)/i,
         /^(?:[0-9]+\.[0-9]+\b)/i,
         /^(?:[0-9]+\b)/i,
@@ -572,7 +572,7 @@ export class QCrypterLexer extends JisonLexer implements JisonLexerApi {
       break;
     case 55:return "RW_RETURN";
       break;
-    case 56:return "TK_DATE";
+    case 56: yy_.yytext = yy_.yytext.substr(1, yy_.yytext.length -2); return "TK_DATE";
       break;
     case 57:return "TK_VAR";
       break;

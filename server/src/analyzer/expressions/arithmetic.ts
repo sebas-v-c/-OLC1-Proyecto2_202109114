@@ -92,11 +92,11 @@ export class Arithmetic implements Statement {
             return new ReturnType(Primitive.DOUBLE, leftResult.value + rightResult.value);
         }
         if ((leftResult.type === Primitive.DATE) && (rightResult.type === Primitive.INT || rightResult.type === Primitive.DOUBLE)){
-            leftResult.value.setDate(leftResult.value.getDate() + rightResult.value);
+            leftResult.value.setDate(leftResult.value.getDate() + (rightResult.value+1));
             return new ReturnType(Primitive.DATE, leftResult.value);
         }
         if ((rightResult.type === Primitive.DATE) && (leftResult.type === Primitive.INT || leftResult.type === Primitive.DOUBLE)){
-            rightResult.value.setDate(leftResult.value + rightResult.value.getDate());
+            rightResult.value.setDate((leftResult.value+1) + rightResult.value.getDate());
             return new ReturnType(Primitive.DATE, rightResult.value);
         }
         if (leftResult.type === Primitive.VARCHAR && rightResult.type === Primitive.VARCHAR){
@@ -127,11 +127,11 @@ export class Arithmetic implements Statement {
             return new ReturnType(Primitive.DOUBLE, leftResult.value - rightResult.value);
         }
         if ((leftResult.type === Primitive.DATE) && (rightResult.type === Primitive.INT || rightResult.type === Primitive.DOUBLE)){
-            leftResult.value.setDate(leftResult.value.getDate() - rightResult.value);
+            leftResult.value.setDate(leftResult.value.getDate() - (rightResult.value-1));
             return new ReturnType(Primitive.DATE, leftResult.value);
         }
         if ((rightResult.type === Primitive.DATE) && (leftResult.type === Primitive.INT || leftResult.type === Primitive.DOUBLE)){
-            rightResult.value.setDate(leftResult.value - rightResult.value.getDate());
+            rightResult.value.setDate(rightResult.value.getDate() - (leftResult.value-1));
             return new ReturnType(Primitive.DATE, rightResult.value);
         }
 
