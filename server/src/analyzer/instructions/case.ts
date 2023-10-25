@@ -30,7 +30,8 @@ export class SimpleCase implements Statement {
     }
 
     getValue(tree: Tree, table: Environment): ReturnType {
-        return new ReturnType(Primitive.NULL, undefined);
+        let ret = this.interpret(tree, table);
+        return ret;
     }
 
     interpret(tree: Tree, table: Environment) {
@@ -64,9 +65,9 @@ export class SimpleCase implements Statement {
 
         if (this.asVar !== undefined){
             table.setSymbol(new Symbol(this.asVar, thenSym.type, thenSym.value, this.line, this.column, table));
+            return thenSym;
         }
-
-        return undefined;
+        return new ReturnType(Primitive.NULL, null);
     }
 
     getCST(): Node {

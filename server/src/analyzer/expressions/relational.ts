@@ -130,7 +130,7 @@ export class Relational implements WhereExp {
                         return [];
                     }
                     const cleanCols: any[] = col.data.map(obj => obj.value);
-                    return filterColumn(cleanCols, (element: number) => element <= ret.value);
+                    return filterColumn(cleanCols, (element: number) => element < ret.value);
                 } catch(err){
                     tree.errors.push(err as Exception); throw err;
                 }

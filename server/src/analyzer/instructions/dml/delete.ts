@@ -36,6 +36,7 @@ export class Delete implements Statement {
             tree.errors.push(err as Exception); throw err;
         }
 
+        arr.sort((a, b) => b-a);
 
         try {
             for (let index of arr){
