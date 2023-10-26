@@ -5,52 +5,52 @@ Sebastian Alejandro Vásquez Cartagena - 202109114
 
 ## User manual
 
-        ![](images/image1.png)
+![](images/image1.png)
 
 1. Upload File
 Click on the folder icon to open the file explorer, select a file to upload to the browser. Once the file is loaded it will open a new tab in the editor displaying the code in the file.
 
-        ![](images/image2.png)
+![](images/image2.png)
 
 
 2. Download File
 After editing a file in the editor, you can save the file clicking on the save icon. It will automatically download the file into the default downloads folder.
 
-        ![](images/image3.png)
+![](images/image3.png)
 
 4. Code Editor
 The code editor has almost the same functionality as any other basic editor. It has autocompletion, undo and redo capabitlities. and also copy, paste, cut text.
 </br>
 There are tabs that allow to switch between the windows of code that are loaded
 
-        ![](images/image5.png)
+![](images/image5.png)
 
     
 3. Run Button
 The run button is located at the bottom right of the screen. It sends the code to the backend to be interpreted.
 
-        ![](images/image6.png)
+![](images/image6.png)
 
 
 
 ### Output Window
 The output window is useful to the display information about the executed code. It is composed of three main tabs.
 
-        ![](images/image4.png)
+![](images/image4.png)
 
 1. Out Console
 The out console displays the standard output of the program, Including syntax, semantic and lexical errors.
 
-        ![](images/image7.png)
+![](images/image7.png)
 
 2. Reports Console
-Here are the reports console. We can se the table of tokens, a lexical and syntax errors table, and the table of Symbols.
+Here are the reports console. We can se the table of tokens, a lexical and syntax errors table, and the table of Symbols
 
-        ![](images/image8.png)
+![](images/image8.png)
 
 3. AST Window
 The AST of the code is displayed in this window. The user has the capabitlity to zoom in, zoom out, and move the image to explore the generated AST
-        ![](images/image9.png)
+![](images/image9.png)
 
 
 ## Technical Manual
