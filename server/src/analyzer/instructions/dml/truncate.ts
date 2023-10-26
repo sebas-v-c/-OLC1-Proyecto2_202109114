@@ -21,7 +21,7 @@ export class Truncate implements Statement {
         } catch(err){
             tree.errors.push(err as Exception); throw err;
         }
-        dbTable.truncateTable();
+        dbTable.truncateTable(this.line, this.column);
 
         try {
            table.updateTable(dbTable, this.line, this.column);
