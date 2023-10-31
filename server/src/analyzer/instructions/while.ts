@@ -72,7 +72,7 @@ export class While implements Statement {
 
         }
 
-        return res;
+        return undefined;
     }
 
     getCST(): Node {
